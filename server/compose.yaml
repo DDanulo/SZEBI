@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:17
+    container_name: pgdb
+    environment:
+      POSTGRES_DB: IO_db
+      POSTGRES_USER: iouser
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
