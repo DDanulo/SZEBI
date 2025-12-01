@@ -2,6 +2,7 @@ package com.example.server.Simulation.service;
 
 
 import com.example.server.Simulation.data.SolarPanelRepository;
+import com.example.server.Simulation.entities.EnergyProducingDevice;
 import com.example.server.Simulation.entities.SolarPanel;
 import com.example.server.Simulation.exceptions.DeviceNotFoundException;
 import com.example.server.Simulation.simulators.BasicSimulator;
@@ -42,12 +43,12 @@ public class SolarPanelService {
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         simulationThread.start();
     }
 
-    public SolarPanel addSolarPanel(boolean active, double area) {
-        return solarPanelRepository.save(new SolarPanel(active, area));
+    public SolarPanel addSolarPanel(SolarPanel solarPanel) {
+        return solarPanelRepository.save(solarPanel);
     }
 
     public Optional<SolarPanel> getSolarPanel(UUID id) {
@@ -55,12 +56,12 @@ public class SolarPanelService {
     }
 
     public void activateSolarPanel(UUID id) {
-        solarPanelRepository.findById(id).ifPresentOrElse(solarPanel -> {solarPanel.setWorking(true);},
+        solarPanelRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::deactivate,
                 () -> {throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");});
     }
 
     public void deactivateSolarPanel(UUID id) {
-        solarPanelRepository.findById(id).ifPresentOrElse(solarPanel -> {solarPanel.setWorking(false);},
+        solarPanelRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::deactivate,
                 () -> {throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");});
     }
 
@@ -68,8 +69,13 @@ public class SolarPanelService {
         return  solarPanelRepository.findAll();
     }
 
-    public SolarPanel delete(UUID id) {
-        return  solarPanelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("SolarPanel with id " + id + " not found"));
+    public SolarPanel deleteSolarPanel(UUID id) {
+        var maybeSolarPanel = solarPanelRepository.findById(id);
+        if (maybeSolarPanel.isEmpty()) {
+            throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");
+        }
+       solarPanelRepository.deleteById(id);
+        return  solarPanelRepository.findById(id).get();
     }
 
     private void simulateEnergyGeneration() {

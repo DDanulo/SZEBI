@@ -1,9 +1,6 @@
 package com.example.server.Simulation.simulators;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,11 +12,11 @@ import java.util.Map;
 @Component("basic")
 public class BasicSimulator implements Simulator {
 
-    @Setter
+
     @Getter
     private TimeOfDay dayTime;
     @Getter
-    @Setter
+    @Setter(AccessLevel.PACKAGE)
     private Season season;
     //in Celsius
     @Getter
@@ -64,5 +61,10 @@ public class BasicSimulator implements Simulator {
         map.put("insolation", insolation);
         map.put("counter", counter);
         return map;
+    }
+
+    void changeTimeOfDay(TimeOfDay timeOfDay) {
+        this.dayTime = timeOfDay;
+        counter = 0;
     }
 }

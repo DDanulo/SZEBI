@@ -11,18 +11,10 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorValue("generating")
 @NoArgsConstructor
-public  abstract class EnergyProducingDevice {
+public  abstract class EnergyProducingDevice extends Device {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
-
-    @Column
-    @Setter
-    private Boolean working;
 
     @Column
     protected BigDecimal totalGenerated;
@@ -30,7 +22,7 @@ public  abstract class EnergyProducingDevice {
 
 
     public EnergyProducingDevice(boolean working) {
-        this.working = working;
+        super(working);
         this.totalGenerated = BigDecimal.valueOf(0.0f);
     }
 
