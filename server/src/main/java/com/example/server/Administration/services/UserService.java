@@ -69,4 +69,6 @@ public class UserService {
                 .map(u -> (Resident) u)
                 .collect(Collectors.toList());
     }
+
+
 }
