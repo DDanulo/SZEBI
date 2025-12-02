@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import ScheduleManager from './components/devicecontrol/ScheduleManager';
+import ResidentManager from "./components/Administration/ResidentManager.jsx";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,7 @@ function App() {
         {/* --- TU WSTAWIAMY TWÓJ MODUŁ --- */}
         <div style={{ textAlign: 'left' }}> {/* Tylko żeby wyrównać tekst do lewej */}
             <ScheduleManager />
+            <ResidentManager />
         </div>
     </>
   )

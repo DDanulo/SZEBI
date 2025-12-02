@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @SuperBuilder
 @NoArgsConstructor
 @Entity
+@Table(name = "Users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 @Access(AccessType.FIELD)

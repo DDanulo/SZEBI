@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@DiscriminatorValue("resident")
 @Data
-@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
+@DiscriminatorValue("resident")
 public class Resident extends User {
     @Column(name="room")
     private String room;

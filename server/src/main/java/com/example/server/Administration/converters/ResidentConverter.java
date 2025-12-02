@@ -10,13 +10,14 @@ import java.util.stream.Collectors;
 public class ResidentConverter {
 
     public static ResidentDTO convertResidentToResidentDTO(Resident resident){
-        return new ResidentDTO(resident.getId(),resident.getLogin(), resident.getFirstName(), resident.getLastName(),resident.isActive(), resident.getEmail(), resident.getRoom());
+        return new ResidentDTO(resident.getId(),resident.getLogin(),resident.getPasswordHash(), resident.getFirstName(), resident.getLastName(),resident.isActive(), resident.getEmail(), resident.getRoom());
     }
 
     public static Resident convertResidentDTOToResident(ResidentDTO residentDTO){
         return Resident.builder()
                 .id(residentDTO.id())
                 .login(residentDTO.login())
+                .passwordHash(residentDTO.password())
                 .firstName(residentDTO.firstName())
                 .lastName(residentDTO.lastName())
                 .active(residentDTO.active())
