@@ -91,6 +91,7 @@ const ScheduleManager = () => {
             }
 
             loadDevices();
+            // eslint-disable-next-line no-unused-vars
         } catch (error) {
             alert("Błąd sterowania urządzeniem");
         }
@@ -103,14 +104,14 @@ const ScheduleManager = () => {
     return (
         <div className="p-6 max-w-6xl mx-auto space-y-8 text-gray-100">
 
-            {/* 1. HARMONOGRAM */}
+
             <div className="bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-gray-500">
                 <h2 className="text-2xl font-bold mb-4 border-b-2 border-gray-500 pb-2">📅 Harmonogram</h2>
 
-                {/* Wybór i formularz (bez zmian logicznych, tylko wygląd) */}
+
                 <div className="flex gap-4 mb-4">
                     <div className="flex-1">
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Urządzenie</label>
+                        <label className="block text-sm text-gray-300 mb-1 font-bold">Urządzenie: </label>
                         <select
                             className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 focus:outline-none focus:border-blue-400 text-white"
                             value={selectedDeviceId}
@@ -125,11 +126,11 @@ const ScheduleManager = () => {
 
                 <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div>
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Start</label>
+                        <label className="block text-sm text-gray-300 mb-1 font-bold">Start: </label>
                         <input type="datetime-local" className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white" value={start} onChange={e => setStart(e.target.value)} required />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Koniec</label>
+                        <label className="block text-sm text-gray-300 mb-1 font-bold">Koniec: </label>
                         <input type="datetime-local" className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white" value={end} onChange={e => setEnd(e.target.value)} required />
                     </div>
                     <div className="flex items-end">
@@ -166,7 +167,7 @@ const ScheduleManager = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                {/* TABELA AKTYWNE (ZIELONA RAMKA) */}
+
                 <div className="bg-gray-800 rounded-xl shadow-lg border-2 border-green-600 overflow-hidden">
                     <div className="bg-green-900/30 p-4 border-b-2 border-green-600">
                         <h3 className="text-xl font-bold text-green-400 flex items-center gap-2">⚡ Aktywne (ON)</h3>

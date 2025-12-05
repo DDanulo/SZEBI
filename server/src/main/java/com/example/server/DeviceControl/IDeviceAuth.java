@@ -7,7 +7,10 @@ import java.util.UUID;
 public interface IDeviceAuth {
     boolean turnDeviceOn(UUID id);
     boolean turnDeviceOff(UUID id);
-    Device addDevice(UUID id); // Zgodnie z diagramem przyjmujemy UUID
-    Device deleteDevice(UUID id);
+
+    // MAciek zrub coś
+    Device addDevice(String name);
+
+    boolean removeDevice(UUID id);
     List<Device> getDevices();
 }

@@ -1,57 +1,73 @@
 package com.example.server.DeviceControl;
 
-import com.example.server.DeviceControl.Device;
+import com.example.server.Simulation.api.IControlDevices;
+import com.example.server.Simulation.api.IShowDevices;
+import com.example.server.Simulation.entities.Windmill;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ManagerWindmills implements IDeviceAuth {
 
-    private List<Device> windmills = new ArrayList<>();
+    private final IControlDevices controlDevices;
+    private final IShowDevices showDevices;
 
-    public ManagerWindmills() {
-        windmills.add(new Device(UUID.fromString("33333333-3333-3333-3333-333333333333"), "Turbina Główna", true, "WIND"));
-        windmills.add(new Device(UUID.fromString("44444444-4444-4444-4444-444444444444"), "Wiatrak Ogrodowy", true, "WIND"));
+    @Override
+    public List<Device> getDevices() {
+        return showDevices.getWindmills().stream()
+                .map(w -> Device.builder()
+                        .id(w.getId())
+                        .name("Wiatrak " + w.getId().toString().substring(0, 4))
+                        .isOn(w.isWorking())
+                        .type("WIND")
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean turnDeviceOn(UUID id) {
-        return changeState(id, true);
+        if (showDevices.getWindmill(id).isPresent()) {
+            controlDevices.activateWindmill(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean turnDeviceOff(UUID id) {
-        return changeState(id, false);
+        if (showDevices.getWindmill(id).isPresent()) {
+            controlDevices.deactivateWindmill(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Device addDevice(UUID id) {
-        Device newDevice = new Device(id, "Wiatrak " + id.toString().substring(0, 4), false, "WIND");
-        windmills.add(newDevice);
-        return newDevice;
+    public Device addDevice(String name) {
+
+        Windmill newWindmill = new Windmill(false, 1000, 5);
+
+        Windmill saved = controlDevices.addWindmill(newWindmill);
+
+        return Device.builder()
+                .id(saved.getId())
+                .name(name)
+                .type("WIND")
+                .isOn(false)
+                .build();
     }
 
     @Override
-    public Device deleteDevice(UUID id) {
-        Device toDelete = windmills.stream().filter(d -> d.getId().equals(id)).findFirst().orElse(null);
-        if (toDelete != null) windmills.remove(toDelete);
-        return toDelete;
-    }
-
-    @Override
-    public List<Device> getDevices() {
-        return new ArrayList<>(windmills);
-    }
-
-    private boolean changeState(UUID id, boolean state) {
-        for (Device d : windmills) {
-            if (d.getId().equals(id)) {
-                d.setOn(state);
-                return true;
-            }
+    public boolean removeDevice(UUID id) {
+        if (showDevices.getWindmill(id).isPresent()) {
+            controlDevices.removeWindmill(id);
+            return true;
         }
         return false;
     }

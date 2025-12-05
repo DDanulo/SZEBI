@@ -1,58 +1,73 @@
 package com.example.server.DeviceControl;
 
-import com.example.server.DeviceControl.Device;
+import com.example.server.Simulation.api.IControlDevices;
+import com.example.server.Simulation.api.IShowDevices;
+import com.example.server.Simulation.entities.ConsumingDevice;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ManagerAppliance implements IDeviceAuth {
 
-    private List<Device> appliances = new ArrayList<>();
+    private final IControlDevices controlDevices;
+    private final IShowDevices showDevices;
 
-    public ManagerAppliance() {
-        appliances.add(new Device(UUID.fromString("55555555-5555-5555-5555-555555555555"), "Lodówka Samsung", true, "APPLIANCE"));
-        appliances.add(new Device(UUID.fromString("66666666-6666-6666-6666-666666666666"), "Telewizor Salon", false, "APPLIANCE"));
-        appliances.add(new Device(UUID.fromString("77777777-7777-7777-7777-777777777777"), "Ekspres do kawy", false, "APPLIANCE"));
+    @Override
+    public List<Device> getDevices() {
+        return showDevices.getConsumingDevices().stream()
+                .map(c -> Device.builder()
+                        .id(c.getId())
+                        .name(c.getDescription())
+                        .isOn(c.isWorking())
+                        .type("APPLIANCE")
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean turnDeviceOn(UUID id) {
-        return changeState(id, true);
+        if (showDevices.getConsumingDevice(id).isPresent()) {
+            controlDevices.activateConsumingDevice(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean turnDeviceOff(UUID id) {
-        return changeState(id, false);
+        if (showDevices.getConsumingDevice(id).isPresent()) {
+            controlDevices.deactivateConsumingDevice(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Device addDevice(UUID id) {
-        Device newDevice = new Device(id, "Sprzęt " + id.toString().substring(0, 4), false, "APPLIANCE");
-        appliances.add(newDevice);
-        return newDevice;
+    public Device addDevice(String name) {
+
+        ConsumingDevice device = new ConsumingDevice(name, false);
+
+        ConsumingDevice saved = controlDevices.addConsumingDevice(device);
+
+        return Device.builder()
+                .id(saved.getId())
+                .name(saved.getDescription())
+                .type("APPLIANCE")
+                .isOn(false)
+                .build();
     }
 
     @Override
-    public Device deleteDevice(UUID id) {
-        Device toDelete = appliances.stream().filter(d -> d.getId().equals(id)).findFirst().orElse(null);
-        if (toDelete != null) appliances.remove(toDelete);
-        return toDelete;
-    }
-
-    @Override
-    public List<Device> getDevices() {
-        return new ArrayList<>(appliances);
-    }
-
-    private boolean changeState(UUID id, boolean state) {
-        for (Device d : appliances) {
-            if (d.getId().equals(id)) {
-                d.setOn(state);
-                return true;
-            }
+    public boolean removeDevice(UUID id) {
+        if (showDevices.getConsumingDevice(id).isPresent()) {
+            controlDevices.removeConsumingDevice(id);
+            return true;
         }
         return false;
     }

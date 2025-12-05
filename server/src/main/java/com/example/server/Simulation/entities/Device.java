@@ -3,6 +3,7 @@ package com.example.server.Simulation.entities;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public abstract  class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
