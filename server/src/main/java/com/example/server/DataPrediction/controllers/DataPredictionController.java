@@ -40,6 +40,8 @@ public class DataPredictionController {
         try {
             forecastService.changeInterval(Integer.parseInt(interval));
             return ResponseEntity.status(HttpStatus.OK).body("Generation interval has been set to: " + interval + " minutes");
+        } catch (NumberFormatException e) {
+            return ResponseEntity.unprocessableEntity().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
