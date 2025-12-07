@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue("empolyee")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class Employee extends User{
 }

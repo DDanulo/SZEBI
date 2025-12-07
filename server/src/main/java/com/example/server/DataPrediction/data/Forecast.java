@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "forecasts")
 public class Forecast {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     private Instant creationTime;

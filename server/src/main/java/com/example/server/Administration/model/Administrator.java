@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue("administrator")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class Administrator extends User {
 }
