@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import ScheduleManager from './components/devicecontrol/ScheduleManager';
+import ReportModule from './components/DataAnalysis/ReportModule';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,12 @@ function App() {
         {/* --- TU WSTAWIAMY TWÓJ MODUŁ --- */}
         <div style={{ textAlign: 'left' }}> {/* Tylko żeby wyrównać tekst do lewej */}
             <ScheduleManager />
+        </div>
+
+        {/* --- MODUŁ ANALIZY I RAPORTOWANIA --- */}
+        <hr style={{ margin: '40px 0', border: '2px solid #666' }} />
+        <div style={{ textAlign: 'left' }}>
+            <ReportModule />
         </div>
     </>
   )
