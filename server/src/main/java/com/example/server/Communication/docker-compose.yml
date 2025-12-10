@@ -1,0 +1,14 @@
+services:
+  communication-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: IO_db
+      POSTGRES_USER: iouser
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg:/var/lib/postgresql/data
+volumes:
+  pg:

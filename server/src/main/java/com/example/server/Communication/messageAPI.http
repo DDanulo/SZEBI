@@ -1,0 +1,12 @@
+### Pobierz wszystkie wiadomości
+GET http://localhost:8080/api/communication/messages
+Accept: application/json
+
+### Utwórz nową wiadomość
+POST http://localhost:8080/api/communication/messages
+Content-Type: application/json
+
+{
+  "content": "To jest przykładowa wiadomość.",
+  "authorLogin": "itsHardStyl3r"
+}
