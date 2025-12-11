@@ -10,4 +10,6 @@ public interface ForecastService {
     Forecast getLatestForecast();
 
     Forecast getForecast(UUID forecastId);
+
+    void generateForecast();
 }

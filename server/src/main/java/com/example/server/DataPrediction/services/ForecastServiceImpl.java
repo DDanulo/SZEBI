@@ -6,11 +6,9 @@ import com.example.server.DataPrediction.repositories.ForecastRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static java.lang.Thread.sleep;
@@ -32,8 +30,7 @@ public class ForecastServiceImpl implements ForecastService {
     private void createGenerationThread() {
         generationThread = new Thread(() -> {
             while (true) {
-//                generateForecasts();
-                generateForecastsTemp();
+                generateForecasts();
                 try {
                     sleep((long) generationInterval * 60 * 1000);
                 } catch (InterruptedException ignored) {
@@ -62,6 +59,11 @@ public class ForecastServiceImpl implements ForecastService {
         return forecastRepository.findById(forecastId).orElse(null);
     }
 
+    @Override
+    public void generateForecast() {
+        generateForecasts();
+    }
+
     /**
      * Tworzenie prognozy zużycia energii po zmianie modelu danych przez Moduł Symulacji
      *
@@ -81,22 +83,6 @@ public class ForecastServiceImpl implements ForecastService {
     }
 
     /**
-     * (Tymczasowe) Tworzenie prognozy zużycia energii przy obecnym modelu danych Modułu Symulacji
-     *
-     * @param previousUsage poprzednie zużycie w formie jednej liczby
-     * @param forDay        prognoza, na jaki kolejny dzień
-     */
-    private void createForecastTemp(BigDecimal previousUsage, long forDay) {
-        long val = 40L;
-        BigDecimal r = new Random().nextBoolean() ? BigDecimal.ONE : BigDecimal.ONE.negate();
-        BigDecimal forecastedUsage = previousUsage.add(BigDecimal.valueOf(val).multiply(r));
-
-        Forecast forecast = new Forecast(forecastedUsage.intValue(), LocalDateTime.now().plusDays(forDay));
-
-        forecastRepository.save(forecast);
-    }
-
-    /**
      * Generuje i zapisuje do bazy <code>DAY_INTERVAL</code> prognoz
      */
     private void generateForecasts() {
@@ -106,26 +92,9 @@ public class ForecastServiceImpl implements ForecastService {
                 LocalDateTime.now().minusDays(DAY_INTERVAL), LocalDateTime.now());
 
         for (int d = 1; d <= DAY_INTERVAL; d++) {
-            List<Double> temperatures = forecastRepository.fetchTemperatures(
-                    LocalDateTime.now(), LocalDateTime.now().plusDays(d));
+            List<Double> temperatures = Arrays.asList(1.0, 2.0, 0.0, 0.0, 3.0, 5.0, 10.0);
 
             createForecast(previousUsage, temperatures, d);
-        }
-    }
-
-    /**
-     * Tymczasowe
-     * Generuje i zapisuje do bazy <code>DAY_INTERVAL</code> prognoz
-     */
-    private void generateForecastsTemp() {
-        final int DAY_INTERVAL = 7;
-
-        BigDecimal previousTotalUsage = forecastRepository.fetchTotalUsage();
-
-        BigDecimal previousUsage = previousTotalUsage.multiply(BigDecimal.valueOf(0.01));
-
-        for (int d = 1; d <= DAY_INTERVAL; d++) {
-            createForecastTemp(previousUsage, d);
         }
     }
 
@@ -134,7 +103,7 @@ public class ForecastServiceImpl implements ForecastService {
         for (int usage : values) {
             totalUsage += usage;
         }
-        return totalUsage / values.size();
+        return !values.isEmpty() ? totalUsage / values.size() : 0;
     }
 
     private double getAverageDouble(List<Double> values) {
