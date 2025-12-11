@@ -1,17 +1,11 @@
 package com.example.server.Administration.dto;
 
-import jakarta.persistence.Column;
-import lombok.Builder;
-
-import java.util.UUID;
-
-public record ResidentDTO (
-        UUID id,
+public record RegisterDTO(
         String login,
         String password,
         String firstName,
         String lastName,
-        boolean active,
         String email,
         String room
-) {}
+) {
+}

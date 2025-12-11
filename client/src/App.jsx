@@ -5,6 +5,7 @@ import './App.css'
 import ScheduleManager from './components/devicecontrol/ScheduleManager';
 import ReportModule from './components/DataAnalysis/ReportModule';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
+import ResidentManager from "./components/Administration/ResidentManager.jsx";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,6 +40,7 @@ function App() {
         {/* --- TU WSTAWIAMY TWÓJ MODUŁ --- */}
         <div style={{ textAlign: 'left' }}> {/* Tylko żeby wyrównać tekst do lewej */}
             <ScheduleManager />
+            <ResidentManager />
         </div>
 
         {/* --- MODUŁ ANALIZY I RAPORTOWANIA --- */}
