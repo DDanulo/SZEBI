@@ -27,3 +27,16 @@ export const turnDeviceOn = (id) => {
 export const turnDeviceOff = (id) => {
     return axios.post(`${API_URL}/devices/${id}/turn-off`);
 };
+export const addDevice = (name, type, params = {}) => {
+    return axios.post(`${API_URL}/devices`, null, {
+        params: {
+            name,
+            type,
+            ...params
+        }
+    });
+};
+
+export const removeDevice = (id) => {
+    return axios.delete(`${API_URL}/devices/${id}`);
+};

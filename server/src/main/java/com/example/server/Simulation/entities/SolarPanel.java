@@ -23,9 +23,9 @@ public class SolarPanel extends EnergyProducingDevice{
         return generatedNow;
     }
 
-    public SolarPanel(boolean working, double area) {
-        super(working);
-        this.area = area;
+    public SolarPanel(String description, boolean working, double area) {
+        super(description, working);
+        this.setArea(area);
     }
 
 

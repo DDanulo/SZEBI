@@ -30,9 +30,10 @@ public class Windmill extends EnergyProducingDevice{
         return generatedNow;
     }
 
-    public Windmill(boolean working, int maxPowerPerHour, int minWindSpeedForMaxPower) {
-        super(working);
+    public Windmill(String description, boolean working, double area, int maxPowerPerHour, int minWindSpeedForMaxPower) {
+        super(description,working);
         this.minWindSpeedForMaxPower = minWindSpeedForMaxPower;
         this.maxPowerPerHour = maxPowerPerHour;
+        this.setArea(area);
     }
 }

@@ -15,17 +15,17 @@ import java.util.UUID;
 public class ConsumingDevice extends Device {
 
 
-    @Column
-    private String description;
+
 
 
     @Column
     private BigDecimal totalConsumed;
 
 
-    public ConsumingDevice(String description, boolean active) {
-        super(active);
-        this.description = description;
+    public ConsumingDevice(String description, boolean active,double area) {
+        super(description,active);
+
+        this.setArea(area);
     }
 
     public double consumeEnergy(double coeff){

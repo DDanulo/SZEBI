@@ -15,4 +15,5 @@ public class Device {
     private String name;
     private boolean isOn;
     private String type; // "SOLAR", "WIND", "APPLIANCE"
+    private double area;
 }

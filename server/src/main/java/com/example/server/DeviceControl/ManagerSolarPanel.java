@@ -23,9 +23,10 @@ public class ManagerSolarPanel implements IDeviceAuth {
         return showDevices.getSolarPanels().stream()
                 .map(p -> Device.builder()
                         .id(p.getId())
-                        .name("Panel Solarny " + p.getId().toString().substring(0, 4))
-                        .isOn(p.isWorking())
+                        .name(p.getDescription())
                         .type("SOLAR")
+                        .isOn(p.isWorking())
+                        .area(p.getArea())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -49,24 +50,26 @@ public class ManagerSolarPanel implements IDeviceAuth {
     }
 
     @Override
-    public Device addDevice(String name) {
-        // Konstruktor SolarPanel wymaga: (boolean working, double area)
-        // Ustawiamy domyślne area = 20.0, bo frontend tego nie podaje
-        SolarPanel newPanel = new SolarPanel(false, 20.0);
+    public boolean supports(String type) {
+        return "SOLAR".equalsIgnoreCase(type);
+    }
 
-        // ID generuje się w bazie (GenerationType.IDENTITY) lub musimy nadać
-        // Skoro w Device.java jest IDENTITY, to baza nada ID po zapisie.
-        // Ale ControlDevices.addSolarPanel pewnie robi save().
+    @Override
+    public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
+        SolarPanel panel = new SolarPanel(name,false, area);
 
-        SolarPanel saved = controlDevices.addSolarPanel(newPanel);
+        var saved = controlDevices.addSolarPanel(panel);
 
         return Device.builder()
                 .id(saved.getId())
-                .name(name) // Używamy nazwy podanej przez użytkownika w widoku
+                .name(panel.getDescription())
                 .type("SOLAR")
                 .isOn(false)
+                .area(area)
                 .build();
     }
+
+
 
     @Override
     public boolean removeDevice(UUID id) {

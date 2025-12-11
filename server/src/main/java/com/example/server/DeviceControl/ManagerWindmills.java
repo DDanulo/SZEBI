@@ -23,9 +23,10 @@ public class ManagerWindmills implements IDeviceAuth {
         return showDevices.getWindmills().stream()
                 .map(w -> Device.builder()
                         .id(w.getId())
-                        .name("Wiatrak " + w.getId().toString().substring(0, 4))
+                        .name(w.getDescription())
                         .isOn(w.isWorking())
                         .type("WIND")
+                        .area(w.getArea())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -49,19 +50,30 @@ public class ManagerWindmills implements IDeviceAuth {
     }
 
     @Override
-    public Device addDevice(String name) {
+    public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
 
-        Windmill newWindmill = new Windmill(false, 1000, 5);
+        Windmill windmill = new Windmill(name,false,area, maxPower, minWind);
 
-        Windmill saved = controlDevices.addWindmill(newWindmill);
+
+
+        var saved = controlDevices.addWindmill(windmill);
 
         return Device.builder()
                 .id(saved.getId())
                 .name(name)
                 .type("WIND")
                 .isOn(false)
+                .area(area)
                 .build();
     }
+
+    @Override
+    public boolean supports(String type) {
+        return "WIND".equalsIgnoreCase(type);
+    }
+
+
+
 
     @Override
     public boolean removeDevice(UUID id) {

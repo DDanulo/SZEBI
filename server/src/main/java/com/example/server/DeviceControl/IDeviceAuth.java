@@ -9,8 +9,9 @@ public interface IDeviceAuth {
     boolean turnDeviceOff(UUID id);
 
     // MAciek zrub coś
-    Device addDevice(String name);
+   boolean supports(String type);
 
+    Device addDevice(String name, Double area, Integer maxPower, Integer minWind);
     boolean removeDevice(UUID id);
     List<Device> getDevices();
 }

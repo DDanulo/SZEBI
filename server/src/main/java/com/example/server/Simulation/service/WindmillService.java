@@ -54,14 +54,19 @@ public class WindmillService {
     }
 
     public void activateWindmill(UUID id) {
-        windmillRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::activate,  () -> {
-            throw new DeviceNotFoundException("Windmill with id " + id + " not found");});
+        Windmill windmill = windmillRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("Windmill with id " + id + " not found"));
+
+        windmill.activate();
+        windmillRepository.save(windmill);
     }
 
     public void deactivateWindmill(UUID id) {
-        windmillRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::deactivate, () -> {
-            throw new DeviceNotFoundException("Windmill with id " + id + " not found");
-        });
+        Windmill windmill = windmillRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("Windmill with id " + id + " not found"));
+
+        windmill.deactivate();
+        windmillRepository.save(windmill);
     }
     public Windmill deleteWindmill(UUID id) {
         var maybeWindmill = windmillRepository.findById(id);

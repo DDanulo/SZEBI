@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSchedulesByDevice, addSchedule, deleteSchedule, getAllDevices, turnDeviceOn, turnDeviceOff } from './ScheduleService';
+import { getSchedulesByDevice, addSchedule, deleteSchedule, getAllDevices, turnDeviceOn, turnDeviceOff, addDevice, removeDevice } from './ScheduleService';
 const ScheduleManager = () => {
     const [devices, setDevices] = useState([]);
     const [selectedDeviceId, setSelectedDeviceId] = useState('');
@@ -7,6 +7,48 @@ const ScheduleManager = () => {
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
 
+    const [newDeviceName, setNewDeviceName] = useState('');
+    const [newDeviceType, setNewDeviceType] = useState('APPLIANCE');
+
+    const [area, setArea] = useState('');
+
+    const handleCreateDevice = async (e) => {
+        e.preventDefault();
+
+        const parsedArea = parseFloat(area);
+           if (isNaN(parsedArea) || parsedArea <= 0) {
+                alert('Wymagana jest poprawna wartość powierzchni (> 0).');
+                return;
+            }
+
+        try {
+
+            const extraParams = {
+                    area: parsedArea
+            };
+
+            await addDevice(newDeviceName, newDeviceType, extraParams);
+
+
+            setNewDeviceName('');
+            setArea('');
+            alert("Urządzenie dodane!");
+            loadDevices();
+        } catch (error) {
+            console.error(error);
+            alert("Błąd dodawania urządzenia");
+        }
+    };
+    const handleRemoveDevice = async (id) => {
+        if(!window.confirm("Usunąć urządzenie?")) return;
+        try {
+            await removeDevice(id);
+            loadDevices();
+        } catch (error) {
+            console.error(error);
+            alert("Błąd dodawania urządzenia");
+        }
+    };
 
     useEffect(() => {
         loadDevices();
@@ -81,6 +123,7 @@ const ScheduleManager = () => {
             console.error("Błąd usuwania", error);
         }
     };
+
     // PRZEŁĄCZANIE STANU ---
     const toggleState = async (device, targetState) => {
         try {
@@ -91,8 +134,9 @@ const ScheduleManager = () => {
             }
 
             loadDevices();
-            // eslint-disable-next-line no-unused-vars
+
         } catch (error) {
+            console.error(error);
             alert("Błąd sterowania urządzeniem");
         }
     };
@@ -104,10 +148,72 @@ const ScheduleManager = () => {
     return (
         <div className="p-6 max-w-6xl mx-auto space-y-8 text-gray-100">
 
+            {/* --- 1. PANEL DODAWANIA URZĄDZEŃ --- */}
+            <div className="bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-blue-500">
+                <h2 className="text-2xl font-bold mb-4 border-b-2 border-blue-500 pb-2 text-blue-400">
+                    🛠 Dodaj Nowe Urządzenie
+                </h2>
 
+                <form onSubmit={handleCreateDevice} className="flex flex-col gap-4">
+                    <div className="flex gap-4 items-end">
+
+                        {/* Pole: NAZWA */}
+                        <div className="flex-1">
+                            <label className="block text-sm text-gray-300 mb-1 font-bold">Nazwa: </label>
+                            <input
+                                type="text"
+                                className="w-full p-2 rounded bg-gray-700 border-2 border-blue-500 text-white placeholder-gray-400"
+                                placeholder="np. Mój Sprzęt"
+                                value={newDeviceName}
+                                onChange={(e) => setNewDeviceName(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {/* Pole: TYP */}
+                        <div className="w-48">
+                            <label className="block text-sm text-gray-300 mb-1 font-bold">Typ: </label>
+                            <select
+                                className="w-full p-2 rounded bg-gray-700 border-2 border-blue-500 text-white"
+                                value={newDeviceType}
+                                onChange={(e) => setNewDeviceType(e.target.value)}
+                            >
+                                <option value="APPLIANCE">AGD (Zużycie)</option>
+                                <option value="SOLAR">Panel Solarny</option>
+                                <option value="WIND">Wiatrak</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Pole: POWIERZCHNIA (Teraz widoczne ZAWSZE i WYMAGANE) */}
+                    <div className="bg-gray-700/50 p-3 rounded border border-gray-600">
+                        <label className="block text-sm text-gray-300 mb-1 font-bold text-blue-300">
+                            Powierzchnia (m²) <span className="text-xs font-normal text-gray-400">: </span>
+                        </label>
+                        <input
+                            type="number"
+                            className="w-full p-2 rounded bg-gray-700 border border-blue-400 text-white placeholder-gray-400"
+                            placeholder="np. 5.5 (musi być > 0)"
+                            value={area}
+                            onChange={(e) => setArea(e.target.value)}
+                            required
+                            min="0.01"
+                            step="0.01"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-bold transition shadow-md hover:shadow-lg"
+                    >
+                        Dodaj Urządzenie
+                    </button>
+                </form>
+            </div>
+
+            {/* --- 2. HARMONOGRAM --- */}
             <div className="bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-gray-500">
                 <h2 className="text-2xl font-bold mb-4 border-b-2 border-gray-500 pb-2">📅 Harmonogram</h2>
-
 
                 <div className="flex gap-4 mb-4">
                     <div className="flex-1">
@@ -127,17 +233,30 @@ const ScheduleManager = () => {
                 <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div>
                         <label className="block text-sm text-gray-300 mb-1 font-bold">Start: </label>
-                        <input type="datetime-local" className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white" value={start} onChange={e => setStart(e.target.value)} required />
+                        <input
+                            type="datetime-local"
+                            className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white"
+                            value={start}
+                            onChange={e => setStart(e.target.value)}
+                            required
+                        />
                     </div>
                     <div>
                         <label className="block text-sm text-gray-300 mb-1 font-bold">Koniec: </label>
-                        <input type="datetime-local" className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white" value={end} onChange={e => setEnd(e.target.value)} required />
+                        <input
+                            type="datetime-local"
+                            className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white"
+                            value={end}
+                            onChange={e => setEnd(e.target.value)}
+                            required
+                        />
                     </div>
                     <div className="flex items-end">
-                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 py-2 rounded font-bold border-2 border-blue-400 transition shadow-lg">Dodaj Zadanie</button>
+                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 py-2 rounded font-bold border-2 border-blue-400 transition shadow-lg">
+                            Dodaj Zadanie
+                        </button>
                     </div>
                 </form>
-
 
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm border-collapse border-2 border-gray-400">
@@ -151,23 +270,38 @@ const ScheduleManager = () => {
                         <tbody>
                         {schedules.map((item) => (
                             <tr key={item.id} className="hover:bg-gray-700">
-                                <td className="p-3 border-2 border-gray-400 text-green-300 font-mono">{new Date(item.start).toLocaleString()}</td>
-                                <td className="p-3 border-2 border-gray-400 text-red-300 font-mono">{new Date(item.end).toLocaleString()}</td>
+                                <td className="p-3 border-2 border-gray-400 text-green-300 font-mono">
+                                    {new Date(item.start).toLocaleString()}
+                                </td>
+                                <td className="p-3 border-2 border-gray-400 text-red-300 font-mono">
+                                    {new Date(item.end).toLocaleString()}
+                                </td>
                                 <td className="p-3 border-2 border-gray-400 text-right">
-                                    <button onClick={() => handleDelete(item.id)} className="bg-red-900/40 text-red-300 border border-red-500 hover:bg-red-900 hover:text-white px-3 py-1 rounded font-bold transition">Usuń</button>
+                                    <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="bg-red-900/40 text-red-300 border border-red-500 hover:bg-red-900 hover:text-white px-3 py-1 rounded font-bold transition"
+                                    >
+                                        Usuń
+                                    </button>
                                 </td>
                             </tr>
                         ))}
-                        {schedules.length === 0 && <tr><td colSpan="3" className="p-4 border-2 border-gray-400 text-center text-gray-400">Brak zadań w harmonogramie.</td></tr>}
+                        {schedules.length === 0 && (
+                            <tr>
+                                <td colSpan="3" className="p-4 border-2 border-gray-400 text-center text-gray-400">
+                                    Brak zadań w harmonogramie.
+                                </td>
+                            </tr>
+                        )}
                         </tbody>
                     </table>
                 </div>
             </div>
 
-
+            {/* --- 3. TABELE URZĄDZEŃ --- */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-
+                {/* AKTYWNE */}
                 <div className="bg-gray-800 rounded-xl shadow-lg border-2 border-green-600 overflow-hidden">
                     <div className="bg-green-900/30 p-4 border-b-2 border-green-600">
                         <h3 className="text-xl font-bold text-green-400 flex items-center gap-2">⚡ Aktywne (ON)</h3>
@@ -176,8 +310,8 @@ const ScheduleManager = () => {
                         <table className="w-full text-left border-collapse border-2 border-green-600">
                             <thead className="bg-gray-900 text-green-100 uppercase text-xs">
                             <tr>
-                                <th className="p-3 border-2 border-green-600">Nazwa</th>
-                                <th className="p-3 border-2 border-green-600">Typ</th>
+                                <th className="p-3 border-2 border-green-600">Nazwa </th>
+                                <th className="p-3 border-2 border-green-600">Typ </th>
                                 <th className="p-3 border-2 border-green-600 text-right">Sterowanie</th>
                             </tr>
                             </thead>
@@ -186,23 +320,35 @@ const ScheduleManager = () => {
                                 <tr key={dev.id} className="hover:bg-gray-700/50">
                                     <td className="p-3 border-2 border-green-600 font-bold text-white">{dev.name}</td>
                                     <td className="p-3 border-2 border-green-600 text-xs font-mono text-green-300">{dev.type}</td>
-                                    <td className="p-3 border-2 border-green-600 text-right">
+                                    <td className="p-3 border-2 border-green-600 text-right space-x-2">
                                         <button
                                             onClick={() => toggleState(dev, false)}
-                                            className="bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded text-xs font-bold border-2 border-red-400 shadow transition"
+                                            className="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold border-2 border-red-400 transition"
                                         >
                                             WYŁĄCZ
+                                        </button>
+                                        <button
+                                            onClick={() => handleRemoveDevice(dev.id)}
+                                            className="bg-gray-700 hover:bg-red-900 text-red-400 hover:text-white px-2 py-1 rounded text-xs font-bold border border-red-500 transition"
+                                        >
+                                            USUŃ
                                         </button>
                                     </td>
                                 </tr>
                             ))}
-                            {activeDevices.length === 0 && <tr><td colSpan="3" className="p-6 border-2 border-green-600 text-center text-gray-400 italic">Brak włączonych urządzeń</td></tr>}
+                            {activeDevices.length === 0 && (
+                                <tr>
+                                    <td colSpan="3" className="p-6 border-2 border-green-600 text-center text-gray-400 italic">
+                                        Brak włączonych urządzeń
+                                    </td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-
+                {/* PASYWNE */}
                 <div className="bg-gray-800 rounded-xl shadow-lg border-2 border-gray-400 overflow-hidden">
                     <div className="bg-gray-700/40 p-4 border-b-2 border-gray-400">
                         <h3 className="text-xl font-bold text-gray-300 flex items-center gap-2">💤 Pasywne (OFF)</h3>
@@ -211,8 +357,8 @@ const ScheduleManager = () => {
                         <table className="w-full text-left border-collapse border-2 border-gray-400">
                             <thead className="bg-gray-900 text-gray-300 uppercase text-xs">
                             <tr>
-                                <th className="p-3 border-2 border-gray-400">Nazwa</th>
-                                <th className="p-3 border-2 border-gray-400">Typ</th>
+                                <th className="p-3 border-2 border-gray-400">Nazwa </th>
+                                <th className="p-3 border-2 border-gray-400">Typ </th>
                                 <th className="p-3 border-2 border-gray-400 text-right">Sterowanie</th>
                             </tr>
                             </thead>
@@ -221,22 +367,33 @@ const ScheduleManager = () => {
                                 <tr key={dev.id} className="hover:bg-gray-700/50">
                                     <td className="p-3 border-2 border-gray-400 font-semibold text-gray-300">{dev.name}</td>
                                     <td className="p-3 border-2 border-gray-400 text-xs font-mono text-gray-500">{dev.type}</td>
-                                    <td className="p-3 border-2 border-gray-400 text-right">
+                                    <td className="p-3 border-2 border-gray-400 text-right space-x-2">
                                         <button
                                             onClick={() => toggleState(dev, true)}
-                                            className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded text-xs font-bold border-2 border-green-400 shadow transition"
+                                            className="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold border-2 border-green-400 transition"
                                         >
                                             WŁĄCZ
+                                        </button>
+                                        <button
+                                            onClick={() => handleRemoveDevice(dev.id)}
+                                            className="bg-gray-700 hover:bg-red-900 text-red-400 hover:text-white px-2 py-1 rounded text-xs font-bold border border-red-500 transition"
+                                        >
+                                            USUŃ
                                         </button>
                                     </td>
                                 </tr>
                             ))}
-                            {passiveDevices.length === 0 && <tr><td colSpan="3" className="p-6 border-2 border-gray-400 text-center text-gray-500 italic">Wszystko włączone!</td></tr>}
+                            {passiveDevices.length === 0 && (
+                                <tr>
+                                    <td colSpan="3" className="p-6 border-2 border-gray-400 text-center text-gray-500 italic">
+                                        Wszystko włączone!
+                                    </td>
+                                </tr>
+                            )}
                             </tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     );

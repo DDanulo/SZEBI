@@ -47,24 +47,28 @@ public class DeviceController {
 // Maciak prosze bardzo
 
     @PostMapping
-    public ResponseEntity<Device> addDevice(@RequestParam String name, @RequestParam String type) {
+    public ResponseEntity<Device> addDevice(
+            @RequestParam String name,
+            @RequestParam String type,
+            @RequestParam(required = true) Double area,
+            @RequestParam(required = false) Integer maxPower,
+            @RequestParam(required = false) Integer minWind
+    ) {
+        if (area == null || area <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        int safeMaxPower = (maxPower != null) ? maxPower : 0;
+        int safeMinWind = (minWind != null) ? minWind : 0;
 
         for (IDeviceAuth manager : deviceManagers) {
-
-
-
-            if ("SOLAR".equalsIgnoreCase(type) && manager.getClass().getSimpleName().contains("Solar")) {
-                return ResponseEntity.ok(manager.addDevice(name));
-            }
-
-            if ("WIND".equalsIgnoreCase(type) && manager.getClass().getSimpleName().contains("Wind")) {
-                return ResponseEntity.ok(manager.addDevice(name));
-            }
-
-            if ("APPLIANCE".equalsIgnoreCase(type) && manager.getClass().getSimpleName().contains("Appliance")) {
-                return ResponseEntity.ok(manager.addDevice(name));
+             if (manager.supports(type)) {
+                 return ResponseEntity.ok(
+                        manager.addDevice(name, area, safeMaxPower, safeMinWind)
+                );
             }
         }
+
         return ResponseEntity.badRequest().build();
     }
 

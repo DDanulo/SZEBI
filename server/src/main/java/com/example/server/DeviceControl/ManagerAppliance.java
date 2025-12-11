@@ -3,7 +3,7 @@ package com.example.server.DeviceControl;
 import com.example.server.Simulation.api.IControlDevices;
 import com.example.server.Simulation.api.IShowDevices;
 import com.example.server.Simulation.entities.ConsumingDevice;
-
+import com.example.server.DeviceControl.Device;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +24,9 @@ public class ManagerAppliance implements IDeviceAuth {
                 .map(c -> Device.builder()
                         .id(c.getId())
                         .name(c.getDescription())
-                        .isOn(c.isWorking())
                         .type("APPLIANCE")
+                        .isOn(c.isWorking())
+                        .area(c.getArea())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -49,19 +50,28 @@ public class ManagerAppliance implements IDeviceAuth {
     }
 
     @Override
-    public Device addDevice(String name) {
+    public boolean supports(String type) {
+        return "APPLIANCE".equalsIgnoreCase(type);
+    }
 
-        ConsumingDevice device = new ConsumingDevice(name, false);
+    @Override
+    public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
+         ConsumingDevice device = new ConsumingDevice(name, false,area);
 
-        ConsumingDevice saved = controlDevices.addConsumingDevice(device);
+
+        var saved = controlDevices.addConsumingDevice(device);
 
         return Device.builder()
                 .id(saved.getId())
-                .name(saved.getDescription())
+                .name(name)
                 .type("APPLIANCE")
                 .isOn(false)
+                .area(area)
                 .build();
     }
+
+
+
 
     @Override
     public boolean removeDevice(UUID id) {
