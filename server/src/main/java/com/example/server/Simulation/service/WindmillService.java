@@ -64,9 +64,9 @@ public class WindmillService {
     }
 
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
-    private void simulateEnergyGeneration() {
+    public void simulateEnergyGeneration() {
         double windSpeed = simulator.getWindSpeed();
-        windmillRepository.findAll().forEach(windmill -> generatedMeasureRepository
+        windmillRepository.findByWorkingTrue().forEach(windmill -> generatedMeasureRepository
                 .save(new GeneratedEnergyMeasure(LocalDateTime.now(),
                 windmill.generateEnergy(windSpeed), windmill)));
     }

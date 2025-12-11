@@ -71,9 +71,9 @@ public class SolarPanelService {
     }
 
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
-    private void simulateEnergyGeneration() {
+    public void simulateEnergyGeneration() {
         double insolation = simulator.getInsolation();
-        solarPanelRepository.findAll().forEach(solarPanel -> generatedMeasureRepository.save(new GeneratedEnergyMeasure(LocalDateTime.now(),
+        solarPanelRepository.findByWorkingTrue().forEach(solarPanel -> generatedMeasureRepository.save(new GeneratedEnergyMeasure(LocalDateTime.now(),
                 solarPanel.generateEnergy(insolation), solarPanel)));
     }
 

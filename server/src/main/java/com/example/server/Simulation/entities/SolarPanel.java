@@ -18,8 +18,11 @@ public class SolarPanel extends EnergyProducingDevice{
 
     @Override
     public double generateEnergy(double insolation) {
+        if(this.totalGenerated == null){
+            this.totalGenerated = BigDecimal.ZERO;
+        }
         double generatedNow = area * insolation * 0.3;
-        totalGenerated.add(BigDecimal.valueOf(generatedNow));
+        this.totalGenerated = totalGenerated.add(BigDecimal.valueOf(generatedNow));
         return generatedNow;
     }
 

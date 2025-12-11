@@ -25,8 +25,11 @@ public class Windmill extends EnergyProducingDevice{
 
     @Override
     public double generateEnergy(double windSpeed) {
+        if(this.totalGenerated == null){
+            this.totalGenerated = BigDecimal.ZERO;
+        }
         double generatedNow =  maxPowerPerHour * Math.min(windSpeed/minWindSpeedForMaxPower, 1) /12;
-        totalGenerated.add(BigDecimal.valueOf(generatedNow));
+        this.totalGenerated = totalGenerated.add(BigDecimal.valueOf(generatedNow));
         return generatedNow;
     }
 
