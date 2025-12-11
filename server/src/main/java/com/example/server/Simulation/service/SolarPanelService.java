@@ -1,16 +1,20 @@
 package com.example.server.Simulation.service;
 
 
+import com.example.server.Simulation.data.GeneratedMeasureRepository;
 import com.example.server.Simulation.data.SolarPanelRepository;
 import com.example.server.Simulation.entities.EnergyProducingDevice;
+import com.example.server.Simulation.entities.GeneratedEnergyMeasure;
 import com.example.server.Simulation.entities.SolarPanel;
 import com.example.server.Simulation.exceptions.DeviceNotFoundException;
 import com.example.server.Simulation.simulators.BasicSimulator;
 import com.example.server.Simulation.simulators.Simulator;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,29 +27,17 @@ public class SolarPanelService {
 
     private final BasicSimulator simulator;
 
-    private final Thread simulationThread;
-
     private final SolarPanelRepository solarPanelRepository;
 
-    public SolarPanelService(BasicSimulator simulator, SolarPanelRepository solarPanelRepository) {
+    private final GeneratedMeasureRepository  generatedMeasureRepository;
+
+    public SolarPanelService(BasicSimulator simulator, SolarPanelRepository solarPanelRepository, GeneratedMeasureRepository generatedMeasureRepository) {
         this.simulator = simulator;
         this.solarPanelRepository = solarPanelRepository;
-        this .simulationThread = new Thread(() -> {
-            while (true) {
-                simulateEnergyGeneration();
-                try {
-                    sleep(300);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        this.generatedMeasureRepository = generatedMeasureRepository;
     }
 
-    @PostConstruct
-    public void init() {
-        simulationThread.start();
-    }
+
 
     public SolarPanel addSolarPanel(SolarPanel solarPanel) {
         return solarPanelRepository.save(solarPanel);
@@ -75,12 +67,14 @@ public class SolarPanelService {
             throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");
         }
        solarPanelRepository.deleteById(id);
-        return  solarPanelRepository.findById(id).get();
+        return  maybeSolarPanel.get();
     }
 
+    @Scheduled(fixedRate = 300_000, initialDelay = 10000)
     private void simulateEnergyGeneration() {
         double insolation = simulator.getInsolation();
-        solarPanelRepository.findAll().forEach(solarPanel -> {solarPanel.generateEnergy(insolation);});
+        solarPanelRepository.findAll().forEach(solarPanel -> generatedMeasureRepository.save(new GeneratedEnergyMeasure(LocalDateTime.now(),
+                solarPanel.generateEnergy(insolation), solarPanel)));
     }
 
 

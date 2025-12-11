@@ -11,13 +11,6 @@ import java.util.UUID;
 public interface SolarPanelRepository extends JpaRepository<SolarPanel,  UUID> {
 
 
-    //czemu tu zwraca boolean?????
-
-
-
-    /// i po jasny pieron jest save to DB jak jest add????
-    /// jak to jest przecie repo w bazie a nie in-memory?
-
 
 
 }
