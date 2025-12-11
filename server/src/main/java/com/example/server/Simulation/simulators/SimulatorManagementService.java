@@ -1,6 +1,7 @@
 package com.example.server.Simulation.simulators;
 
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -22,5 +23,10 @@ public class SimulatorManagementService {
     public Map<String, Object> changeTimeOfDay(TimeOfDay timeOfDay) {
         simulator.changeTimeOfDay(timeOfDay);
         return simulator.getSimulationParameters();
+    }
+
+    @Scheduled(fixedRate = 300_000)
+    public void simulate() {
+        simulator.simulate();
     }
 }

@@ -19,8 +19,6 @@ public  abstract class EnergyProducingDevice extends Device {
     @Column
     protected BigDecimal totalGenerated;
 
-
-
     public EnergyProducingDevice(boolean working) {
         super(working);
         this.totalGenerated = BigDecimal.valueOf(0.0f);
