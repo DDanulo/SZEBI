@@ -18,4 +18,6 @@ public class Resident extends User {
     private String room;
 
 
+
+
 }

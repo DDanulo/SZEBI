@@ -1,4 +1,4 @@
 package com.example.server.Administration.dto;
 
-public class LoginDTO {
-}
+public record LoginDTO (String login, String password)
+{ }

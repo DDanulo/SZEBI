@@ -1,23 +1,28 @@
-package com.example.server.Administration.rest;
+package com.example.server.Administration.security;
 
 import com.example.server.Administration.converters.ResidentConverter;
 import com.example.server.Administration.dto.RegisterDTO;
 import com.example.server.Administration.dto.ResidentDTO;
 import com.example.server.Administration.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class RegisterController {
 
     private final UserService userService;
 
+
     @PostMapping("/register")
     public ResidentDTO createResident(@RequestBody RegisterDTO resident){
-        return ResidentConverter.convertResidentToResidentDTO(userService.createUser(ResidentConverter.convertResidentDTOToResident(resident)));
+
+        return ResidentConverter.convertResidentToResidentDTO(userService.registerResident(ResidentConverter.convertRegisterDTOtoResident(resident)));
     }
 
 }

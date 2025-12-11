@@ -1,5 +1,7 @@
 package com.example.server.Administration.services;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.server.Administration.exceptions.InternalErrorException;
 import com.example.server.Administration.model.Resident;
 import com.example.server.Administration.model.User;
@@ -18,6 +20,8 @@ public class UserService {
 
     private final UserRepo userRepo;
 
+    private final PasswordEncoder passwordEncoder;
+
     public List<User> getAllUsers() {
         return userRepo.findAll();
 
@@ -28,8 +32,9 @@ public class UserService {
                 .orElseThrow(() -> new InternalErrorException());
     }
 
+
     public <T extends User> T createUser(T user) {
-        try{
+        try {
             return userRepo.save(user);
         } catch (DuplicateKeyException e){
             throw new InternalErrorException();
@@ -68,6 +73,51 @@ public class UserService {
                 .filter(u -> u instanceof Resident)
                 .map(u -> (Resident) u)
                 .collect(Collectors.toList());
+    }
+
+    public <T extends User> T updateUser(T updated) {
+        User user = getUserById(updated.getId());
+
+        user.setLogin(updated.getLogin());
+        user.setPasswordHash(updated.getPasswordHash());
+        user.setFirstName(updated.getFirstName());
+        user.setLastName(updated.getLastName());
+        user.setEmail(updated.getEmail());
+        user.setActive(updated.isActive());
+
+        if (user instanceof Resident && updated instanceof Resident r) {
+            ((Resident) user).setRoom(r.getRoom());
+        }
+
+        return (T) userRepo.save(user);
+    }
+
+
+    public User removeUserById(UUID id) {
+        User user = getUserById(id);
+        userRepo.delete(user);
+        return user;
+    }
+
+
+    public User loginUser(String login, String password) {
+        User user = getUserByLogin(login);
+        if ( passwordEncoder.matches(password,user.getPasswordHash()) ) {
+            return  user;
+        } else {
+            throw new InternalErrorException();
+        }
+
+    }
+
+
+    public Resident registerResident(Resident resident) {
+        try{
+            resident.setPasswordHash(passwordEncoder.encode(resident.getPasswordHash()));
+            return userRepo.save(resident);
+        } catch (DuplicateKeyException e){
+            throw new InternalErrorException();
+        }
     }
 
 

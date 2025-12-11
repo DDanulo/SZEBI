@@ -2,7 +2,9 @@ package com.example.server.Administration.rest;
 
 
 import com.example.server.Administration.converters.ResidentConverter;
+import com.example.server.Administration.dto.LoginDTO;
 import com.example.server.Administration.dto.ResidentDTO;
+import com.example.server.Administration.dto.UserDTO;
 import com.example.server.Administration.model.Resident;
 import com.example.server.Administration.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,8 @@ public class UserController {
     public ResidentDTO createResident(@RequestBody ResidentDTO resident){
         return ResidentConverter.convertResidentToResidentDTO(userService.createUser(ResidentConverter.convertResidentDTOToResident(resident)));
     }
+
+
 
 
 }

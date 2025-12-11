@@ -12,6 +12,7 @@ public class ResidentAuth implements IAuth {
 
     private final UserService userService;
 
+    //Mock hehe
     public List<User> getUsers() {
         return userService.getAllUsers();
     }

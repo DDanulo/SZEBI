@@ -1,5 +1,6 @@
 package com.example.server.Administration.converters;
 
+import com.example.server.Administration.dto.RegisterDTO;
 import com.example.server.Administration.dto.ResidentDTO;
 import com.example.server.Administration.model.Resident;
 
@@ -27,8 +28,21 @@ public class ResidentConverter {
 
     }
 
+    public static Resident convertRegisterDTOtoResident(RegisterDTO registerDTO){
+        return Resident.builder()
+                .login(registerDTO.login())
+                .passwordHash(registerDTO.password())
+                .firstName(registerDTO.firstName())
+                .lastName(registerDTO.lastName())
+                .email(registerDTO.email())
+                .room(registerDTO.room())
+                .build();
+    }
+
     public static List<ResidentDTO> convertResidentListToResidentDTOList(List<Resident> residents){
         return null == residents ? null : (List)residents.stream().filter(Objects::nonNull).map(ResidentConverter::convertResidentToResidentDTO).collect(Collectors.toList());
     }
+
+
 
 }
