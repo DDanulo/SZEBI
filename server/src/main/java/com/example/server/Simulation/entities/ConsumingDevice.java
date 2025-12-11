@@ -16,10 +16,6 @@ public class ConsumingDevice extends Device {
 
 
     @Column
-    private String description;
-
-
-    @Column
     private BigDecimal totalConsumed;
 
 
