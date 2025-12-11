@@ -14,6 +14,6 @@ public interface ForecastRepository extends JpaRepository<Forecast, UUID> {
 //    @Query(value = "SELECT * FROM temperatures WHERE date BETWEEN :from AND :to ", nativeQuery = true)
 //    List<Double> fetchTemperatures(LocalDateTime from, LocalDateTime to);
 
-    @Query(value = "SELECT * FROM energy_measure WHERE (timestamp BETWEEN :from AND :to) AND type = 'consumed'", nativeQuery = true)
+    @Query(value = "SELECT value FROM energy_measure WHERE (timestamp BETWEEN :from AND :to) AND type = 'consumed'", nativeQuery = true)
     List<Integer> fetchUsages(LocalDateTime from, LocalDateTime to);
 }
