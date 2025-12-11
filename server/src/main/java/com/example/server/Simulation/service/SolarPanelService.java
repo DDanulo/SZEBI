@@ -48,13 +48,19 @@ public class SolarPanelService {
     }
 
     public void activateSolarPanel(UUID id) {
-        solarPanelRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::deactivate,
-                () -> {throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");});
+        SolarPanel solarPanel = solarPanelRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("SolarPanel with id " + id + " not found"));
+
+        solarPanel.activate();
+        solarPanelRepository.save(solarPanel);
     }
 
     public void deactivateSolarPanel(UUID id) {
-        solarPanelRepository.findById(id).ifPresentOrElse(EnergyProducingDevice::deactivate,
-                () -> {throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");});
+        SolarPanel solarPanel = solarPanelRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("SolarPanel with id " + id + " not found"));
+
+        solarPanel.deactivate();
+        solarPanelRepository.save(solarPanel);
     }
 
     public List<SolarPanel> getAllSolarPanels() {

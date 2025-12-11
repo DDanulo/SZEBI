@@ -37,8 +37,8 @@ function App() {
         {/* --- Moduł sterowania --- */}
         <hr style={{ margin: '40px 0', border: '2px solid #666' }} />
 
-        {/* --- TU WSTAWIAMY TWÓJ MODUŁ --- */}
-        <div style={{ textAlign: 'left' }}> {/* Tylko żeby wyrównać tekst do lewej */}
+
+        <div style={{ textAlign: 'left' }}>
             <ScheduleManager />
             <ResidentManager />
         </div>

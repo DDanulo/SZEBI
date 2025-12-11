@@ -4,26 +4,44 @@ package com.example.server.Simulation.entities;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 public abstract  class Device {
     @Id
     @GeneratedValue
     @UuidGenerator
     private UUID id;
-
+    @Column
+    private String description;
     @Column
     private boolean working;
+    @Column
+    protected double area;
+    @Column
+    protected int maxPowerPerHour = 0;
 
-    public Device(boolean working) {
+    @Column
+    protected int minWindSpeedForMaxPower = 0;
+
+    @Column
+    protected BigDecimal totalConsumed = BigDecimal.ZERO;
+
+    @Column
+    protected BigDecimal totalGenerated = BigDecimal.ZERO;
+
+    public Device(String description, boolean working) {
         this.working = working;
+        this.description = description;
     }
 
     public void activate() {

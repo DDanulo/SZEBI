@@ -4,14 +4,14 @@ package com.example.server.Simulation.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
 @Entity
 @NoArgsConstructor
+@Getter
 public class ConsumingDevice extends Device {
 
 
@@ -23,10 +23,10 @@ public class ConsumingDevice extends Device {
     private BigDecimal totalConsumed;
 
 
-    public ConsumingDevice(String description, boolean active) {
-        super(active);
-        this.description = description;
-        this.totalConsumed = BigDecimal.ZERO;
+    public ConsumingDevice(String description, boolean active,double area) {
+        super(description,active);
+
+        this.setArea(area);
     }
 
     public double consumeEnergy(double coeff){

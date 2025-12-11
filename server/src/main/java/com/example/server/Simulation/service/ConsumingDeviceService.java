@@ -46,15 +46,22 @@ public class ConsumingDeviceService {
         return  consumingDeviceRepository.findById(id);
     }
 
-    public void activateConsumingDevice(UUID id){
-        consumingDeviceRepository.findById(id).ifPresentOrElse(ConsumingDevice::activate, () -> {
-            throw new DeviceNotFoundException("Consuming device with id: " + id + "not found");
-        });
+    public void activateConsumingDevice(UUID id) {
+        ConsumingDevice device = consumingDeviceRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("Consuming device with id: " + id + " not found"));
+
+         device.activate();
+
+          consumingDeviceRepository.save(device);
     }
 
-    public void deactivateConsumingDevice(UUID id){
-        consumingDeviceRepository.findById(id).ifPresentOrElse(ConsumingDevice::deactivate,  () -> {throw
-                new DeviceNotFoundException("Consuming device with id: " + id + "not found");});
+    public void deactivateConsumingDevice(UUID id) {
+        ConsumingDevice device = consumingDeviceRepository.findById(id)
+                .orElseThrow(() -> new DeviceNotFoundException("Consuming device with id: " + id + " not found"));
+
+        device.deactivate();
+
+         consumingDeviceRepository.save(device);
     }
 
     public ConsumingDevice deleteConsumingDevice(UUID id){
