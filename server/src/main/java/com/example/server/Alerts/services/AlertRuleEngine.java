@@ -15,9 +15,10 @@ public class AlertRuleEngine {
 
     private final AlertRuleRepository alertRuleRepository;
 
-    public AlertLevel check(SensorData data) {
+    public AlertLevel checkAlertLevel(SensorData data) {
 
         List<AlertRule> rules = alertRuleRepository.findByMetric(data.metric());
+
 
         AlertLevel highestDetectedLevel = null;
 
@@ -32,6 +33,7 @@ public class AlertRuleEngine {
             }
         }
 
+       // System.out.println("Sprawdzono czy istnie alert dla " + data.source() + " i wynosi on: " + highestDetectedLevel);
         return highestDetectedLevel;
     }
 

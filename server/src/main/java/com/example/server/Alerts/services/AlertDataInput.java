@@ -19,11 +19,16 @@ public class AlertDataInput implements IData {
 
     @Override
     public void handleData(SensorData data) {
-        AlertLevel detectedLevel = alertRuleEngine.check(data);
+        AlertLevel detectedLevel = alertRuleEngine.checkAlertLevel(data);
 
         if(detectedLevel != null){
 
-            Alert alert = Alert.builder().level(detectedLevel).source(data.source()).message("Wykryto anomalie dla " + data.metric() + " Wartość: "+ data.value()).timestamp(LocalDateTime.now()).build();
+            Alert alert = Alert.builder()
+                    .level(detectedLevel)
+                    .source(data.source())
+                    .message("Wykryto anomalie dla " + data.metric() + " Wartość: "+ data.value())
+                    .timestamp(LocalDateTime.now())
+                    .build();
 
             alertPublisher.notify(alert);
 

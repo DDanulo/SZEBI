@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import ScheduleManager from './components/devicecontrol/ScheduleManager';
 import ReportModule from './components/DataAnalysis/ReportModule';
+import AlertHistory from "./components/Alerts/AlertHistory.jsx";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -31,6 +32,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
 
+        <AlertHistory />
 
         {/* --- Moduł sterowania --- */}
         <hr style={{ margin: '40px 0', border: '2px solid #666' }} />
