@@ -1,6 +1,7 @@
 package com.example.server.Alerts.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Alert {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
     @Enumerated(EnumType.STRING)
     private AlertLevel level;

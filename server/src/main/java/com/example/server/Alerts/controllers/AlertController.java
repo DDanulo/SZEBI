@@ -1,12 +1,14 @@
 package com.example.server.Alerts.controllers;
 
 
+import com.example.server.Alerts.entities.Alert;
 import com.example.server.Alerts.services.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,4 +29,11 @@ public class AlertController {
 
         return ResponseEntity.ok("SOS przyjęte");
     }
+
+    @GetMapping("/logs")
+    public List<Alert> getAlertsLogs(){
+        return alertService.getAllAlerts();
+    }
+
+
 }
