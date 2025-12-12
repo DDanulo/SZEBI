@@ -1,64 +1,81 @@
 package com.example.server.DeviceControl;
 
-import com.example.server.DeviceControl.Device;
+import com.example.server.Simulation.api.IControlDevices;
+import com.example.server.Simulation.api.IShowDevices;
+import com.example.server.Simulation.entities.SolarPanel;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ManagerSolarPanel implements IDeviceAuth {
 
-    // Symulacja bazy danych w pamięci
-    private List<Device> solarPanels = new ArrayList<>();
+    private final IControlDevices controlDevices;
+    private final IShowDevices showDevices;
 
-    public ManagerSolarPanel() {
-        // Używamy SZTYWNYCH ID, żeby przetrwały restart serwera
-        solarPanels.add(new Device(UUID.fromString("11111111-1111-1111-1111-111111111111"), "Panel Dach Północ", true, "SOLAR"));
-        solarPanels.add(new Device(UUID.fromString("22222222-2222-2222-2222-222222222222"), "Panel Garaż", false, "SOLAR"));
+    @Override
+    public List<Device> getDevices() {
+        return showDevices.getSolarPanels().stream()
+                .map(p -> Device.builder()
+                        .id(p.getId())
+                        .name(p.getDescription())
+                        .type("SOLAR")
+                        .isOn(p.isWorking())
+                        .area(p.getArea())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean turnDeviceOn(UUID id) {
-        return changeState(id, true);
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.activateSolarPanel(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean turnDeviceOff(UUID id) {
-        return changeState(id, false);
-    }
-
-    @Override
-    public Device addDevice(UUID id) {
-
-        Device newDevice = new Device(id, "Nowy Panel " + id.toString().substring(0, 4), false, "SOLAR");
-        solarPanels.add(newDevice);
-        return newDevice;
-    }
-
-    @Override
-    public Device deleteDevice(UUID id) {
-        Device toDelete = solarPanels.stream().filter(d -> d.getId().equals(id)).findFirst().orElse(null);
-        if (toDelete != null) {
-            solarPanels.remove(toDelete);
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.deactivateSolarPanel(id);
+            return true;
         }
-        return toDelete;
+        return false;
     }
 
     @Override
-    public List<Device> getDevices() {
-        return new ArrayList<>(solarPanels);
+    public boolean supports(String type) {
+        return "SOLAR".equalsIgnoreCase(type);
     }
 
-    // Metoda pomocnicza
-    private boolean changeState(UUID id, boolean state) {
-        for (Device d : solarPanels) {
-            if (d.getId().equals(id)) {
-                d.setOn(state);
-                return true;
-            }
+    @Override
+    public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
+        SolarPanel panel = new SolarPanel(name,false, area);
+
+        var saved = controlDevices.addSolarPanel(panel);
+
+        return Device.builder()
+                .id(saved.getId())
+                .name(panel.getDescription())
+                .type("SOLAR")
+                .isOn(false)
+                .area(area)
+                .build();
+    }
+
+
+
+    @Override
+    public boolean removeDevice(UUID id) {
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.removeSolarPanel(id);
+            return true;
         }
         return false;
     }

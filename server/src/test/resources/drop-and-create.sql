@@ -1,0 +1,29 @@
+set client_min_messages = WARNING;
+drop table if exists device cascade;
+drop table if exists forecasts cascade;
+drop table if exists schedule cascade;
+drop table if exists "user" cascade;
+create table device (area float(53), max_power_per_hour integer, min_wind_speed_for_max_power integer, total_consumed numeric(38,2), total_generated numeric(38,2), working boolean, id uuid, type varchar(31) not null, description varchar(255), primary key (id));
+create table forecasts (forecasted_usage integer not null, creation_time timestamp(6) with time zone, forecast_date timestamp(6), id uuid not null, primary key (id));
+create table schedule (end_time timestamp(6) not null, start_time timestamp(6) not null, device_id uuid not null, id uuid not null, primary key (id));
+create table "user" (active boolean, version bigint, id uuid not null, type varchar(31) not null, email varchar(255), firstname varchar(255), lastname varchar(255), login varchar(255) unique, passwordhash varchar(255), room varchar(255), primary key (id));
+CREATE TABLE energy_measure (id UUID NOT NULL, type VARCHAR(31) NOT NULL, timestamp TIMESTAMP WITHOUT TIME ZONE, value DECIMAL, device_id UUID,CONSTRAINT pk_energymeasure PRIMARY KEY (id));
+ALTER TABLE energy_measure ADD CONSTRAINT FK_ENERGYMEASURE_ON_DEVICE FOREIGN KEY (device_id) REFERENCES device (id);
+create table alert (
+                       id uuid not null,
+                       timestamp timestamp(6),
+                       level varchar(255),
+                       message varchar(255),
+                       source varchar(255),
+                       primary key (id)
+);
+
+create table alert_rule (
+                            id uuid not null,
+                            rule_name varchar(255),
+                            level varchar(255),
+                            metric varchar(255),
+                            value float(53) not null,
+                            operator varchar(255),
+                            primary key (id)
+);

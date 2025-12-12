@@ -16,4 +16,9 @@ public enum Season {
         this.windSpeedCoefficient = windSpeedCoefficient;
         this.temperatureCoefficient = temperatureCoefficient;
     }
+
+    public Season next() {
+        Season[] vals = values();
+        return vals[(this.ordinal() + 1) % vals.length];
+    }
 }

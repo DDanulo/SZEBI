@@ -8,6 +8,7 @@ import java.util.UUID;
 public record ResidentDTO (
         UUID id,
         String login,
+        String password,
         String firstName,
         String lastName,
         boolean active,

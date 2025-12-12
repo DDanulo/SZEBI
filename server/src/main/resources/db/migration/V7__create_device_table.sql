@@ -1,13 +1,12 @@
-create table device
-(
+drop table if exists device cascade;
+create table device (
     area float(53),
     max_power_per_hour integer,
     min_wind_speed_for_max_power integer,
     total_consumed numeric(38,2),
     total_generated numeric(38,2),
     working boolean,
-    id UUID NOT NULL,
+    id        UUID        NOT NULL,
     type varchar(31) not null,
     description varchar(255),
-    CONSTRAINT pk_device PRIMARY KEY (id)
-);
+    CONSTRAINT pk_device PRIMARY KEY (id));

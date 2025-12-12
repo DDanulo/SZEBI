@@ -29,6 +29,8 @@ public class BasicSimulator implements Simulator {
     private volatile float insolation;
     private int counter;
 
+    private int seasonCounter;
+
 
     public BasicSimulator() {
         dayTime = TimeOfDay.EARLY_MORNING;
@@ -37,6 +39,7 @@ public class BasicSimulator implements Simulator {
         windSpeed = 0f;
         insolation = 5.1f;
         counter = 0; //4:00 in the morning
+        seasonCounter = 0;
     }
 
     @Override
@@ -47,6 +50,10 @@ public class BasicSimulator implements Simulator {
         if(++counter ==48) {
             dayTime = dayTime.next();
             counter = 0;
+        }
+        if(++seasonCounter ==91) {
+            season = season.next();
+            seasonCounter = 0;
         }
 
     }

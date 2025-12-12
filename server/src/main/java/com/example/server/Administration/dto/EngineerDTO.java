@@ -2,7 +2,7 @@ package com.example.server.Administration.dto;
 
 import java.util.UUID;
 
-public record EmployeeDTO(
+public record EngineerDTO(
         UUID id,
         String login,
         String firstName,

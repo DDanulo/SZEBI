@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/prediction")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DataPredictionController {
     private final ForecastService forecastService;
 
@@ -45,5 +47,11 @@ public class DataPredictionController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @PutMapping("/generate")
+    public ResponseEntity<String> generateForecasts() {
+        forecastService.generateForecast();
+        return ResponseEntity.created(URI.create("http://localhost:8080/prediction/latest")).build();
     }
 }
