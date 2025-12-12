@@ -2,6 +2,7 @@ package com.example.server.DataAnalysis.service;
 
 import com.example.server.DataAnalysis.model.DataPoint;
 import com.example.server.DataAnalysis.model.DataType;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,8 @@ public class DataFetcher {
     private final JdbcTemplate jdbcTemplate;
 
     // przełącznik mockowania
+    @Getter
     private final boolean mockEnabled = true;
-
-    public boolean isMockEnabled() {
-        return mockEnabled;
-    }
-
 
     public List<DataPoint> fetchData(LocalDateTime from, LocalDateTime to, DataType type) {
         if (!mockEnabled) {

@@ -64,6 +64,25 @@ public class ReportController {
         return ResponseEntity.ok(dataProvider.getAggregatedData(from, to, type));
     }
 
+    @GetMapping("/average")
+    public ResponseEntity<Double> getAverage(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam DataType type
+    ) {
+        return ResponseEntity.ok(
+                dataProvider.calculateAverage(dataProvider.getRawData(from, to, type)));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<Double> getTotal(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam DataType type
+    ) {
+        return ResponseEntity.ok(dataProvider.calculateTotal(dataProvider.getRawData(from, to, type)));
+    }
+
     @GetMapping("/last-updated")
     public ResponseEntity<LocalDateTime> getLastUpdated() {
         return ResponseEntity.ok(dataProvider.getLastUpdated());

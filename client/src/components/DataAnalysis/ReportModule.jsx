@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { getChartData, downloadPdfReport } from './ReportService';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import React, {useCallback, useEffect, useState} from 'react';
+import { getChartData, downloadPdfReport, getDataTotal } from './ReportService';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const ReportModule = () => {
     const [dateFrom, setDateFrom] = useState('2025-12-01T00:00');
@@ -9,19 +10,43 @@ const ReportModule = () => {
     const [reportType, setReportType] = useState('ENERGY_CONSUMPTION');
     const [viewType, setViewType] = useState('line');
 
-    const handleGenerateChart = async () => {
+    const handleGenerateChart = useCallback(async () => {
+        setChartData([]); //czyścimy przed zapytaniem
+
         try {
-            const response = await getChartData(dateFrom, dateTo, reportType);
-            const formattedData = response.data.map(item => ({
-                ...item,
-                timestamp: new Date(item.timestamp).toLocaleDateString() + ' ' + new Date(item.timestamp).getHours() + ':00'
-            }));
-            setChartData(formattedData);
+            if (viewType === `line` || viewType === `bar`) {
+                const response = await getChartData(dateFrom, dateTo, reportType);
+                const formattedData = response.data.map(item => ({
+                    ...item,
+                    timestamp: new Date(item.timestamp).toLocaleDateString() + ' ' + new Date(item.timestamp).getHours() + ':00'
+                }));
+                setChartData(formattedData);
+            }
+            if (viewType === `pie`) {
+                const responseConsumption = await getDataTotal(dateFrom, dateTo, `ENERGY_CONSUMPTION`);
+                const responseProduction = await getDataTotal(dateFrom, dateTo, `ENERGY_PRODUCTION`);
+                const valConsumption = responseConsumption.data;
+                const valProduction = responseProduction.data;
+
+                const pieData = [
+                    { name: "Produkcja Energii", value: valProduction },
+                    { name: "Zużycie Energii", value: valConsumption }
+                ];
+
+                setChartData(pieData);
+            }
+
         } catch (error) {
             console.error("Błąd pobierania danych wykresu", error);
             alert("Nie udało się pobrać danych.");
         }
-    };
+    }, [dateFrom, dateTo, reportType, viewType]);
+
+    useEffect(() => {
+        if (viewType === `pie` || viewType === `line` || viewType === `bar`) {
+            handleGenerateChart();
+        }
+    }, [viewType, handleGenerateChart]);
 
     const handleDownloadPdf = async () => {
         try {
@@ -39,6 +64,7 @@ const ReportModule = () => {
         }
     };
 
+    const COLORS = ['#00C49F', '#FF8042'];
     return (
         <div className="p-6 max-w-6xl mx-auto space-y-8 text-gray-100 bg-gray-800 rounded-xl border-2 border-gray-600 mt-10">
             <h2 className="text-2xl font-bold mb-4 border-b-2 border-gray-500 pb-2">📊 Moduł Analizy i Raportowania</h2>
@@ -97,9 +123,10 @@ const ReportModule = () => {
                     <div className="mb-2 text-right">
                         <button onClick={() => setViewType('line')} className={`mr-2 px-2 py-1 rounded ${viewType === 'line' ? 'bg-blue-600' : 'bg-gray-700'}`}>Liniowy</button>
                         <button onClick={() => setViewType('bar')} className={`px-2 py-1 rounded ${viewType === 'bar' ? 'bg-blue-600' : 'bg-gray-700'}`}>Słupkowy</button>
+                        <button onClick={() => setViewType('pie')} className={`ml-2 px-2 py-1 rounded ${viewType === 'pie' ? 'bg-blue-600' : 'bg-gray-700'}`}>Kołowy</button>
                     </div>
 
-                    <ResponsiveContainer width="100%"Bh height="100%">
+                    <ResponsiveContainer width="100%" height="100%">
                         {viewType === 'line' ? (
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -109,7 +136,7 @@ const ReportModule = () => {
                                 <Legend />
                                 <Line type="monotone" dataKey="value" stroke="#8884d8" name="Wartość [kWh]" strokeWidth={2} />
                             </LineChart>
-                        ) : (
+                        ) : viewType === 'bar' ? (
                             <BarChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                                 <XAxis dataKey="timestamp" stroke="#ccc" />
@@ -118,6 +145,23 @@ const ReportModule = () => {
                                 <Legend />
                                 <Bar dataKey="value" fill="#82ca9d" name="Wartość [kWh]" />
                             </BarChart>
+                        ) : (
+                            <PieChart>
+                                <Pie data={chartData} cx="50%" cy="50%" labelLine={false}
+                                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    dataKey="value"
+                                    nameKey="name"
+                                >
+                                    {chartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555'}}
+                                         itemStyle={{ color: '#ccc' }} />
+                                <Legend />
+                            </PieChart>
                         )}
                     </ResponsiveContainer>
                 </div>
