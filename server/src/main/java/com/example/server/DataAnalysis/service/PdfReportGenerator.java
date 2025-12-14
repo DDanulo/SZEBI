@@ -2,6 +2,7 @@ package com.example.server.DataAnalysis.service;
 
 import com.example.server.DataAnalysis.model.DataPoint;
 import com.lowagie.text.*;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class PdfReportGenerator {
             document.open();
 
             // nagłówek
-            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+            String fontPath = "fonts/arial.ttf";
+            Font titleFont = FontFactory.getFont(fontPath, BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 18);
             Paragraph title = new Paragraph("Raport Zużycia Energii", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
@@ -56,13 +58,13 @@ public class PdfReportGenerator {
             document.add(table);
 
             // podsumowanie
-            Font summaryFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14);
+            Font summaryFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 14);
             document.add(new Paragraph(" "));
             document.add(new Paragraph("Całkowite zużycie: " + String.format("%.2f", total) + " kWh", summaryFont));
 
             // wykres słupkowy (agregacja dzienna)
             document.add(new Paragraph(" "));
-            Font chartTitleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+            Font chartTitleFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 16);
             document.add(new Paragraph("Wykres dzienny (słupkowy)", chartTitleFont));
             document.add(new Paragraph(" "));
 
@@ -104,7 +106,7 @@ public class PdfReportGenerator {
                 float x = left + barGap;
                 cb.setColorFill(new Color(100, 149, 237));
 
-                Font labelFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+                Font labelFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 8);
 
                 for (int i = 0; i < n; i++) {
                     LocalDate day = days.get(i);
@@ -126,7 +128,7 @@ public class PdfReportGenerator {
                     x += barWidth + barGap;
                 }
 
-                Font axisFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+                Font axisFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 8);
                 for (int i = 0; i <= 4; i++) {
                     float frac = i / 4f;
                     float y = bottom + frac * (height - 20f);

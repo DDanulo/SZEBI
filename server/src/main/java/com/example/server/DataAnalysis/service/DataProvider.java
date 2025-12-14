@@ -3,6 +3,7 @@ package com.example.server.DataAnalysis.service;
 import com.example.server.DataAnalysis.api.IData;
 import com.example.server.DataAnalysis.model.DataPoint;
 import com.example.server.DataAnalysis.model.DataType;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class DataProvider implements IData {
     private final DataFetcher dataFetcher;
     private final DataProcessor dataProcessor;
 
+    @Getter
     private LocalDateTime lastUpdated;
 
     @Override
@@ -32,7 +34,11 @@ public class DataProvider implements IData {
         return dataProcessor.aggregateByDay(data);
     }
 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    public double calculateAverage(List<DataPoint> data) {
+        return dataProcessor.calculateAverage(data);
+    }
+
+    public double calculateTotal(List<DataPoint> data) {
+        return dataProcessor.calculateTotal(data);
     }
 }
