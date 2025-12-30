@@ -3,7 +3,7 @@ package com.example.server.Communication.services;
 import com.example.server.Communication.exceptions.UserNotFoundException;
 import com.example.server.Communication.objects.Message;
 import com.example.server.Communication.repositories.MessageRepository;
-import com.example.server.Communication.repositories.TemporaryUserRepo;
+import com.example.server.Communication.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +16,16 @@ import java.util.UUID;
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final TemporaryUserRepo mockUserRepo;
+    private final UserRepository userRepository;
 
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
 
     public Message createMessage(String content, String authorLogin) {
-        mockUserRepo.findByLogin(authorLogin)
-                .orElseThrow(() -> new UserNotFoundException("User with login " + authorLogin + " not found."));
+        if (userRepository.getUser(authorLogin) == null) {
+            throw new UserNotFoundException("User with login " + authorLogin + " not found.");
+        }
 
         Message message = Message.builder()
                 .id(UUID.randomUUID())
