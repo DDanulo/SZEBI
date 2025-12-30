@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @Primary
@@ -28,5 +29,9 @@ public class UserRepository implements IAuth {
                 .filter(user -> user.getLogin().equals(login))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public User findById(UUID id) {
+        return userRepo.findById(id).orElse(null);
     }
 }
