@@ -2,16 +2,12 @@ package com.example.server.DataAnalysis.service;
 
 import com.example.server.DataAnalysis.model.DataPoint;
 import com.example.server.DataAnalysis.model.DataType;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,74 +15,64 @@ public class DataFetcher {
 
     private final JdbcTemplate jdbcTemplate;
 
-    // przełącznik mockowania
-    @Getter
-    private final boolean mockEnabled = true;
-
     public List<DataPoint> fetchData(LocalDateTime from, LocalDateTime to, DataType type) {
-        if (!mockEnabled) {
-            // docelowa ścieżka pod bazę danych (na przyszłość). Na teraz sygnalizujemy brak implementacji.
-            throw new UnsupportedOperationException("Tryb mock=false jest obecnie niezaimplementowany. Włącz mockowanie.");
+        return switch (type) {
+            case ENERGY_CONSUMPTION -> queryMeasure(from, to, "consumed", DataType.ENERGY_CONSUMPTION);
+            case ENERGY_PRODUCTION -> queryMeasure(from, to, "generated", DataType.ENERGY_PRODUCTION);
+            case DEVICE_EFFICIENCY -> computeEfficiency(from, to);
+        };
+    }
+
+    private List<DataPoint> queryMeasure(LocalDateTime from, LocalDateTime to, String discriminator, DataType targetType) {
+        String sql = "SELECT timestamp, value, device_id FROM energy_measure WHERE timestamp BETWEEN ? AND ? AND type = ? ORDER BY timestamp";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            LocalDateTime ts = rs.getTimestamp("timestamp").toLocalDateTime();
+            double value = rs.getBigDecimal("value") != null ? rs.getBigDecimal("value").doubleValue() : 0.0;
+            UUID deviceId = (UUID) rs.getObject("device_id");
+            return new DataPoint(ts, value, targetType, deviceId != null ? deviceId.toString() : null);
+        }, from, to, discriminator);
+    }
+
+    private List<DataPoint> computeEfficiency(LocalDateTime from, LocalDateTime to) {
+        List<DataPoint> cons = queryMeasure(from, to, "consumed", DataType.ENERGY_CONSUMPTION);
+        List<DataPoint> prod = queryMeasure(from, to, "generated", DataType.ENERGY_PRODUCTION);
+
+        HashMap<String, HashMap<LocalDateTime, Double>> consByDeviceTs = new HashMap<>();
+        for (DataPoint dp : cons) {
+            String dev = dp.getDeviceId();
+            if (dev == null) continue;
+            consByDeviceTs
+                .computeIfAbsent(dev, k -> new HashMap<>())
+                .merge(dp.getTimestamp(), dp.getValue(), Double::sum);
         }
 
-        // generujemy dane w pełni niezależnie od modułu symulacji.
-        List<DataPoint> points = new ArrayList<>();
-        LocalDateTime current = from;
-
-        long seed = Objects.hash(from, to, type);
-        Random random = new Random(seed);
-
-        //bazowe wartości zależne od dnia roku (deterministycznie)
-        int dayOfYear = from.getDayOfYear();
-        double baseTemp = 5 + 15 * Math.sin((dayOfYear / 365.0) * 2 * Math.PI);
-        double baseWind = 1.0 + 2.0 * Math.abs(Math.cos((dayOfYear / 365.0) * 2 * Math.PI));
-        double baseInsol = 50 + 100 * Math.max(0, Math.sin((dayOfYear / 365.0) * 2 * Math.PI));
-
-        while (current.isBefore(to)) {
-            int hour = current.getHour();
-
-            // produkcja tylko w dzień
-            double daylightFactor;
-            if (hour >= 6 && hour <= 18) {
-                daylightFactor = 1.0 - (Math.abs(12 - hour) / 6.0);
-                daylightFactor = Math.max(0, daylightFactor);
-            } else {
-                daylightFactor = 0.0;
-            }
-
-            // konsumpcja – wyższa rano i wieczorem
-            double consumptionFactor;
-            if (hour >= 6 && hour < 9) consumptionFactor = 1.2;
-            else if (hour >= 17 && hour < 22) consumptionFactor = 1.35;
-            else if (hour >= 0 && hour < 5) consumptionFactor = 0.7;
-            else consumptionFactor = 1.0;
-
-            // szum losowy w celu zmniejszenia wystąpienia patternu
-            double noise = (random.nextDouble() - 0.5) * 2.0;
-
-            double value;
-            switch (type) {
-                case ENERGY_CONSUMPTION -> {
-                    double raw = 5.0 * (45.0 - baseTemp) * 0.02;
-                    value = Math.max(0.0, (raw * consumptionFactor) + 8 + noise);
-                }
-                case ENERGY_PRODUCTION -> {
-                    double raw = 0.12 * baseInsol + 1.8 * baseWind;
-                    value = Math.max(0.0, raw * daylightFactor + noise * 0.5);
-                }
-                case DEVICE_EFFICIENCY -> {
-                    double cons = Math.max(0.1, 5.0 * (45.0 - baseTemp) * 0.02 * consumptionFactor + 8);
-                    double prod = Math.max(0.0, (0.12 * baseInsol + 1.8 * baseWind) * daylightFactor);
-                    double eff = prod / cons;
-                    value = Math.max(0.0, Math.min(1.0, eff + noise * 0.02));
-                }
-                default -> value = 10 + random.nextDouble() * 20;
-            }
-
-            points.add(new DataPoint(current, value, type, "simulation-device-1"));
-            current = current.plusHours(1);
+        HashMap<String, HashMap<LocalDateTime, Double>> prodByDeviceTs = new HashMap<>();
+        for (DataPoint dp : prod) {
+            String dev = dp.getDeviceId();
+            if (dev == null) continue;
+            prodByDeviceTs
+                .computeIfAbsent(dev, k -> new HashMap<>())
+                .merge(dp.getTimestamp(), dp.getValue(), Double::sum);
         }
 
-        return points;
+        List<DataPoint> result = new ArrayList<>();
+        for (var entry : consByDeviceTs.entrySet()) {
+            String devId = entry.getKey();
+            HashMap<LocalDateTime, Double> consTs = entry.getValue();
+            HashMap<LocalDateTime, Double> prodTs = prodByDeviceTs.get(devId);
+            if (prodTs == null) continue;
+
+            for (LocalDateTime ts : consTs.keySet()) {
+                Double c = consTs.get(ts);
+                Double p = prodTs.get(ts);
+                if (c != null && p != null) {
+                    double eff = c == 0.0 ? 0.0 : Math.max(0.0, Math.min(1.0, p / c));
+                    result.add(new DataPoint(ts, eff, DataType.DEVICE_EFFICIENCY, devId));
+                }
+            }
+        }
+
+        result.sort(Comparator.comparing(DataPoint::getTimestamp));
+        return result;
     }
 }

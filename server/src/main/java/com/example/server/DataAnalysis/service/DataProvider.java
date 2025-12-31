@@ -41,4 +41,24 @@ public class DataProvider implements IData {
     public double calculateTotal(List<DataPoint> data) {
         return dataProcessor.calculateTotal(data);
     }
+
+    public Map<String, Double> aggregateByHour(List<DataPoint> data) {
+        return dataProcessor.aggregateByHour(data);
+    }
+
+    public Map<String, Double> aggregateByDay(List<DataPoint> data) {
+        return dataProcessor.aggregateByDay(data);
+    }
+
+    public Map<String, Double> aggregateByWeek(List<DataPoint> data) {
+        return dataProcessor.aggregateByWeek(data);
+    }
+
+    public Map<String, Double> aggregateByMonth(List<DataPoint> data) {
+        return dataProcessor.aggregateByMonth(data);
+    }
+
+    public Map<String, Double> aggregateByYear(List<DataPoint> data) {
+        return dataProcessor.aggregateByYear(data);
+    }
 }
