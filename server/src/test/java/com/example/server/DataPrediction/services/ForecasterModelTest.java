@@ -1,8 +1,7 @@
-package com.example.server.prediction;
+package com.example.server.DataPrediction.services;
 
 import com.example.server.DataPrediction.data.Forecast;
 import com.example.server.DataPrediction.data.UsageRecord;
-import com.example.server.DataPrediction.services.ForecasterModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

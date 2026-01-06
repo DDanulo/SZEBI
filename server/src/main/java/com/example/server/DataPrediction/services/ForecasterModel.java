@@ -15,15 +15,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ForecasterModel {
-    // Nazwy kolumn w DataFrame (ważne dla mapowania)
+    // nazwy kolumn w DataFrame
     private static final String COL_HOUR = "hour";
     private static final String COL_DAY = "day";
     private static final String COL_LAG1 = "lag1";
     private static final String COL_LAG24 = "lag24";
     private static final String COL_TARGET = "value";
-
-    // --- PROSTE KLASY DANYCH (POJO) ---
-    // (Bez zmian w stosunku do poprzedniej wersji)
 
     private static class HourlyRecord {
         LocalDateTime time;
@@ -35,19 +32,14 @@ public class ForecasterModel {
         }
     }
 
-    // --- GŁÓWNA LOGIKA ---
-
     private RandomForest model;
 
-    // Schema danych wejściowych (bez targetu) - potrzebny do tworzenia Tuple przy predykcji
     private smile.data.type.StructType featureSchema;
 
     @Getter
     private Instant lastTrainingTime = null;
 
-    /**
-     * KROK 1: TRENING MODELU (API SMILE 3.0+)
-     */
+
     public void trainModel(List<UsageRecord> rawHistory5Min) {
         List<HourlyRecord> hourlyHistory = aggregateToHourly(rawHistory5Min);
 
@@ -55,7 +47,6 @@ public class ForecasterModel {
             throw new IllegalArgumentException("Za mało danych (min. 25h): " + hourlyHistory.size());
         }
 
-        // Przygotowanie danych do DataFrame
         int n = hourlyHistory.size() - 24;
         double[][] dataMatrix = new double[n][5]; // 4 cechy + 1 cel
 
@@ -71,30 +62,18 @@ public class ForecasterModel {
             dataMatrix[i][4] = target.value;                       // target (value)
         }
 
-        // 1. Tworzymy DataFrame (nazywamy kolumny)
         DataFrame df = DataFrame.of(dataMatrix, COL_HOUR, COL_DAY, COL_LAG1, COL_LAG24, COL_TARGET);
 
-        // 2. Definiujemy Formułę: "value ~ ." (Przewiduj 'value' używając wszystkich innych kolumn)
         Formula formula = Formula.lhs(COL_TARGET);
 
-        // 3. Opcje modelu (RandomForest.Options)
-        // W nowym Smile można użyć domyślnej metody fit, która używa domyślnych opcji,
-        // lub skonfigurować własne. Tutaj użyjemy przeciążenia z domyślnymi opcjami dla prostoty.
-        System.out.println("Trening modelu...");
-
-        // fit(Formula, DataFrame) - to jest kluczowa zmiana w API
         this.model = RandomForest.fit(formula, df);
 
-        // Zapisujemy schemat cech (potrzebny do predykcji) - pobieramy schemat X (bez Y)
         this.featureSchema = formula.x(df).schema();
 
-        System.out.println("Model gotowy!");
         lastTrainingTime = Instant.now();
     }
 
-    /**
-     * KROK 2: PROGNOZOWANIE (API SMILE 3.0+)
-     */
+
     public List<Forecast> forecastNext7Days(List<UsageRecord> recentHistoryRaw) {
         if (model == null) {
             throw new IllegalStateException("Najpierw wytrenuj model!");
@@ -105,7 +84,6 @@ public class ForecasterModel {
             throw new IllegalArgumentException("Potrzebne min. 24h historii.");
         }
 
-        // Bufor na historię (tak jak poprzednio)
         LinkedList<Double> historyBuffer = new LinkedList<>();
         for (int i = 24; i > 0; i--) {
             historyBuffer.add(context.get(context.size() - i).value);
@@ -116,11 +94,9 @@ public class ForecasterModel {
         LocalDateTime currentTime = lastKnownTime;
         double lastValue = historyBuffer.getLast();
 
-        // Pętla na 7 dni (168 godzin)
         for (int i = 0; i < 7 * 24; i++) {
             currentTime = currentTime.plusHours(1);
 
-            // Budujemy surowy wiersz danych (tylko cechy, bez targetu)
             double[] featuresValues = new double[]{
                     (double) currentTime.getHour(),              // hour
                     (double) currentTime.getDayOfWeek().getValue(), // day
@@ -128,18 +104,13 @@ public class ForecasterModel {
                     historyBuffer.getFirst()                     // lag24
             };
 
-            // TWORZENIE TUPLE (Wymagane przez Smile 3.0+ dla predict())
-            // Najprostszy sposób to utworzenie jednowierszowego DataFrame lub użycie Tuple.of
-            // Tuple.of wymaga podania tablicy wartości i schematu (struktury)
             Tuple inputTuple = Tuple.of(this.featureSchema, featuresValues);
 
-            // Wywołanie modelu
             double prediction = model.predict(inputTuple);
             if (prediction < 0) prediction = 0;
 
             futureHourlyPredictions.add(new HourlyRecord(currentTime, prediction));
 
-            // Aktualizacja buforów
             historyBuffer.add(prediction);
             historyBuffer.removeFirst();
             lastValue = prediction;
@@ -147,8 +118,6 @@ public class ForecasterModel {
 
         return calculateDailyAverages(futureHourlyPredictions);
     }
-
-    // --- METODY POMOCNICZE (Bez zmian logicznych) ---
 
     private List<HourlyRecord> aggregateToHourly(List<UsageRecord> raw) {
         Map<LocalDateTime, List<Double>> grouped = raw.stream()
@@ -184,17 +153,16 @@ public class ForecasterModel {
         LocalDateTime start = LocalDateTime.now().minusDays(days);
 
         Random random = new Random();
-        int totalPoints = days * 24 * 12; // co 5 minut
+        int totalPoints = days * 24 * 12;
 
         for (int i = 0; i < totalPoints; i++) {
             LocalDateTime t = start.plusMinutes(i * 5L);
-            // Prosty wzór: więcej w dzień (godz 12), mniej w nocy + trochę losowości
+
             double hourEffect = Math.sin((t.getHour() - 6) * Math.PI / 12);
             double baseValue = 10 + (hourEffect * 5);
             double noise = random.nextDouble() * 2;
 
             data.add(new UsageRecord(t, baseValue + noise));
-            System.out.println(data.getLast());
         }
 
         return data;

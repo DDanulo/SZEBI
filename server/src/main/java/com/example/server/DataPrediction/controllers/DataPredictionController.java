@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.List;
 
 @RestController
 @RequestMapping("/prediction")
@@ -19,39 +19,36 @@ public class DataPredictionController {
         this.forecastService = forecastService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Forecast> getForecast(@PathVariable String id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(forecastService.getForecast(UUID.fromString(id)));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/latest")
+    @GetMapping("/latest/one")
     public ResponseEntity<Forecast> getLatestForecast() {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecast());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecast());
     }
 
-    @PutMapping("/{interval}")
-    public ResponseEntity<String> updateInterval(@PathVariable String interval) {
-        try {
-            forecastService.changeInterval(Integer.parseInt(interval));
-            return ResponseEntity.status(HttpStatus.OK).body("Generation interval has been set to: " + interval + " minutes");
-        } catch (NumberFormatException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @GetMapping("/latest/batch")
+    public ResponseEntity<List<Forecast>> getLatestForecasts() {
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecasts());
+    }
+
+    @GetMapping(value = "/forecasts", consumes = "application/json")
+    public ResponseEntity<List<Forecast>> getForecasts(@RequestBody FromTo fromTo) {
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getForecasts(fromTo.from, fromTo.to));
     }
 
     @PutMapping("/generate")
     public ResponseEntity<String> generateForecasts() {
         forecastService.generateForecast();
-        return ResponseEntity.created(URI.create("http://localhost:8080/prediction/latest")).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping(value = "/mockitbro")
+    public ResponseEntity<String> mockitbro() {
+        forecastService.switchMockMode();
+        return ResponseEntity.status(HttpStatus.OK).body("Bro got mocked");
+    }
+
+    public record FromTo(
+            Instant from,
+            Instant to
+    ) {
     }
 }
