@@ -2,41 +2,52 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ResidentView from "./ResidentView.jsx";
 import AdminView from "./AdminView.jsx";
+import ConversationsView from "./ConversationsView.jsx";
 
 const CommunicationPage = () => {
-    const [role, setRole] = useState('resident');
+    const [view, setView] = useState('resident');
     const [residentViewKey, setResidentViewKey] = useState(0);
 
     const handleAnnouncementCreated = () => {
         setResidentViewKey(prevKey => prevKey + 1);
-        setRole('resident');
+        setView('resident');
     };
 
+    // Trzeba zmienić samemu
+    const currentUserId = '6d981507-0d27-48e6-826e-a87ba57433a0';
+
     return (
-        <div className="p-4">
-            <Link to="/" className="mb-4 text-blue-500 hover:underline block">
+        <div className="communication-page">
+            <Link to="/" className="back-link">
                 &larr; Powrót do strony głównej
             </Link>
-            <h1 className="text-4xl font-bold mb-6 text-center">Moduł Komunikacji</h1>
-            <div className="flex justify-center gap-4 mb-6">
+            <h1 className="page-title">Moduł Komunikacji</h1>
+            <div className="view-switcher">
                 <button
-                    onClick={() => setRole('resident')}
-                    className={`px-4 py-2 rounded ${role === 'resident' ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}
+                    onClick={() => setView('resident')}
+                    className={`switch-button ${view === 'resident' ? 'active' : ''}`}
                 >
-                    Widok Mieszkańca
+                    Ogłoszenia
                 </button>
                 <button
-                    onClick={() => setRole('admin')}
-                    className={`px-4 py-2 rounded ${role === 'admin' ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}
+                    onClick={() => setView('messages')}
+                    className={`switch-button ${view === 'messages' ? 'active' : ''}`}
                 >
-                    Widok Administratora
+                    Wiadomości
+                </button>
+                <button
+                    onClick={() => setView('admin')}
+                    className={`switch-button ${view === 'admin' ? 'active' : ''}`}
+                >
+                    Panel Admina
                 </button>
             </div>
 
-            <hr className="my-6" />
+            <hr className="divider" />
 
-            {role === 'resident' && <ResidentView key={residentViewKey} />}
-            {role === 'admin' && <AdminView onAnnouncementCreated={handleAnnouncementCreated} />}
+            {view === 'resident' && <ResidentView key={residentViewKey} />}
+            {view === 'admin' && <AdminView onAnnouncementCreated={handleAnnouncementCreated} />}
+            {view === 'messages' && <ConversationsView currentUserId={currentUserId} />}
         </div>
     );
 };

@@ -289,3 +289,296 @@
     }
 }
 
+.communication-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #3b82f6;
+    text-decoration: none;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.view-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.switch-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #444;
+    background-color: transparent;
+    color: #a0a0a0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.switch-button.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.divider {
+    margin: 1.5rem 0;
+    border-color: #444;
+}
+
+.conversations-view {
+    display: flex;
+    height: 75vh;
+    border: 1px solid #444;
+    border-radius: 0.5rem;
+    background-color: #2a2a2a;
+    overflow: hidden;
+}
+
+.conversation-list {
+    width: 25%;
+    min-width: 220px;
+    border-right: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-header {
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #444;
+}
+
+.conversation-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.conversation-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.2s;
+}
+
+.conversation-item:hover {
+    background-color: #333;
+}
+
+.conversation-item.active {
+    background-color: #3b82f6;
+}
+
+.participant-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #6b7280;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 0.75rem;
+}
+
+.participant-name {
+    font-weight: 500;
+}
+
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    width: 30rem;
+}
+
+.chat-window.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0a0a0;
+}
+
+.chat-header {
+    padding: 1rem;
+    border-bottom: 1px solid #444;
+    background-color: #2a2a2a;
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.messages-area {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.message-bubble {
+    max-width: 70%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+    word-wrap: break-word;
+}
+
+.message-bubble p {
+    margin: 0;
+}
+
+.message-bubble.sent {
+    background-color: #3b82f6;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0.25rem;
+    text-align: right;
+}
+
+.message-bubble.received {
+    background-color: #4b5563;
+    color: rgba(255, 255, 255, 0.87);
+    align-self: flex-start;
+    border-bottom-left-radius: 0.25rem;
+    text-align: left;
+}
+
+.message-timestamp {
+    font-size: 0.60rem;
+    color: rgba(255, 255, 255, 0.6);
+    display: block;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.message-bubble.received .message-timestamp {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.message-input-form {
+    display: flex;
+    padding: 0.75rem;
+    border-top: 1px solid #444;
+    gap: 0.5rem;
+}
+
+.message-input-form input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #444;
+    border-radius: 1rem;
+    background-color: #2a2a2a;
+    color: white;
+}
+
+.message-input-form button {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    border: none;
+    background-color: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+@media (prefers-color-scheme: light) {
+    .back-link { color: #2563eb; }
+    .switch-button {
+        border-color: #d1d5db;
+        color: #4b5563;
+    }
+    .switch-button.active {
+        background-color: #2563eb;
+        border-color: #2563eb;
+    }
+    .divider { border-color: #e5e7eb; }
+
+    .conversations-view {
+        border-color: #e5e7eb;
+        background-color: #f9fafb;
+    }
+    .conversation-list { border-right-color: #e5e7eb; }
+    .list-header { border-bottom-color: #e5e7eb; }
+    .conversation-item { border-bottom-color: #e5e7eb; }
+    .conversation-item:hover { background-color: #f3f4f6; }
+    .conversation-item.active { background-color: #2563eb; }
+    .participant-avatar { background-color: #9ca3af; }
+
+    .chat-window { background-color: #ffffff; }
+    .chat-window.placeholder { color: #6b7280; }
+    .chat-header {
+        border-bottom-color: #e5e7eb;
+        background-color: #f9fafb;
+    }
+    .message-bubble.sent { background-color: #2563eb; }
+    .message-bubble.received {
+        background-color: #e5e7eb;
+        color: #1f2937;
+    }
+    .message-timestamp { color: rgba(255, 255, 255, 0.7); }
+    .message-bubble.received .message-timestamp { color: #6b7280; }
+
+    .message-input-form { border-top-color: #e5e7eb; }
+    .message-input-form input {
+        border-color: #d1d5db;
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+    .message-input-form button { background-color: #2563eb; }
+}
+
+.participant-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.participant-details {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+
+.conversation-item.active .participant-details {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.chat-header p.participant-contact {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+@media (prefers-color-scheme: light) {
+    .participant-details {
+        color: #6b7280;
+    }
+    .conversation-item.active .participant-details {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .chat-header p.participant-contact {
+        color: #6b7280;
+    }
+}
