@@ -1,4 +1,4 @@
-const ConversationList = ({ conversations, currentUserId, onSelectConversation, selectedConversationId }) => {
+const ConversationList = ({ conversations, currentUserId, onSelectConversation, selectedConversationId, onNewConversation }) => {
 
     const getParticipant = (participants) => {
         return participants.find(p => p.id !== currentUserId);
@@ -6,7 +6,10 @@ const ConversationList = ({ conversations, currentUserId, onSelectConversation, 
 
     return (
         <div className="conversation-list">
-            <h3 className="list-header">Twoje konwersacje</h3>
+            <div className="list-header-container">
+                <h3 className="list-header">Twoje konwersacje</h3>
+                <button className="new-conversation-btn" onClick={onNewConversation}>+</button>
+            </div>
             {conversations.length > 0 ? (
                 <ul>
                     {conversations.map(conv => {

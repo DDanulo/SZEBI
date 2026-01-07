@@ -1,6 +1,7 @@
 package com.example.server.Communication.controllers;
 
 import com.example.server.Communication.dtos.ConversationDTO;
+import com.example.server.Communication.dtos.CreateConversationRequestDTO;
 import com.example.server.Communication.objects.Conversation;
 import com.example.server.Communication.services.ConversationService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,12 @@ public class ConversationController {
     @GetMapping("/{id}")
     public ConversationDTO getConversationById(@PathVariable Long id) {
         return convertToDto(conversationService.getConversationById(id));
+    }
+
+    @PostMapping
+    public ConversationDTO findOrCreateConversation(@RequestBody CreateConversationRequestDTO request) {
+        Conversation conversation = conversationService.findOrCreateConversation(request.user1Id(), request.user2Id());
+        return convertToDto(conversation);
     }
 
     private ConversationDTO convertToDto(Conversation conversation) {

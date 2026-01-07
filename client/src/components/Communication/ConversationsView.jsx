@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import ConversationList from './ConversationList';
 import ChatWindow from './ChatWindow.jsx';
+import NewConversationModal from "./NewConversationModal.jsx";
 
 const ConversationsView = ({ currentUserId }) => {
     const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const fetchConversations = async () => {
         try {
@@ -30,11 +32,12 @@ const ConversationsView = ({ currentUserId }) => {
 
     const handleMessageSent = () => {
         fetchConversations();
-        if (selectedConversation) {
-            const newSelected = { ...selectedConversation };
-            setSelectedConversation(null);
-            setTimeout(() => setSelectedConversation(newSelected), 0);
-        }
+    };
+
+    const handleConversationCreated = (newConversation) => {
+        fetchConversations();
+        setSelectedConversation(newConversation);
+        setIsModalOpen(false);
     };
 
     if (loading) return <p className="loading-text">Ładowanie konwersacji...</p>;
@@ -47,12 +50,20 @@ const ConversationsView = ({ currentUserId }) => {
                 currentUserId={currentUserId}
                 onSelectConversation={setSelectedConversation}
                 selectedConversationId={selectedConversation?.id}
+                onNewConversation={() => setIsModalOpen(true)}
             />
             <ChatWindow
                 conversation={selectedConversation}
                 currentUserId={currentUserId}
                 onMessageSent={handleMessageSent}
             />
+            {isModalOpen && (
+                <NewConversationModal
+                    currentUserId={currentUserId}
+                    onClose={() => setIsModalOpen(false)}
+                    onConversationCreated={handleConversationCreated}
+                />
+            )}
         </div>
     );
 };
