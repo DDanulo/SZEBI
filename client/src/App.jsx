@@ -5,6 +5,7 @@ import ScheduleManager from './components/DeviceControl/ScheduleManager.jsx';
 import ReportModule from './components/DataAnalysis/ReportModule.jsx';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
 import ResidentManager from "./components/Administration/ResidentManager.jsx";
+import {Link} from "react-router-dom";
 
 
 function App() {
@@ -33,6 +34,15 @@ function App() {
         <hr style={{ margin: '40px 0', border: '2px solid #666' }} />
         <div style={{ textAlign: 'left' }}>
             <PredictionViewer />
+        </div>
+
+        {/* --- MODUŁ KOMUNIKACJI --- */}
+        <div>
+            <h2>Moduł Komunikacji</h2>
+            <p>Przejdź do tablicy ogłoszeń i centrum wiadomości.</p>
+            <Link to="/communication">
+                Przejdź do Komunikacji
+            </Link>
         </div>
     </>
   )
