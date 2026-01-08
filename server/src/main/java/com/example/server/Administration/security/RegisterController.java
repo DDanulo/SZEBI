@@ -21,7 +21,6 @@ public class RegisterController {
 
     @PostMapping("/register")
     public ResidentDTO createResident(@RequestBody RegisterDTO resident){
-
         return ResidentConverter.convertResidentToResidentDTO(userService.registerResident(ResidentConverter.convertRegisterDTOtoResident(resident)));
     }
 
