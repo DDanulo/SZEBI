@@ -37,39 +37,29 @@ public class DataFetcher {
         List<DataPoint> cons = queryMeasure(from, to, "consumed", DataType.ENERGY_CONSUMPTION);
         List<DataPoint> prod = queryMeasure(from, to, "generated", DataType.ENERGY_PRODUCTION);
 
-        HashMap<String, HashMap<LocalDateTime, Double>> consByDeviceTs = new HashMap<>();
+        Map<LocalDateTime, Double> totalConsByTs = new HashMap<>();
         for (DataPoint dp : cons) {
-            String dev = dp.getDeviceId();
-            if (dev == null) continue;
-            consByDeviceTs
-                .computeIfAbsent(dev, k -> new HashMap<>())
-                .merge(dp.getTimestamp(), dp.getValue(), Double::sum);
+            totalConsByTs.merge(dp.getTimestamp(), dp.getValue(), Double::sum);
         }
 
-        HashMap<String, HashMap<LocalDateTime, Double>> prodByDeviceTs = new HashMap<>();
+        Map<LocalDateTime, Double> totalProdByTs = new HashMap<>();
         for (DataPoint dp : prod) {
-            String dev = dp.getDeviceId();
-            if (dev == null) continue;
-            prodByDeviceTs
-                .computeIfAbsent(dev, k -> new HashMap<>())
-                .merge(dp.getTimestamp(), dp.getValue(), Double::sum);
+            totalProdByTs.merge(dp.getTimestamp(), dp.getValue(), Double::sum);
         }
 
         List<DataPoint> result = new ArrayList<>();
-        for (var entry : consByDeviceTs.entrySet()) {
-            String devId = entry.getKey();
-            HashMap<LocalDateTime, Double> consTs = entry.getValue();
-            HashMap<LocalDateTime, Double> prodTs = prodByDeviceTs.get(devId);
-            if (prodTs == null) continue;
 
-            for (LocalDateTime ts : consTs.keySet()) {
-                Double c = consTs.get(ts);
-                Double p = prodTs.get(ts);
-                if (c != null && p != null) {
-                    double eff = c == 0.0 ? 0.0 : Math.max(0.0, Math.min(1.0, p / c));
-                    result.add(new DataPoint(ts, eff, DataType.DEVICE_EFFICIENCY, devId));
-                }
+        for (Map.Entry<LocalDateTime, Double> entry : totalConsByTs.entrySet()) {
+            LocalDateTime ts = entry.getKey();
+            double totalCons = entry.getValue();
+            double totalProd = totalProdByTs.getOrDefault(ts, 0.0);
+
+            double efficiency = 0.0;
+            if (totalCons > 0) {
+                efficiency = Math.min(1.0, totalProd / totalCons);
             }
+
+            result.add(new DataPoint(ts, efficiency, DataType.DEVICE_EFFICIENCY, "SYSTEM"));
         }
 
         result.sort(Comparator.comparing(DataPoint::getTimestamp));

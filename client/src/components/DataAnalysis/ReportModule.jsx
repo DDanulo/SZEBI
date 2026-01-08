@@ -2,15 +2,18 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import { getChartData, downloadPdfReport, getDataTotal, getDevices } from './ReportService';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
     ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { Download, RefreshCw, Filter } from 'lucide-react';
 
 const ReportModule = () => {
-    const [dateFrom, setDateFrom] = useState('2025-12-01T00:00');
-    const [dateTo, setDateTo] = useState('2025-12-07T23:59');
+    // Domyślny zakres dat (ostatnie 7 dni)
+    const [dateFrom, setDateFrom] = useState('2023-10-01T00:00');
+    const [dateTo, setDateTo] = useState('2023-10-07T23:59');
+
     const [chartData, setChartData] = useState([]);
     const [reportType, setReportType] = useState('ENERGY_CONSUMPTION');
     const [viewType, setViewType] = useState('line');
     const [seriesKeys, setSeriesKeys] = useState([]);
-    const [granularity, setGranularity] = useState('daily'); // 'daily' | 'hourly'
+    const [granularity, setGranularity] = useState('daily');
     const [devices, setDevices] = useState([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState([]);
 
@@ -22,12 +25,13 @@ const ReportModule = () => {
 
     const handleGenerateChart = useCallback(async () => {
         setChartData([]);
-
         try {
-            if (viewType === `line` || viewType === `bar`) {
+            if (viewType === 'line' || viewType === 'bar') {
                 const response = await getChartData(dateFrom, dateTo, reportType, selectedDeviceIds);
 
+                // Logika przetwarzania danych (agregacja vs podział na urządzenia)
                 if (!selectedDeviceIds || selectedDeviceIds.length === 0) {
+                    // Logika dla sumy wszystkich urządzeń
                     if (reportType !== 'DEVICE_EFFICIENCY') {
                         const sumByTs = new Map();
                         response.data.forEach(item => {
@@ -42,6 +46,7 @@ const ReportModule = () => {
                         setChartData(aggregated);
                         setSeriesKeys([]);
                     } else {
+                        // Logika dla średniej wydajności
                         const agg = new Map();
                         response.data.forEach(item => {
                             const d = new Date(item.timestamp);
@@ -58,62 +63,47 @@ const ReportModule = () => {
                         setSeriesKeys([]);
                     }
                 } else {
+                    // Logika dla wybranych konkretnych urządzeń (pivot)
                     const byTs = new Map();
-                    const devices = new Set();
-
+                    const devs = new Set();
                     response.data.forEach(item => {
                         const d = new Date(item.timestamp);
                         const tsLabel = d.toLocaleDateString() + ' ' + d.getHours() + ':00';
-                        const dev = item.deviceId || 'unknown-device';
-                        devices.add(dev);
-                        if (!byTs.has(tsLabel)) {
-                            byTs.set(tsLabel, { timestamp: tsLabel });
-                        }
+                        const dev = item.deviceId || 'unknown';
+                        devs.add(dev);
+                        if (!byTs.has(tsLabel)) byTs.set(tsLabel, { timestamp: tsLabel });
                         const row = byTs.get(tsLabel);
                         row[dev] = (row[dev] || 0) + (item.value || 0);
                     });
-
-                    const pivoted = Array.from(byTs.values()).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                    setChartData(pivoted);
-                    setSeriesKeys(Array.from(devices));
+                    setChartData(Array.from(byTs.values()).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)));
+                    setSeriesKeys(Array.from(devs));
                 }
+            } else if (viewType === 'pie') {
+                // Dla wykresu kołowego pobieramy sumy całkowite
+                const [resCons, resProd] = await Promise.all([
+                    getDataTotal(dateFrom, dateTo, 'ENERGY_CONSUMPTION', selectedDeviceIds),
+                    getDataTotal(dateFrom, dateTo, 'ENERGY_PRODUCTION', selectedDeviceIds)
+                ]);
+                setChartData([
+                    { name: "Produkcja", value: resProd.data || 0 },
+                    { name: "Zużycie", value: resCons.data || 0 }
+                ]);
             }
-            if (viewType === `pie`) {
-                const responseConsumption = await getDataTotal(dateFrom, dateTo, `ENERGY_CONSUMPTION`, selectedDeviceIds);
-                const responseProduction = await getDataTotal(dateFrom, dateTo, `ENERGY_PRODUCTION`, selectedDeviceIds);
-                const valConsumption = responseConsumption.data;
-                const valProduction = responseProduction.data;
-
-                const pieData = [
-                    { name: "Produkcja Energii", value: valProduction },
-                    { name: "Zużycie Energii", value: valConsumption }
-                ];
-
-                setChartData(pieData);
-            }
-
         } catch (error) {
-            console.error("Błąd pobierania danych wykresu", error);
+            console.error("Błąd pobierania danych:", error);
             alert("Nie udało się pobrać danych.");
         }
     }, [dateFrom, dateTo, reportType, viewType, selectedDeviceIds]);
 
+    // Pobranie listy urządzeń przy starcie
     useEffect(() => {
-        if (viewType === `pie` || viewType === `line` || viewType === `bar`) {
-            handleGenerateChart();
-        }
-    }, [viewType, handleGenerateChart]);
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const res = await getDevices();
-                setDevices(res.data || []);
-            } catch (e) {
-                console.error('Błąd pobierania listy urządzeń', e);
-            }
-        })();
+        getDevices().then(res => setDevices(res.data || [])).catch(console.error);
     }, []);
+
+    // Automatyczne odświeżenie wykresu przy zmianie typu widoku
+    useEffect(() => {
+        if (chartData.length === 0) handleGenerateChart();
+    }, [viewType]);
 
     const handleDownloadPdf = async () => {
         try {
@@ -121,178 +111,131 @@ const ReportModule = () => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'raport.pdf');
+            link.setAttribute('download', 'raport_energetyczny.pdf');
             document.body.appendChild(link);
             link.click();
             link.remove();
         } catch (error) {
-            console.error("Błąd pobierania PDF", error);
+            console.error("Błąd PDF:", error);
             alert("Nie udało się wygenerować PDF.");
         }
     };
 
-    const COLORS = ['#00C49F', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#a4de6c', '#d0ed57', '#8dd1e1', '#d88884', '#c0c0c0'];
-    return (
-        <div className="p-6 max-w-6xl mx-auto space-y-8 text-gray-100 bg-gray-800 rounded-xl border-2 border-gray-600 mt-10">
-            <h2 className="text-2xl font-bold mb-4 border-b-2 border-gray-500 pb-2">📊 Moduł Analizy i Raportowania</h2>
+    const COLORS = ['#2563eb', '#16a34a', '#db2777', '#ea580c', '#9333ea', '#0891b2'];
 
-            {/* Panel Sterowania */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div>
-                    <label className="block text-sm text-gray-300 mb-1 font-bold">Rodzaj Raportu</label>
+    return (
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+
+            {/* --- PANEL KONTROLNY --- */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="flex flex-col">
+                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Typ Danych</label>
                     <select
                         value={reportType}
                         onChange={(e) => setReportType(e.target.value)}
-                        className="w-full p-2 rounded bg-gray-700 border border-gray-500 text-white"
+                        className="p-2 rounded border border-gray-300 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     >
                         <option value="ENERGY_CONSUMPTION">Zużycie Energii</option>
                         <option value="ENERGY_PRODUCTION">Produkcja Energii</option>
-                        <option value="DEVICE_EFFICIENCY">Sprawność Urządzeń</option>
+                        <option value="DEVICE_EFFICIENCY">Efektywność</option>
                     </select>
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-300 mb-1 font-bold">Urządzenie</label>
+
+                <div className="flex flex-col">
+                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Urządzenie</label>
                     <select
                         value={selectedDeviceIds[0] || 'ALL'}
-                        onChange={(e) => {
-                            const val = e.target.value;
-                            if (val === 'ALL') {
-                                setSelectedDeviceIds([]);
-                            } else {
-                                setSelectedDeviceIds([val]);
-                            }
-                        }}
-                        className="w-full p-2 rounded bg-gray-700 border border-gray-500 text-white"
-                        title="Wybierz urządzenie lub Wszystkie"
+                        onChange={(e) => setSelectedDeviceIds(e.target.value === 'ALL' ? [] : [e.target.value])}
+                        className="p-2 rounded border border-gray-300 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     >
-                        <option value="ALL" className="bg-gray-700">Wszystkie urządzenia</option>
+                        <option value="ALL">Wszystkie urządzenia</option>
                         {devices.map(d => (
-                            <option key={d.id} value={d.id} className="bg-gray-700">
-                                {d.description || d.id}
-                            </option>
+                            <option key={d.id} value={d.id}>{d.description || d.id}</option>
                         ))}
                     </select>
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-300 mb-1 font-bold">Granularność PDF</label>
-                    <select
-                        value={granularity}
-                        onChange={(e) => setGranularity(e.target.value)}
-                        className="w-full p-2 rounded bg-gray-700 border border-gray-500 text-white"
-                    >
-                        <option value="hourly" className="bg-gray-700">Godzinowa</option>
-                        <option value="daily" className="bg-gray-700">Dzienna</option>
-                        <option value="weekly" className="bg-gray-700">Tygodniowa</option>
-                        <option value="monthly" className="bg-gray-700">Miesięczna</option>
-                        <option value="yearly" className="bg-gray-700">Roczna</option>
-                    </select>
-                </div>
-                <div>
-                    <label className="block text-sm text-gray-300 mb-1 font-bold">Od</label>
+
+                <div className="flex flex-col">
+                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Data Od</label>
                     <input
                         type="datetime-local"
                         value={dateFrom}
                         onChange={(e) => setDateFrom(e.target.value)}
-                        className="w-full p-2 rounded bg-gray-700 border border-gray-500 text-white"
+                        className="p-2 rounded border border-gray-300 bg-white text-sm"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-300 mb-1 font-bold">Do</label>
+
+                <div className="flex flex-col">
+                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Data Do</label>
                     <input
                         type="datetime-local"
                         value={dateTo}
                         onChange={(e) => setDateTo(e.target.value)}
-                        className="w-full p-2 rounded bg-gray-700 border border-gray-500 text-white"
+                        className="p-2 rounded border border-gray-300 bg-white text-sm"
                     />
                 </div>
+
                 <div className="flex items-end gap-2">
                     <button
                         onClick={handleGenerateChart}
-                        className="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded font-bold transition"
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded flex justify-center items-center gap-2 font-semibold transition"
                     >
-                        Generuj Wykres
+                        <RefreshCw size={18} /> Generuj
                     </button>
                     <button
                         onClick={handleDownloadPdf}
-                        className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded font-bold transition"
+                        className="bg-red-600 hover:bg-red-700 text-white p-2 rounded flex justify-center items-center gap-2 font-semibold transition"
                         title="Pobierz PDF"
                     >
-                        PDF
+                        <Download size={18} /> PDF
                     </button>
                 </div>
             </div>
 
-            {/* Wykres */}
-            {chartData.length > 0 ? (
-                <div className="bg-gray-900 p-4 rounded-lg border border-gray-700" style={{ height: '400px' }}>
-                    <div className="mb-2 text-right">
-                        <button onClick={() => setViewType('line')} className={`mr-2 px-2 py-1 rounded ${viewType === 'line' ? 'bg-blue-600' : 'bg-gray-700'}`}>Liniowy</button>
-                        <button onClick={() => setViewType('bar')} className={`px-2 py-1 rounded ${viewType === 'bar' ? 'bg-blue-600' : 'bg-gray-700'}`}>Słupkowy</button>
-                        <button onClick={() => setViewType('pie')} className={`ml-2 px-2 py-1 rounded ${viewType === 'pie' ? 'bg-blue-600' : 'bg-gray-700'}`}>Kołowy</button>
-                    </div>
+            {/* --- OBSZAR WYKRESU --- */}
+            <div className="h-[500px] w-full bg-white p-4">
+                <div className="flex justify-end mb-4 gap-2">
+                    <button onClick={() => setViewType('line')} className={`px-3 py-1 text-sm rounded ${viewType === 'line' ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-500 hover:bg-gray-100'}`}>Liniowy</button>
+                    <button onClick={() => setViewType('bar')} className={`px-3 py-1 text-sm rounded ${viewType === 'bar' ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-500 hover:bg-gray-100'}`}>Słupkowy</button>
+                    <button onClick={() => setViewType('pie')} className={`px-3 py-1 text-sm rounded ${viewType === 'pie' ? 'bg-blue-100 text-blue-700 font-bold' : 'text-gray-500 hover:bg-gray-100'}`}>Kołowy (Suma)</button>
+                </div>
 
-                    <ResponsiveContainer width="100%" height="100%">
-                        {viewType === 'line' ? (
-                            <LineChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                                <XAxis dataKey="timestamp" stroke="#ccc" />
-                                <YAxis stroke="#ccc" />
-                                <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
-                                <Legend />
-                                {seriesKeys.length > 0 ? (
-                                    seriesKeys.map((key, idx) => (
-                                        <Line key={key}
-                                              type="monotone"
-                                              dataKey={key}
-                                              stroke={COLORS[idx % COLORS.length]}
-                                              name={deviceNameMap[key] || key}
-                                              strokeWidth={2}
-                                        />
-                                    ))
-                                ) : (
-                                    <Line type="monotone" dataKey="value" stroke="#8884d8" name="Wartość" strokeWidth={2} />
-                                )}
-                            </LineChart>
-                        ) : viewType === 'bar' ? (
-                            <BarChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                                <XAxis dataKey="timestamp" stroke="#ccc" />
-                                <YAxis stroke="#ccc" />
-                                <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
-                                <Legend />
-                                {seriesKeys.length > 0 ? (
-                                    seriesKeys.map((key, idx) => (
-                                        <Bar key={key} dataKey={key} fill={COLORS[idx % COLORS.length]} name={deviceNameMap[key] || key} />
-                                    ))
-                                ) : (
-                                    <Bar dataKey="value" fill="#82ca9d" name="Wartość" />
-                                )}
-                            </BarChart>
-                        ) : (
-                            <PieChart>
-                                <Pie data={chartData} cx="50%" cy="50%" labelLine={false}
-                                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    dataKey="value"
-                                    nameKey="name"
-                                >
-                                    {chartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555'}}
-                                         itemStyle={{ color: '#ccc' }} />
-                                <Legend />
-                            </PieChart>
-                        )}
-                    </ResponsiveContainer>
-                </div>
-            ) : (
-                <div className="text-center py-10 text-gray-500 border-2 border-dashed border-gray-600 rounded-lg">
-                    Wybierz parametry i kliknij "Generuj Wykres", aby zobaczyć dane.
-                </div>
-            )}
+                <ResponsiveContainer width="100%" height="100%">
+                    {viewType === 'pie' ? (
+                        <PieChart>
+                            <Pie data={chartData} cx="50%" cy="50%" label outerRadius={120} fill="#8884d8" dataKey="value" nameKey="name">
+                                {chartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                            </Pie>
+                            <Tooltip />
+                            <Legend />
+                        </PieChart>
+                    ) : viewType === 'bar' ? (
+                        <BarChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis dataKey="timestamp" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            {seriesKeys.length > 0
+                                ? seriesKeys.map((key, idx) => <Bar key={key} dataKey={key} name={deviceNameMap[key] || key} fill={COLORS[idx % COLORS.length]} />)
+                                : <Bar dataKey="value" name="Wartość" fill="#2563eb" />
+                            }
+                        </BarChart>
+                    ) : (
+                        <LineChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis dataKey="timestamp" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            {seriesKeys.length > 0
+                                ? seriesKeys.map((key, idx) => <Line key={key} type="monotone" dataKey={key} name={deviceNameMap[key] || key} stroke={COLORS[idx % COLORS.length]} strokeWidth={2} dot={false} />)
+                                : <Line type="monotone" dataKey="value" name="Wartość" stroke="#2563eb" strokeWidth={2} dot={false} />
+                            }
+                        </LineChart>
+                    )}
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };
