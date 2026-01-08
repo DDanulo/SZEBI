@@ -8,6 +8,6 @@ import java.util.UUID;
 public class ScheduleDTO {
     private UUID id;
     private UUID deviceId;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime turnOn;
+    private LocalDateTime turnOff;
 }

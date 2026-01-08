@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { getSchedulesByDevice, addSchedule, deleteSchedule, getAllDevices, turnDeviceOn, turnDeviceOff, addDevice, removeDevice } from './ScheduleService';
+// Importujemy Twój CSS
+import './ScheduleManager.css';
+
 const ScheduleManager = () => {
     const [devices, setDevices] = useState([]);
     const [selectedDeviceId, setSelectedDeviceId] = useState('');
     const [schedules, setSchedules] = useState([]);
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
+
+    // Zmienione nazwy stanów dla jasności (backend oczekuje turnOn/turnOff)
+    const [turnOnTime, setTurnOnTime] = useState('');
+    const [turnOffTime, setTurnOffTime] = useState('');
 
     const [newDeviceName, setNewDeviceName] = useState('');
     const [newDeviceType, setNewDeviceType] = useState('APPLIANCE');
-
     const [area, setArea] = useState('');
 
+    // --- LOGIKA ---
     const handleCreateDevice = async (e) => {
         e.preventDefault();
-
         const parsedArea = parseFloat(area);
-           if (isNaN(parsedArea) || parsedArea <= 0) {
-                alert('Wymagana jest poprawna wartość powierzchni (> 0).');
-                return;
-            }
-
+        if (isNaN(parsedArea) || parsedArea <= 0) {
+            alert('Wymagana jest poprawna wartość powierzchni (> 0).');
+            return;
+        }
         try {
-
-            const extraParams = {
-                    area: parsedArea
-            };
-
+            const extraParams = { area: parsedArea };
             await addDevice(newDeviceName, newDeviceType, extraParams);
-
-
             setNewDeviceName('');
             setArea('');
             alert("Urządzenie dodane!");
@@ -39,6 +36,7 @@ const ScheduleManager = () => {
             alert("Błąd dodawania urządzenia");
         }
     };
+
     const handleRemoveDevice = async (id) => {
         if(!window.confirm("Usunąć urządzenie?")) return;
         try {
@@ -46,14 +44,11 @@ const ScheduleManager = () => {
             loadDevices();
         } catch (error) {
             console.error(error);
-            alert("Błąd dodawania urządzenia");
+            alert("Błąd usuwania urządzenia");
         }
     };
 
-    useEffect(() => {
-        loadDevices();
-    }, []);
-
+    useEffect(() => { loadDevices(); }, []);
 
     useEffect(() => {
         if (selectedDeviceId) {
@@ -67,7 +62,6 @@ const ScheduleManager = () => {
         try {
             const response = await getAllDevices();
             setDevices(response.data);
-
             if (!selectedDeviceId && response.data.length > 0) {
                 setSelectedDeviceId(response.data[0].id);
             }
@@ -92,16 +86,17 @@ const ScheduleManager = () => {
             return;
         }
 
+        // --- ZMIANA: Używamy nazw zgodnych z nowym DTO w Javie ---
         const newSchedule = {
             deviceId: selectedDeviceId,
-            start: start,
-            end: end
+            turnOn: turnOnTime,   // Zamiast start
+            turnOff: turnOffTime  // Zamiast end
         };
 
         try {
             await addSchedule(newSchedule);
-            setStart('');
-            setEnd('');
+            setTurnOnTime('');
+            setTurnOffTime('');
             alert("Dodano!");
             loadSchedules(selectedDeviceId);
         } catch (error) {
@@ -124,7 +119,6 @@ const ScheduleManager = () => {
         }
     };
 
-    // PRZEŁĄCZANIE STANU ---
     const toggleState = async (device, targetState) => {
         try {
             if (targetState === true) {
@@ -132,268 +126,189 @@ const ScheduleManager = () => {
             } else {
                 await turnDeviceOff(device.id);
             }
-
             loadDevices();
-
         } catch (error) {
             console.error(error);
             alert("Błąd sterowania urządzeniem");
         }
     };
 
-    // Filtrowanie urządzeń
     const activeDevices = devices.filter(d => d.on === true);
     const passiveDevices = devices.filter(d => d.on === false);
 
     return (
-        <div className="p-6 max-w-6xl mx-auto space-y-8 text-gray-100">
+        <div className="schedule-container">
+            <div className="schedule-layout">
 
-            {/* --- 1. PANEL DODAWANIA URZĄDZEŃ --- */}
-            <div className="bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-blue-500">
-                <h2 className="text-2xl font-bold mb-4 border-b-2 border-blue-500 pb-2 text-blue-400">
-                    🛠 Dodaj Nowe Urządzenie
-                </h2>
+                {/* --- LEWA KOLUMNA: URZĄDZENIA --- */}
+                <div className="left-column">
 
-                <form onSubmit={handleCreateDevice} className="flex flex-col gap-4">
-                    <div className="flex gap-4 items-end">
-
-                        {/* Pole: NAZWA */}
-                        <div className="flex-1">
-                            <label className="block text-sm text-gray-300 mb-1 font-bold">Nazwa: </label>
-                            <input
-                                type="text"
-                                className="w-full p-2 rounded bg-gray-700 border-2 border-blue-500 text-white placeholder-gray-400"
-                                placeholder="np. Mój Sprzęt"
-                                value={newDeviceName}
-                                onChange={(e) => setNewDeviceName(e.target.value)}
-                                required
-                            />
-                        </div>
-
-                        {/* Pole: TYP */}
-                        <div className="w-48">
-                            <label className="block text-sm text-gray-300 mb-1 font-bold">Typ: </label>
-                            <select
-                                className="w-full p-2 rounded bg-gray-700 border-2 border-blue-500 text-white"
-                                value={newDeviceType}
-                                onChange={(e) => setNewDeviceType(e.target.value)}
-                            >
-                                <option value="APPLIANCE">AGD (Zużycie)</option>
-                                <option value="SOLAR">Panel Solarny</option>
-                                <option value="WIND">Wiatrak</option>
-                            </select>
-                        </div>
+                    {/* KARTA DODAWANIA */}
+                    <div className="schedule-card">
+                        <h3>🛠 Dodaj Urządzenie</h3>
+                        <form onSubmit={handleCreateDevice}>
+                            <div className="form-group">
+                                <label>Nazwa urządzenia</label>
+                                <input
+                                    type="text" className="form-input" placeholder="np. Lodówka"
+                                    value={newDeviceName} onChange={(e) => setNewDeviceName(e.target.value)} required
+                                />
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group" style={{flex: 1}}>
+                                    <label>Typ</label>
+                                    <select className="form-input" value={newDeviceType} onChange={(e) => setNewDeviceType(e.target.value)}>
+                                        <option value="APPLIANCE">AGD</option>
+                                        <option value="SOLAR">Panel Solarny</option>
+                                        <option value="WIND">Wiatrak</option>
+                                    </select>
+                                </div>
+                                <div className="form-group" style={{flex: 1}}>
+                                    <label>Powierzchnia (m²)</label>
+                                    <input
+                                        type="number" className="form-input" placeholder="> 0"
+                                        value={area} onChange={(e) => setArea(e.target.value)} required min="0.01" step="0.01"
+                                    />
+                                </div>
+                            </div>
+                            <button type="submit" className="btn-primary">Dodaj Urządzenie +</button>
+                        </form>
                     </div>
 
-                    {/* Pole: POWIERZCHNIA (Teraz widoczne ZAWSZE i WYMAGANE) */}
-                    <div className="bg-gray-700/50 p-3 rounded border border-gray-600">
-                        <label className="block text-sm text-gray-300 mb-1 font-bold text-blue-300">
-                            Powierzchnia (m²) <span className="text-xs font-normal text-gray-400">: </span>
-                        </label>
-                        <input
-                            type="number"
-                            className="w-full p-2 rounded bg-gray-700 border border-blue-400 text-white placeholder-gray-400"
-                            placeholder="np. 5.5 (musi być > 0)"
-                            value={area}
-                            onChange={(e) => setArea(e.target.value)}
-                            required
-                            min="0.01"
-                            step="0.01"
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-bold transition shadow-md hover:shadow-lg"
-                    >
-                        Dodaj Urządzenie
-                    </button>
-                </form>
-            </div>
-
-            {/* --- 2. HARMONOGRAM --- */}
-            <div className="bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-gray-500">
-                <h2 className="text-2xl font-bold mb-4 border-b-2 border-gray-500 pb-2">📅 Harmonogram</h2>
-
-                <div className="flex gap-4 mb-4">
-                    <div className="flex-1">
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Urządzenie: </label>
-                        <select
-                            className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 focus:outline-none focus:border-blue-400 text-white"
-                            value={selectedDeviceId}
-                            onChange={(e) => setSelectedDeviceId(e.target.value)}
-                        >
-                            {devices.map(dev => (
-                                <option key={dev.id} value={dev.id}>{dev.name} ({dev.type})</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-
-                <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Start: </label>
-                        <input
-                            type="datetime-local"
-                            className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white"
-                            value={start}
-                            onChange={e => setStart(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm text-gray-300 mb-1 font-bold">Koniec: </label>
-                        <input
-                            type="datetime-local"
-                            className="w-full p-2 rounded bg-gray-700 border-2 border-gray-500 text-white"
-                            value={end}
-                            onChange={e => setEnd(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="flex items-end">
-                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 py-2 rounded font-bold border-2 border-blue-400 transition shadow-lg">
-                            Dodaj Zadanie
-                        </button>
-                    </div>
-                </form>
-
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm border-collapse border-2 border-gray-400">
-                        <thead className="bg-gray-900 text-white uppercase tracking-wider">
-                        <tr>
-                            <th className="p-3 border-2 border-green-400">Start</th>
-                            <th className="p-3 border-2 border-green-400">Stop</th>
-                            <th className="p-3 border-2 border-green-400 text-right">Akcja</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {schedules.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-700">
-                                <td className="p-3 border-2 border-gray-400 text-green-300 font-mono">
-                                    {new Date(item.start).toLocaleString()}
-                                </td>
-                                <td className="p-3 border-2 border-gray-400 text-red-300 font-mono">
-                                    {new Date(item.end).toLocaleString()}
-                                </td>
-                                <td className="p-3 border-2 border-gray-400 text-right">
-                                    <button
-                                        onClick={() => handleDelete(item.id)}
-                                        className="bg-red-900/40 text-red-300 border border-red-500 hover:bg-red-900 hover:text-white px-3 py-1 rounded font-bold transition"
-                                    >
-                                        Usuń
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {schedules.length === 0 && (
-                            <tr>
-                                <td colSpan="3" className="p-4 border-2 border-gray-400 text-center text-gray-400">
-                                    Brak zadań w harmonogramie.
-                                </td>
-                            </tr>
+                    {/* KARTA LISTA URZĄDZEŃ (AKTYWNE) */}
+                    <div className="schedule-card">
+                        <h3>
+                            ⚡ Aktywne (ON)
+                            <span className="status-badge badge-green">{activeDevices.length}</span>
+                        </h3>
+                        {activeDevices.length === 0 ? (
+                            <p style={{color: '#666', fontStyle: 'italic'}}>Brak włączonych urządzeń.</p>
+                        ) : (
+                            <table className="device-table">
+                                <thead>
+                                <tr>
+                                    <th>Nazwa / Typ</th>
+                                    <th style={{textAlign: 'right'}}>Akcja</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {activeDevices.map(dev => (
+                                    <tr key={dev.id}>
+                                        <td>
+                                            <div style={{fontWeight: 'bold'}}>{dev.name}</div>
+                                            <div style={{fontSize: '0.8em', color: '#888'}}>{dev.type}</div>
+                                        </td>
+                                        <td style={{textAlign: 'right'}}>
+                                            <button onClick={() => toggleState(dev, false)} className="btn-small btn-neutral">OFF</button>
+                                            <button onClick={() => handleRemoveDevice(dev.id)} className="btn-small btn-danger">×</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
                         )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* --- 3. TABELE URZĄDZEŃ --- */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-                {/* AKTYWNE */}
-                <div className="bg-gray-800 rounded-xl shadow-lg border-2 border-green-600 overflow-hidden">
-                    <div className="bg-green-900/30 p-4 border-b-2 border-green-600">
-                        <h3 className="text-xl font-bold text-green-400 flex items-center gap-2">⚡ Aktywne (ON)</h3>
                     </div>
-                    <div className="p-4 overflow-x-auto">
-                        <table className="w-full text-left border-collapse border-2 border-green-600">
-                            <thead className="bg-gray-900 text-green-100 uppercase text-xs">
-                            <tr>
-                                <th className="p-3 border-2 border-green-600">Nazwa </th>
-                                <th className="p-3 border-2 border-green-600">Typ </th>
-                                <th className="p-3 border-2 border-green-600 text-right">Sterowanie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {activeDevices.map(dev => (
-                                <tr key={dev.id} className="hover:bg-gray-700/50">
-                                    <td className="p-3 border-2 border-green-600 font-bold text-white">{dev.name}</td>
-                                    <td className="p-3 border-2 border-green-600 text-xs font-mono text-green-300">{dev.type}</td>
-                                    <td className="p-3 border-2 border-green-600 text-right space-x-2">
-                                        <button
-                                            onClick={() => toggleState(dev, false)}
-                                            className="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs font-bold border-2 border-red-400 transition"
-                                        >
-                                            WYŁĄCZ
-                                        </button>
-                                        <button
-                                            onClick={() => handleRemoveDevice(dev.id)}
-                                            className="bg-gray-700 hover:bg-red-900 text-red-400 hover:text-white px-2 py-1 rounded text-xs font-bold border border-red-500 transition"
-                                        >
-                                            USUŃ
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {activeDevices.length === 0 && (
+
+                    {/* KARTA LISTA URZĄDZEŃ (PASYWNE) */}
+                    <div className="schedule-card">
+                        <h3>
+                            💤 Pasywne (OFF)
+                            <span className="status-badge badge-gray">{passiveDevices.length}</span>
+                        </h3>
+                        {passiveDevices.length === 0 ? (
+                            <p style={{color: '#666', fontStyle: 'italic'}}>Wszystko włączone!</p>
+                        ) : (
+                            <table className="device-table">
+                                <thead>
                                 <tr>
-                                    <td colSpan="3" className="p-6 border-2 border-green-600 text-center text-gray-400 italic">
-                                        Brak włączonych urządzeń
-                                    </td>
+                                    <th>Nazwa / Typ</th>
+                                    <th style={{textAlign: 'right'}}>Akcja</th>
                                 </tr>
-                            )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {passiveDevices.map(dev => (
+                                    <tr key={dev.id}>
+                                        <td>
+                                            <div style={{fontWeight: 'bold'}}>{dev.name}</div>
+                                            <div style={{fontSize: '0.8em', color: '#888'}}>{dev.type}</div>
+                                        </td>
+                                        <td style={{textAlign: 'right'}}>
+                                            <button onClick={() => toggleState(dev, true)} className="btn-small btn-success">ON</button>
+                                            <button onClick={() => handleRemoveDevice(dev.id)} className="btn-small btn-danger">×</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
+
+                </div>
+
+                {/* --- PRAWA KOLUMNA: HARMONOGRAMY --- */}
+                <div className="right-column">
+                    <div className="schedule-card">
+                        <h3>📅 Harmonogram</h3>
+
+                        <div style={{marginBottom: '20px'}}>
+                            <div className="form-group">
+                                <label>Wybierz urządzenie</label>
+                                <select
+                                    className="form-input"
+                                    value={selectedDeviceId} onChange={(e) => setSelectedDeviceId(e.target.value)}
+                                    disabled={devices.length === 0}
+                                >
+                                    {devices.length > 0 ? (
+                                        devices.map(dev => <option key={dev.id} value={dev.id}>{dev.name} ({dev.type})</option>)
+                                    ) : <option disabled value="">Brak urządzeń</option>}
+                                </select>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group" style={{flex: 1}}>
+                                    <label>Data WŁĄCZENIA</label>
+                                    <input type="datetime-local" className="form-input" value={turnOnTime} onChange={e => setTurnOnTime(e.target.value)} required />
+                                </div>
+                                <div className="form-group" style={{flex: 1}}>
+                                    <label>Data WYŁĄCZENIA</label>
+                                    <input type="datetime-local" className="form-input" value={turnOffTime} onChange={e => setTurnOffTime(e.target.value)} required />
+                                </div>
+                            </div>
+                            <button onClick={handleAdd} className="btn-primary">Zaplanuj Zadanie</button>
+                        </div>
+
+                        <h4 style={{fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #333', paddingBottom: '5px'}}>
+                            Zaplanowane zadania:
+                        </h4>
+
+                        {schedules.length === 0 ? (
+                            <div style={{padding: '20px', textAlign: 'center', color: '#555', fontStyle: 'italic'}}>
+                                Brak zadań dla wybranego urządzenia.
+                            </div>
+                        ) : (
+                            <table className="device-table">
+                                <tbody>
+                                {schedules.map((item) => (
+                                    <tr key={item.id}>
+                                        <td>
+                                            {/* --- TUTAJ POPRAWKA: turnOn / turnOff --- */}
+                                            <div style={{color: '#34d399', fontSize: '0.9em'}}>
+                                                Włącz: {new Date(item.turnOn).toLocaleString()}
+                                            </div>
+                                            <div style={{color: '#f87171', fontSize: '0.9em'}}>
+                                                Wyłącz: {new Date(item.turnOff).toLocaleString()}
+                                            </div>
+                                        </td>
+                                        <td style={{textAlign: 'right'}}>
+                                            <button onClick={() => handleDelete(item.id)} className="btn-small btn-danger">Usuń</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
 
-                {/* PASYWNE */}
-                <div className="bg-gray-800 rounded-xl shadow-lg border-2 border-gray-400 overflow-hidden">
-                    <div className="bg-gray-700/40 p-4 border-b-2 border-gray-400">
-                        <h3 className="text-xl font-bold text-gray-300 flex items-center gap-2">💤 Pasywne (OFF)</h3>
-                    </div>
-                    <div className="p-4 overflow-x-auto">
-                        <table className="w-full text-left border-collapse border-2 border-gray-400">
-                            <thead className="bg-gray-900 text-gray-300 uppercase text-xs">
-                            <tr>
-                                <th className="p-3 border-2 border-gray-400">Nazwa </th>
-                                <th className="p-3 border-2 border-gray-400">Typ </th>
-                                <th className="p-3 border-2 border-gray-400 text-right">Sterowanie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {passiveDevices.map(dev => (
-                                <tr key={dev.id} className="hover:bg-gray-700/50">
-                                    <td className="p-3 border-2 border-gray-400 font-semibold text-gray-300">{dev.name}</td>
-                                    <td className="p-3 border-2 border-gray-400 text-xs font-mono text-gray-500">{dev.type}</td>
-                                    <td className="p-3 border-2 border-gray-400 text-right space-x-2">
-                                        <button
-                                            onClick={() => toggleState(dev, true)}
-                                            className="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-xs font-bold border-2 border-green-400 transition"
-                                        >
-                                            WŁĄCZ
-                                        </button>
-                                        <button
-                                            onClick={() => handleRemoveDevice(dev.id)}
-                                            className="bg-gray-700 hover:bg-red-900 text-red-400 hover:text-white px-2 py-1 rounded text-xs font-bold border border-red-500 transition"
-                                        >
-                                            USUŃ
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {passiveDevices.length === 0 && (
-                                <tr>
-                                    <td colSpan="3" className="p-6 border-2 border-gray-400 text-center text-gray-500 italic">
-                                        Wszystko włączone!
-                                    </td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     );

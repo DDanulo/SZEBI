@@ -20,33 +20,38 @@ public class ScheduleService {
     private final ScheduleRepo scheduleRepo;
 
     public ScheduleDTO addDailySchedule(ScheduleDTO dto) {
-        validateDates(dto.getStart(), dto.getEnd());
+        validateDate(dto.getTurnOn(), "Data włączenia");
+        validateDate(dto.getTurnOff(), "Data wyłączenia");
 
         Schedule schedule = Schedule.builder()
                 .deviceId(dto.getDeviceId())
-                .dateTimeTurnOn(dto.getStart())
-                .dateTimeTurnOff(dto.getEnd())
+                .dateTimeTurnOn(dto.getTurnOn())
+                .dateTimeTurnOff(dto.getTurnOff())
                 .build();
 
         Schedule saved = scheduleRepo.save(schedule);
         return mapToDTO(saved);
     }
 
-    public void deleteDailySchedule(UUID id) {
-        scheduleRepo.deleteById(id);
-    }
+
 
     public ScheduleDTO updateDailySchedule(ScheduleDTO dto) {
 
-        validateDates(dto.getStart(), dto.getEnd());
+        validateDate(dto.getTurnOn(), "Data włączenia");
+        validateDate(dto.getTurnOff(), "Data wyłączenia");
+
 
         Schedule schedule = scheduleRepo.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Harmonogram nie znaleziony"));
 
-        schedule.setDateTimeTurnOn(dto.getStart());
-        schedule.setDateTimeTurnOff(dto.getEnd());
+
+        schedule.setDateTimeTurnOn(dto.getTurnOn());
+        schedule.setDateTimeTurnOff(dto.getTurnOff());
 
         return mapToDTO(scheduleRepo.save(schedule));
+    }
+    public void deleteDailySchedule(UUID id) {
+        scheduleRepo.deleteById(id);
     }
 
     public List<ScheduleDTO> findScheduleByDevice(UUID deviceId) {
@@ -56,28 +61,21 @@ public class ScheduleService {
     }
 
 
- private void validateDates(LocalDateTime start, LocalDateTime end) {
-     LocalDateTime now = LocalDateTime.now();
+    private void validateDate(LocalDateTime date, String fieldName) {
+        if (date == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, fieldName + " jest wymagana!");
+        }
+        if (date.isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, fieldName + " nie może być w przeszłości!");
+        }
+    }
 
-     // Wymóg: Sprawdzenie czy data początkowa jest w czasie przeszłym
-     if (start.isBefore(now)) {
-         // Rzucamy 409 CONFLICT zgodnie ze slajdem 11
-         throw new ResponseStatusException(HttpStatus.CONFLICT, "Data startu nie może być w przeszłości!");
-     }
-
-
-     if (start.isAfter(end) || start.equals(end)) {
-         throw new ResponseStatusException(HttpStatus.CONFLICT, "Data startu musi być przed datą końca!");
-     }
- }
-
-    // Prosty mapper
     private ScheduleDTO mapToDTO(Schedule s) {
         ScheduleDTO dto = new ScheduleDTO();
         dto.setId(s.getId());
         dto.setDeviceId(s.getDeviceId());
-        dto.setStart(s.getDateTimeTurnOn());
-        dto.setEnd(s.getDateTimeTurnOff());
+        dto.setTurnOn(s.getDateTimeTurnOn());
+        dto.setTurnOff(s.getDateTimeTurnOff());
         return dto;
     }
 }

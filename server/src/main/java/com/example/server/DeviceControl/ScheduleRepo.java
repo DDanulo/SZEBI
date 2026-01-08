@@ -9,7 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface ScheduleRepo extends JpaRepository<Schedule, UUID> {
-    // Metoda z diagramu: findScheduleByUser
-    // ale na razie zróbmy proste szukanie po urządzeniu bo nie mozemy po user)
-    List<Schedule> findByDeviceId(UUID deviceId);
+     List<Schedule> findByDeviceId(UUID deviceId);
 }

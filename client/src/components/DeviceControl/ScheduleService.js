@@ -15,11 +15,11 @@ export const deleteSchedule = (id) => {
     return axios.delete(`${API_URL}/schedules/${id}`);
 };
 
-// --- NOWA METODA ---
+
 export const getAllDevices = () => {
     return axios.get(`${API_URL}/devices`);
 };
-// --- NOWE METODY ---
+
 export const turnDeviceOn = (id) => {
     return axios.post(`${API_URL}/devices/${id}/turn-on`);
 };
