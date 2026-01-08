@@ -6,9 +6,11 @@ import com.example.server.Administration.dto.LoginDTO;
 import com.example.server.Administration.dto.ResidentDTO;
 import com.example.server.Administration.dto.UserDTO;
 import com.example.server.Administration.model.Resident;
+import com.example.server.Administration.model.User;
 import com.example.server.Administration.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +25,16 @@ public class UserController {
 
     private final UserService userService;
 
-    //add validation
+
     @GetMapping("/residents")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<ResidentDTO> getAllResidents(){
         return ResidentConverter.convertResidentListToResidentDTOList(userService.getAllResidents());
+    }
+
+    @GetMapping("")
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
     }
 
     @PostMapping("/residents")

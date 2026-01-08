@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepo userRepo;
-
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
@@ -100,10 +101,14 @@ public class UserService {
     }
 
 
-    public User loginUser(String login, String password) {
-        User user = getUserByLogin(login);
-        if ( passwordEncoder.matches(password,user.getPasswordHash()) ) {
-            return  user;
+    public List<String> loginUser(String login, String password) {
+        User user = userRepo.findByLogin(login)
+                .orElseThrow(() -> new InternalErrorException());
+        if (passwordEncoder.matches(password, user.getPasswordHash())) {
+            return Arrays.asList(
+                    jwtService.generateAccessToken(user),
+                    jwtService.generateRefreshToken(user)
+            );
         } else {
             throw new InternalErrorException();
         }
