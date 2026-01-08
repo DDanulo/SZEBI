@@ -33,13 +33,9 @@ public class UserService {
                 .orElseThrow(() -> new InternalErrorException());
     }
 
-    public List<User> searchByLogin(String partial) {
-        return userRepo.findAllByLoginContainingIgnoreCase(partial);
-    }
 
     public <T extends User> T createUser(T user) {
         try {
-            user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             return userRepo.save(user);
         } catch (DuplicateKeyException e){
             throw new InternalErrorException();
@@ -108,8 +104,7 @@ public class UserService {
     public List<String> loginUser(String login, String password) {
         User user = userRepo.findByLogin(login)
                 .orElseThrow(() -> new InternalErrorException());
-
-        if (passwordEncoder.matches(password, user.getPasswordHash()) && user.isActive()) {
+        if (passwordEncoder.matches(password, user.getPasswordHash())) {
             return Arrays.asList(
                     jwtService.generateAccessToken(user),
                     jwtService.generateRefreshToken(user)
