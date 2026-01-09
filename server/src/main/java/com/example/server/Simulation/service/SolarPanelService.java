@@ -11,6 +11,7 @@ import com.example.server.Simulation.simulators.BasicSimulator;
 import com.example.server.Simulation.simulators.Simulator;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,14 +30,13 @@ public class SolarPanelService {
 
     private final SolarPanelRepository solarPanelRepository;
 
-    private final GeneratedMeasureRepository  generatedMeasureRepository;
+    private final GeneratedMeasureRepository generatedMeasureRepository;
 
     public SolarPanelService(BasicSimulator simulator, SolarPanelRepository solarPanelRepository, GeneratedMeasureRepository generatedMeasureRepository) {
         this.simulator = simulator;
         this.solarPanelRepository = solarPanelRepository;
         this.generatedMeasureRepository = generatedMeasureRepository;
     }
-
 
 
     public SolarPanel addSolarPanel(SolarPanel solarPanel) {
@@ -64,7 +64,7 @@ public class SolarPanelService {
     }
 
     public List<SolarPanel> getAllSolarPanels() {
-        return  solarPanelRepository.findAll();
+        return solarPanelRepository.findAll();
     }
 
     public SolarPanel deleteSolarPanel(UUID id) {
@@ -72,18 +72,17 @@ public class SolarPanelService {
         if (maybeSolarPanel.isEmpty()) {
             throw new DeviceNotFoundException("SolarPanel with id " + id + " not found");
         }
-       solarPanelRepository.deleteById(id);
-        return  maybeSolarPanel.get();
+        solarPanelRepository.deleteById(id);
+        return maybeSolarPanel.get();
     }
 
+    @Transactional
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
     public void simulateEnergyGeneration() {
         double insolation = simulator.getInsolation();
         solarPanelRepository.findByWorkingTrue().forEach(solarPanel -> generatedMeasureRepository.save(new GeneratedEnergyMeasure(LocalDateTime.now(),
                 solarPanel.generateEnergy(insolation), solarPanel)));
     }
-
-
 
 
 }

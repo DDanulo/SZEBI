@@ -16,7 +16,6 @@ public class BasicSimulator implements Simulator {
     @Getter
     private TimeOfDay dayTime;
     @Getter
-    @Setter(AccessLevel.PACKAGE)
     private Season season;
     //in Celsius
     @Getter
@@ -73,5 +72,10 @@ public class BasicSimulator implements Simulator {
     void changeTimeOfDay(TimeOfDay timeOfDay) {
         this.dayTime = timeOfDay;
         counter = 0;
+    }
+
+    void changeSeason (Season season) {
+        this.season = season;
+        seasonCounter = 0;
     }
 }

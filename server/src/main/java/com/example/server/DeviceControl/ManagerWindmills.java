@@ -26,7 +26,6 @@ public class ManagerWindmills implements IDeviceAuth {
                         .name(w.getDescription())
                         .isOn(w.isWorking())
                         .type("WIND")
-                        .area(w.getArea())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -52,7 +51,7 @@ public class ManagerWindmills implements IDeviceAuth {
     @Override
     public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
 
-        Windmill windmill = new Windmill(name,false,area, maxPower, minWind);
+        Windmill windmill = new Windmill(name,false, maxPower, minWind);
 
 
 

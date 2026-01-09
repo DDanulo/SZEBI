@@ -16,12 +16,16 @@ public class SimulatorManagementService {
     }
 
     public Map<String, Object> changeSeason(Season season) {
-        simulator.setSeason(season);
-        return simulator.getSimulationParameters();
+        simulator.changeSeason(season);
+        return getSimulationParameters();
     }
 
     public Map<String, Object> changeTimeOfDay(TimeOfDay timeOfDay) {
         simulator.changeTimeOfDay(timeOfDay);
+        return getSimulationParameters();
+    }
+
+    public Map<String, Object> getSimulationParameters() {
         return simulator.getSimulationParameters();
     }
 
