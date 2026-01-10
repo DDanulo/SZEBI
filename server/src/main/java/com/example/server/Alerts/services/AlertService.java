@@ -1,6 +1,7 @@
 package com.example.server.Alerts.services;
 
 
+import com.example.server.Alerts.dto.SosReport;
 import com.example.server.Alerts.entities.Alert;
 import com.example.server.Alerts.entities.AlertLevel;
 import com.example.server.Alerts.repositories.AlertRepository;
@@ -19,8 +20,27 @@ public class AlertService {
     private final AlertRepository alertRepository;
 
 
-    public void createSosAlert(String message){
-        Alert alert = Alert.builder().level(AlertLevel.SOS).message(message).source("User SOS").timestamp(LocalDateTime.now()).build();
+    public void createSosAlert(SosReport sosReport){
+
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("SOS Alert");
+
+        if (sosReport.getMessage() != null && !sosReport.getMessage().isEmpty()){
+            msgBuilder.append("- TREŚĆ: ").append(sosReport.getMessage());
+        }
+
+        if(sosReport.getLocation() != null && !sosReport.getLocation().isEmpty()){
+            msgBuilder.append("- LOKALIZACJA: ").append(sosReport.getLocation());
+        }
+
+        Alert alert = Alert.builder()
+                .level(AlertLevel.SOS)
+                .message(msgBuilder.toString())
+                .source("User SOS")
+                .timestamp(LocalDateTime.now())
+                .build();
+
+
         alertPublisher.notify(alert);
     }
 

@@ -2,6 +2,7 @@ package com.example.server.Alerts.config;
 
 import com.example.server.Alerts.entities.AlertLevel;
 import com.example.server.Alerts.entities.AlertRule;
+import com.example.server.Alerts.entities.Metric;
 import com.example.server.Alerts.entities.Operator;
 import com.example.server.Alerts.repositories.AlertRuleRepository;
 import com.example.server.Alerts.services.AlertDataInput;
@@ -32,7 +33,7 @@ public class AlertDataSeeder implements CommandLineRunner {
 
             AlertRule rule1 = AlertRule.builder()
                     .ruleName("Wysoka Temperatura")
-                    .metric("temperature")
+                    .metric(Metric.TEMPERATURE)
                     .value(80.00)
                     .operator(Operator.GREATER_THAN)
                     .level(AlertLevel.WARNING)
@@ -40,7 +41,7 @@ public class AlertDataSeeder implements CommandLineRunner {
 
             AlertRule rule2 = AlertRule.builder()
                     .ruleName("Krytyczna Temperatura")
-                    .metric("temperature")
+                    .metric(Metric.TEMPERATURE)
                     .value(110.00)
                     .operator(Operator.GREATER_THAN)
                     .level(AlertLevel.CRITICAL)
@@ -48,7 +49,7 @@ public class AlertDataSeeder implements CommandLineRunner {
 
             AlertRule rule3 = AlertRule.builder()
                     .ruleName("Niskie Napięcie")
-                    .metric("voltage")
+                    .metric(Metric.VOLTAGE)
                     .value(200.0)
                     .operator(Operator.LESS_THAN)
                     .level(AlertLevel.WARNING)
@@ -56,7 +57,7 @@ public class AlertDataSeeder implements CommandLineRunner {
 
             AlertRule rule4 = AlertRule.builder()
                     .ruleName("Wysokie zużycie energii")
-                    .metric("MWH")
+                    .metric(Metric.MWH)
                     .value(47.0)
                     .operator(Operator.GREATER_THAN)
                     .level(AlertLevel.WARNING)
@@ -67,9 +68,7 @@ public class AlertDataSeeder implements CommandLineRunner {
         }
 
 
-        alertDataInput.handleData(new SensorData("Piec_01", "temperature", 70.0, LocalDateTime.now()));
-        alertDataInput.handleData(new SensorData("Piec_02", "temperature", 120.0, LocalDateTime.now()));
-        alertPredictionService.checkForecast();
-
+        alertDataInput.handleData(new SensorData("Piec_01", Metric.TEMPERATURE, 70.0, LocalDateTime.now()));
+        alertDataInput.handleData(new SensorData("Piec_02", Metric.TEMPERATURE, 120.0, LocalDateTime.now()));
     }
 }
