@@ -8,9 +8,9 @@ import com.example.server.Simulation.simulators.SimulatorManagementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/simulation")
+@RequestMapping("/api/simulation")
 class SimulationManagingController {
 
     private final SimulatorManagementService simulatorManagementService;
@@ -21,6 +21,7 @@ class SimulationManagingController {
         this.dtoToBusinessLayerMapper = dtoToBusinessLayerMapper;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/season")
     @ResponseStatus(HttpStatus.OK)
     public SimulationParametersDto changeSeason(@RequestBody SeasonDto seasonDto) {
@@ -36,6 +37,7 @@ class SimulationManagingController {
         return dtoToBusinessLayerMapper
                 .mapSimulationParametersToDto(simulatorManagementService.getSimulationParameters());
     }
+
 
     @GetMapping("/parameters")
     @ResponseStatus(HttpStatus.OK)

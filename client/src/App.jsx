@@ -6,8 +6,9 @@ import ScheduleManager from './components/DeviceControl/ScheduleManager.jsx';
 import ReportModule from './components/DataAnalysis/ReportModule.jsx';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
 import ResidentManager from "./components/Administration/ResidentManager.jsx";
+import Simulation from "./components/Simulation/SimulationManagement.jsx";
 
-const Simulation = () => <div style={{ padding: '20px' }}><h2>Modul symulacji</h2><p>Tutaj moduł symulacji</p></div>;
+//const Simulation = () => <div style={{ padding: '20px' }}><h2>Modul symulacji</h2><p>Tutaj moduł symulacji</p></div>;
 const Communication = () => <div style={{ padding: '20px' }}><h2>Komunikacja</h2><p>Tutaj moduł komunikacji</p></div>;
 
 function App() {

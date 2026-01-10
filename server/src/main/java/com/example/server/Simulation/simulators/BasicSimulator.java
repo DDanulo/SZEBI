@@ -44,8 +44,11 @@ public class BasicSimulator implements Simulator {
     @Override
     public void simulate() {
         this.insolation = 135.0f *this.dayTime.insolationCoefficient *this.season.insolationCoefficient;
-        this.temperature = 8.0f * this.dayTime.temperatureCoefficient * this.season.temperatureCoefficient;
-        this.windSpeed = Math.random() * 5 * 3.1f * this.season.windSpeedCoefficient;
+        this.temperature = 4.0f * this.dayTime.temperatureCoefficient * this.season.temperatureCoefficient;
+        this.windSpeed = Math.random() * 3.1f * this.season.windSpeedCoefficient;
+        if(this.season == Season.WINTER) {
+            this.temperature -=8.0f;
+        }
         if(++counter ==48) {
             dayTime = dayTime.next();
             counter = 0;

@@ -13,14 +13,6 @@ import java.util.Map;
 class DtoToBusinessLayerMapper {
 
 
-    SeasonDto mapSeasonToSeasonDto(Season season) {
-        return SeasonDto.builder().season(season).build();
-    }
-
-    TimeOfDayDto  mapTimeOfDayToTimeOfDayDto(TimeOfDay timeOfDay) {
-        return TimeOfDayDto.builder()
-                .timeOfDay(timeOfDay).build();
-    }
 
     SimulationParametersDto mapSimulationParametersToDto(Map<String, Object> map) {
         return SimulationParametersDto.builder()
