@@ -47,7 +47,7 @@ const ReportModule = () => {
                     const sumByTs = new Map();
                     data.forEach(item => {
                         const d = new Date(item.timestamp);
-                        const tsLabel = d.toISOString().substring(0, 16).replace('T', ' ');
+                        const tsLabel = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:00`;
                         const prev = sumByTs.get(tsLabel) || 0;
                         sumByTs.set(tsLabel, prev + (item.value || 0));
                     });
@@ -61,7 +61,7 @@ const ReportModule = () => {
                     const devs = new Set();
                     data.forEach(item => {
                         const d = new Date(item.timestamp);
-                        const tsLabel = d.toISOString().substring(0, 16).replace('T', ' ');
+                        const tsLabel = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:00`;
                         const dev = item.deviceId || 'unknown';
                         devs.add(dev);
                         if (!byTs.has(tsLabel)) byTs.set(tsLabel, { timestamp: tsLabel });
