@@ -35,9 +35,9 @@ export const getAggregatedData = (from, to, type, deviceIds = []) => {
     });
 };
 
-export const downloadPdfReport = (from, to, deviceIds = [], granularity = 'daily') => {
+export const downloadPdfReport = (from, to, deviceIds = []) => {
     return axios.get(`${API_URL}/download-pdf`, {
-        params: { from, to, deviceIds: toDeviceIdsParam(deviceIds), granularity },
+        params: { from, to, deviceIds: toDeviceIdsParam(deviceIds)},
         responseType: 'blob',
     });
 };

@@ -57,8 +57,7 @@ public class ReportController {
             @RequestParam(required = false) Double temperature,
             @RequestParam(required = false) Double windSpeed,
             @RequestParam(required = false) Double insolation,
-            @RequestParam(required = false, name = "deviceIds") List<String> deviceIds,
-            @RequestParam(required = false, defaultValue = "daily") String granularity
+            @RequestParam(required = false, name = "deviceIds") List<String> deviceIds
     ) {
         List<DataPoint> data = dataFetcher.fetchData(from, to, DataType.ENERGY_CONSUMPTION);
         if (deviceIds != null && !deviceIds.isEmpty()) {
@@ -79,7 +78,7 @@ public class ReportController {
             return map;
         });
 
-        byte[] pdfBytes = pdfGenerator.generateUsageReport(data, from, to, aliasMap, granularity);
+        byte[] pdfBytes = pdfGenerator.generateUsageReport(data, from, to, aliasMap);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=raport_zuzycia.pdf")
