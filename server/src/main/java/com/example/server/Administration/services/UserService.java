@@ -33,9 +33,13 @@ public class UserService {
                 .orElseThrow(() -> new InternalErrorException());
     }
 
+    public List<User> searchByLogin(String partial) {
+        return userRepo.findAllByLoginContainingIgnoreCase(partial);
+    }
 
     public <T extends User> T createUser(T user) {
         try {
+            user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             return userRepo.save(user);
         } catch (DuplicateKeyException e){
             throw new InternalErrorException();
