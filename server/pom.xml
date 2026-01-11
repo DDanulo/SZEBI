@@ -116,7 +116,7 @@
         <dependency>
             <groupId>com.github.haifengl</groupId>
             <artifactId>smile-core</artifactId>
-            <version>5.0.2</version>
+            <version>4.4.1</version>
         </dependency>
     </dependencies>
 

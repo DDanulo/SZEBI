@@ -142,9 +142,11 @@ public class ForecasterModel {
                         Collectors.averagingDouble(r -> r.value)
                 ));
 
+        Instant creationTime = Instant.now();
+
         return dailyAverages.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(e -> new Forecast(e.getValue(), e.getKey()))
+                .map(e -> new Forecast(creationTime, e.getValue(), e.getKey()))
                 .collect(Collectors.toList());
     }
 

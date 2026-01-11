@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8080/prediction"
+const API = "http://localhost:8080/predictions"
 
 export const getLatestPrediction = function () {
     return axios.get(`${API}/latest/one`, {

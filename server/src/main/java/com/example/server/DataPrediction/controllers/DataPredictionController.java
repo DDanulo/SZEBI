@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-@RequestMapping("/prediction")
+@RequestMapping("/predictions")
 @CrossOrigin(origins = "http://localhost:5173")
 public class DataPredictionController {
     private final ForecastService forecastService;

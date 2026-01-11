@@ -21,8 +21,8 @@ public class Forecast {
     private double forecastedUsage;
     private LocalDateTime forecastDate;
 
-    public Forecast(double forecastedUsage, LocalDateTime forecastDate) {
-        this.creationTime = Instant.now();
+    public Forecast(Instant creationTime, double forecastedUsage, LocalDateTime forecastDate) {
+        this.creationTime = creationTime;
         this.forecastedUsage = forecastedUsage;
         this.forecastDate = forecastDate;
     }
