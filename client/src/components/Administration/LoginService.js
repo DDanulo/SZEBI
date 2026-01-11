@@ -1,9 +1,24 @@
-import axios from 'axios';
+import api from 'api.js';
+import {jwtDecode} from 'jwt-decode';
 
 
-const API_URL = "http://localhost:8080/login";
+
 
 export const loginUser = async (data) => {
-    const response = await axios.post(API_URL,data);
-    return response.data;
+    try {
+        const response = await api.post("login", data);
+        const { accessToken, refreshToken } = response.data;
+
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        const decoded = jwtDecode(accessToken);
+        setUser({ userId: decoded.userId, role: decoded.role });
+
+        return true;
+
+    } catch (error) {
+        console.error('Błąd logowania:', error.response?.data?.message || 'Nieznany błąd.');
+        return false;
+    }
 };
