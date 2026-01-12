@@ -1,4 +1,4 @@
-import api from 'api.js';
+import api from './api.js';
 import {jwtDecode} from 'jwt-decode';
 
 

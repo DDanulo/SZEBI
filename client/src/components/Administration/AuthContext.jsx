@@ -1,6 +1,6 @@
-// src/context/AuthContext.js
+// src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../api/api';
+import api from './api.js';
 import {jwtDecode} from 'jwt-decode';
 
 const AuthContext = createContext();
@@ -36,9 +36,9 @@ export const AuthProvider = ({ children }) => {
     // funkcja wejscia
     const login = async (login, password) => {
         try {
-            const response = await api.post('/auth/login', { login, password });
+            const response = await api.post('/login', { login, password });
             const { accessToken, refreshToken } = response.data;
-
+            console.log(response.status)
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 

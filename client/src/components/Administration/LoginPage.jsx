@@ -1,7 +1,7 @@
 // src/pages/Auth/LoginPage.jsx
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -14,7 +14,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         // Jeśli użytkownik jest już zalogowany, przekierowujemy na stronę główną
-        if (user) {
+        if (user && window.location.pathname === '/login') {
             navigate('/');
         }
     }, [user, navigate]);
@@ -33,8 +33,8 @@ const LoginPage = () => {
                 const token = localStorage.getItem('accessToken');
                 if (token) {
                     const payload = JSON.parse(atob(token.split('.')[1]));
-                    if (payload.role === 'EMPLOYEE') {
-                        navigate('/admin/orders');
+                    if (payload.role === 'RESIDENT') {
+                        navigate('/admin/orders');// jeszcze nwm
                     } else {
                         navigate('/');
                     }
@@ -53,6 +53,7 @@ const LoginPage = () => {
     };
 
     return (
+
         <Container className="mt-5" style={{ maxWidth: '400px' }}>
             <Card>
                 <Card.Header as="h3" className="text-center">Logowanie</Card.Header>
@@ -61,7 +62,7 @@ const LoginPage = () => {
                     <Form onSubmit={handleSubmit}>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Login (Email/Nazwa)</Form.Label>
+                            <Form.Label>Login</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={loginState}
@@ -91,6 +92,7 @@ const LoginPage = () => {
                 </Card.Body>
             </Card>
         </Container>
+
     );
 };
 
