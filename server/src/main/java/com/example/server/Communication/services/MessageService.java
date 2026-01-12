@@ -1,14 +1,16 @@
 package com.example.server.Communication.services;
 
+import com.example.server.Administration.model.User;
 import com.example.server.Communication.exceptions.UserNotFoundException;
+import com.example.server.Communication.objects.Conversation;
 import com.example.server.Communication.objects.Message;
 import com.example.server.Communication.repositories.MessageRepository;
-import com.example.server.Communication.repositories.TemporaryUserRepo;
+import com.example.server.Communication.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,22 +18,25 @@ import java.util.UUID;
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final TemporaryUserRepo mockUserRepo;
+    private final UserRepository userRepository;
+    private final ConversationService conversationService;
 
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
-    }
+    @Transactional
+    public Message createMessage(String content, UUID senderId, UUID recipientId) {
+        User sender = userRepository.findById(senderId);
+        if (sender == null) {
+            throw new UserNotFoundException("Sender with id " + senderId + " not found.");
+        }
 
-    public Message createMessage(String content, String authorLogin) {
-        mockUserRepo.findByLogin(authorLogin)
-                .orElseThrow(() -> new UserNotFoundException("User with login " + authorLogin + " not found."));
+        Conversation conversation = conversationService.findOrCreateConversation(senderId, recipientId);
 
         Message message = Message.builder()
-                .id(UUID.randomUUID())
                 .content(content)
-                .authorLogin(authorLogin)
+                .sender(sender)
                 .timestamp(LocalDateTime.now())
+                .conversation(conversation)
                 .build();
+
         return messageRepository.save(message);
     }
 }
