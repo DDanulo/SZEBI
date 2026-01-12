@@ -1,7 +1,7 @@
 // src/pages/Auth/RegisterPage.jsx
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
