@@ -1,15 +1,19 @@
 package com.example.server.DataPrediction.api;
 
 import com.example.server.DataPrediction.data.Forecast;
+import com.example.server.DataPrediction.exceptions.ModelNotTrainedException;
 
-import java.util.UUID;
+import java.time.Instant;
+import java.util.List;
 
 public interface ForecastService {
-    void changeInterval(int generationInterval);
-
     Forecast getLatestForecast();
 
-    Forecast getForecast(UUID forecastId);
+    List<Forecast> getLatestForecasts();
 
-    void generateForecast();
+    List<Forecast> getForecasts(Instant from, Instant to);
+
+    void generateForecast() throws ModelNotTrainedException;
+
+    void switchMockMode();
 }
