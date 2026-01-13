@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TimeOfDay {
 
-    EARLY_MORNING("early morning",1, 0.5f), //4-8
+    EARLY_MORNING("early morning",1.8f, 0.5f), //4-8
     MORNING("morning",2,2), //8-12
-    AFTERNOON("afternoon", 2.5f, 4), //12-16
-    EVENING("evening",2, 2.5f), //16-20
-    LATE_EVENING("late evening", 2, 0.25f), //20-24
+    AFTERNOON("afternoon", 2.3f, 4), //12-16
+    EVENING("evening",2.1f, 2.5f), //16-20
+    LATE_EVENING("late evening", 1.9f, 0.25f), //20-24
     NIGHT("night",1.5f, 0.0f); //00.00 -4
 
     private final String value;

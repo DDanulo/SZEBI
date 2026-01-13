@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Season {
-    SPRING("spring",3, 3, 3),
+    SPRING("spring",3, 3, 2.5f),
     SUMMER("summer",5, 2, 4),
     AUTUMN("autumn",2,3, 2 ),
     WINTER("winter",1, 4, 1)
@@ -12,10 +12,10 @@ public enum Season {
     final String value;
     final int insolationCoefficient;
     final int windSpeedCoefficient;
-    final int temperatureCoefficient;
+    final float temperatureCoefficient;
 
 
-    Season(String value, int insolationCoefficient, int windSpeedCoefficient, int temperatureCoefficient) {
+    Season(String value, int insolationCoefficient, int windSpeedCoefficient, float temperatureCoefficient) {
         this.value = value;
         this.insolationCoefficient = insolationCoefficient;
         this.windSpeedCoefficient = windSpeedCoefficient;
