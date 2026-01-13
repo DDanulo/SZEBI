@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Alert, Spinner, Container, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api/api';
+import api from './api.js';
 
 const AdminUsersPage = () => {
     const navigate = useNavigate();

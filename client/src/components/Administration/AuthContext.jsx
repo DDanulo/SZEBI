@@ -54,9 +54,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     // rejestracja
-    const register = async (login, password) => {
+    const register = async (login, password,firstName,lastName,email,room) => {
         try {
-            const response = await api.post('/auth/register', { login, password });
+            const response = await api.post('/register', { login, password, firstName,lastName,email,room});
 
             return response.status === 201;
 

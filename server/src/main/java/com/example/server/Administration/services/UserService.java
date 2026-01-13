@@ -108,7 +108,8 @@ public class UserService {
     public List<String> loginUser(String login, String password) {
         User user = userRepo.findByLogin(login)
                 .orElseThrow(() -> new InternalErrorException());
-        if (passwordEncoder.matches(password, user.getPasswordHash())) {
+
+        if (passwordEncoder.matches(password, user.getPasswordHash()) && user.isActive()) {
             return Arrays.asList(
                     jwtService.generateAccessToken(user),
                     jwtService.generateRefreshToken(user)
