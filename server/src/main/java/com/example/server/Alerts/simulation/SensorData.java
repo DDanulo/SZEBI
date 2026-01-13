@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Builder
@@ -13,5 +14,7 @@ public record SensorData(
         String source,
         Metric metric,
         double value,
-        LocalDateTime timestamp
+        LocalDateTime timestamp,
+        UUID userID,
+        String location
 ) {}

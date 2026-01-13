@@ -40,9 +40,9 @@ public class AlertPredictionService  {
 
         LocalDateTime forecastTime = lastForecast.getForecastDate();
 
-        if(lastProcessedForecastTime != null && lastProcessedForecastTime.equals(forecastTime)){
-            return;
-        }
+//        if(lastProcessedForecastTime != null && lastProcessedForecastTime.equals(forecastTime)){
+//            return;
+//        }
 
         lastProcessedForecastTime = forecastTime;
 

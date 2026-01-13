@@ -29,12 +29,10 @@ public class AlertService {
             msgBuilder.append("- TREŚĆ: ").append(sosReport.getMessage());
         }
 
-        if(sosReport.getLocation() != null && !sosReport.getLocation().isEmpty()){
-            msgBuilder.append("- LOKALIZACJA: ").append(sosReport.getLocation());
-        }
-
         Alert alert = Alert.builder()
                 .level(AlertLevel.SOS)
+                .userId(sosReport.getUserID())
+                .location(sosReport.getLocation())
                 .message(msgBuilder.toString())
                 .source("User SOS")
                 .timestamp(LocalDateTime.now())
