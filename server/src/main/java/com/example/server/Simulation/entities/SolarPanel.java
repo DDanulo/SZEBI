@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -13,14 +14,12 @@ import java.math.BigDecimal;
 @DiscriminatorValue("solar_panel")
 public class SolarPanel extends EnergyProducingDevice{
 
+    @Getter
     @Column
     private double area;
 
     @Override
     public double generateEnergy(double insolation) {
-        if(this.totalGenerated == null){
-            this.totalGenerated = BigDecimal.ZERO;
-        }
         double generatedNow = area * insolation * 0.3;
         this.totalGenerated = totalGenerated.add(BigDecimal.valueOf(generatedNow));
         return generatedNow;
@@ -28,7 +27,7 @@ public class SolarPanel extends EnergyProducingDevice{
 
     public SolarPanel(String description, boolean working, double area) {
         super(description, working);
-        this.setArea(area);
+        this.area = area;
     }
 
 

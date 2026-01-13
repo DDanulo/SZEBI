@@ -56,7 +56,7 @@ public class ManagerSolarPanel implements IDeviceAuth {
 
     @Override
     public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
-        SolarPanel panel = new SolarPanel(name,false, area);
+        SolarPanel panel = new SolarPanel(name,true, area);
 
         var saved = controlDevices.addSolarPanel(panel);
 

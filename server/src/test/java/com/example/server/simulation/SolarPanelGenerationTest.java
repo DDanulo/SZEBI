@@ -51,7 +51,7 @@ public class SolarPanelGenerationTest {
 
     @Test
     public void shouldSuccesfulyGenerateEnergyConsumption() {
-        SolarPanel solarPanel = new SolarPanel(true, 5);
+        SolarPanel solarPanel = new SolarPanel("some",true, 5);
         solarPanelService.addSolarPanel(solarPanel);
         solarPanelService.simulateEnergyGeneration();
         BigDecimal newValue = solarPanelService.getAllSolarPanels().getLast().getTotalGenerated();
@@ -61,7 +61,7 @@ public class SolarPanelGenerationTest {
 
     @Test
     public void shouldSuccessfulyGenerateMeasurementForEnergyConsumption() {
-        SolarPanel solarPanel = new SolarPanel(true, 5);
+        SolarPanel solarPanel = new SolarPanel("some",true, 520);
         solarPanelService.addSolarPanel(solarPanel);
         solarPanelService.simulateEnergyGeneration();
         List<GeneratedEnergyMeasure> measures = generatedMeasureRepository.findAll();
@@ -75,7 +75,7 @@ public class SolarPanelGenerationTest {
 
     @Test
     public void ShouldNotGenerateConsumptionForInactiveDevice() {
-        SolarPanel solarPanel = new SolarPanel(false, 5);
+        SolarPanel solarPanel = new SolarPanel("some", false, 5);
         solarPanelService.addSolarPanel(solarPanel);
         solarPanelService.simulateEnergyGeneration();
         BigDecimal newValue = solarPanelService.getAllSolarPanels().getLast().getTotalGenerated();
@@ -84,7 +84,7 @@ public class SolarPanelGenerationTest {
 
     @Test
     public void shouldSuccessfulyNotGenerateMeasurementForInactiveDevice() {
-        SolarPanel solarPanel = new SolarPanel(false, 5);
+        SolarPanel solarPanel = new SolarPanel("some",false, 5);
         solarPanelService.addSolarPanel(solarPanel);
         solarPanelService.simulateEnergyGeneration();
         List<GeneratedEnergyMeasure> measures = generatedMeasureRepository.findAll();

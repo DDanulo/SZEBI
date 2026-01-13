@@ -73,6 +73,7 @@ public class ConsumingDeviceService {
         return maybeConsumingDevice.get();
     }
 
+    @Transactional
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
     public void simulateEnergyConsumption() {
         double temperature = simulator.getTemperature();
