@@ -47,8 +47,8 @@ public class UserController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public List<UserDTO> getAllUsers(){
+        return UserConverter.convertUsersToUserDTO(userService.getAllUsers());
     }
 
 
