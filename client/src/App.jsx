@@ -8,9 +8,15 @@ import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
 import ResidentManager from "./components/Administration/ResidentManager.jsx";
 import Simulation from "./components/Simulation/SimulationManagement.jsx";
 import Communication from "./components/Communication/CommunicationPage.jsx";
+import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
+import LoginPage from "./components/Administration/LoginPage.jsx";
+import RegisterPage from "./components/Administration/RegisterPage.jsx";
 
+import { useAuth } from "./components/Administration/AuthContext.jsx";
 
 function App() {
+
+    const { user, logout } = useAuth();
     return (
         <Router>
             <div className="app-container">
@@ -24,6 +30,15 @@ function App() {
                         <Link to="/reports" style={styles.button}>Reports</Link>
                         <Link to="/predictions" style={styles.button}>Predictions</Link>
                         <Link to="/communication" style={styles.button}>Communication</Link>
+                        {user ? (
+                            <button onClick={logout} style={styles.button}>
+                                Wyloguj
+                            </button>
+                        ) : (
+                            <Link to="/login" style={styles.button}>
+                                Zaloguj
+                            </Link>
+                        )}
                     </nav>
                 </header>
 
@@ -32,10 +47,12 @@ function App() {
                         <Route path="/simulation" element={<Simulation />} />
                         <Route path="/alerts" element={<AlertHistory />} />
                         <Route path="/schedule" element={<ScheduleManager />} />
-                        <Route path="/residents" element={<ResidentManager />} />
+                        <Route path="/residents" element={<AdminUsersPage />} />
                         <Route path="/reports" element={<ReportModule />} />
                         <Route path="/predictions" element={<PredictionViewer />} />
                         <Route path="/communication" element={<Communication />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
                     </Routes>
                 </main>
 
