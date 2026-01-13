@@ -18,12 +18,21 @@ public class Forecast {
     private UUID id;
 
     private Instant creationTime;
-    private int forecastedUsage;
+    private double forecastedUsage;
     private LocalDateTime forecastDate;
 
-    public Forecast(int forecastedUsage, LocalDateTime forecastDate) {
+    public Forecast(Instant creationTime, double forecastedUsage, LocalDateTime forecastDate) {
+        this.creationTime = creationTime;
         this.forecastedUsage = forecastedUsage;
         this.forecastDate = forecastDate;
-        this.creationTime = Instant.now();
+    }
+
+    @Override
+    public String toString() {
+        return "Forecast{" +
+                "creationTime=" + creationTime +
+                ", forecastedUsage=" + forecastedUsage +
+                ", forecastDate=" + forecastDate +
+                '}';
     }
 }
