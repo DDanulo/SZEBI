@@ -1,16 +1,21 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import './App.css';
 
 import AlertHistory from "./components/Alerts/AlertHistory.jsx";
 import ScheduleManager from './components/DeviceControl/ScheduleManager.jsx';
 import ReportModule from './components/DataAnalysis/ReportModule.jsx';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
-import ResidentManager from "./components/Administration/ResidentManager.jsx";
 import Simulation from "./components/Simulation/SimulationManagement.jsx";
 import Communication from "./components/Communication/CommunicationPage.jsx";
+import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
+import LoginPage from "./components/Administration/LoginPage.jsx";
+import RegisterPage from "./components/Administration/RegisterPage.jsx";
 
+import { useAuth } from "./components/Administration/AuthContext.jsx";
 
 function App() {
+
+    const { user, logout } = useAuth();
     return (
         <Router>
             <div className="app-container">
@@ -24,6 +29,26 @@ function App() {
                         <Link to="/reports" style={styles.button}>Reports</Link>
                         <Link to="/predictions" style={styles.button}>Predictions</Link>
                         <Link to="/communication" style={styles.button}>Communication</Link>
+                        {user ? (
+                            <Link
+                                to="/"
+                                onClick={(e) => {
+                                    if (!window.confirm('Czy na pewno chcesz się wylogować?')) {
+                                        e.preventDefault();
+                                        return;
+                                    }
+                                    logout();
+
+                                }}
+                                style={styles.button}
+                            >
+                                Wyloguj
+                            </Link>
+                        ) : (
+                            <Link to="/login" style={styles.button}>
+                                Zaloguj się
+                            </Link>
+                        )}
                     </nav>
                 </header>
 
@@ -32,10 +57,12 @@ function App() {
                         <Route path="/simulation" element={<Simulation />} />
                         <Route path="/alerts" element={<AlertHistory />} />
                         <Route path="/schedule" element={<ScheduleManager />} />
-                        <Route path="/residents" element={<ResidentManager />} />
+                        <Route path="/residents" element={<AdminUsersPage />} />
                         <Route path="/reports" element={<ReportModule />} />
                         <Route path="/predictions" element={<PredictionViewer />} />
                         <Route path="/communication" element={<Communication />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
                     </Routes>
                 </main>
 
