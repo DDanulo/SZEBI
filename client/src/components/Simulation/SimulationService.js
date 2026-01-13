@@ -30,7 +30,7 @@ export const changeDaytime = async(daytime) => {
         const res = await axios.put(`${url}/daytime`,{timeOfDay: daytime} );
         return res.data;
     } catch (error) {
-        if(error.status == 400) {
+        if(error.status ==  400) {
             alert("Wybierz porę dnia!");
         }
     }
