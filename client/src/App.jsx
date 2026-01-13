@@ -10,6 +10,7 @@ import RegisterPage from "./components/Administration/RegisterPage.jsx"
 
 // Importujemy potrzebne komponenty z react-router-dom
 import { Routes, Route } from 'react-router-dom'
+import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 
 function App() {
     const [count, setCount] = useState(0)
@@ -60,7 +61,7 @@ function App() {
                 {/* Trasy publiczne */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-
+                <Route path="/auth" element={<AdminUsersPage />} />
                 {/* Opcjonalnie – strona 404 */}
                 <Route path="*" element={<div>404 – Nie znaleziono strony</div>} />
             </Routes>
