@@ -1,11 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import './App.css';
 
 import AlertHistory from "./components/Alerts/AlertHistory.jsx";
 import ScheduleManager from './components/DeviceControl/ScheduleManager.jsx';
 import ReportModule from './components/DataAnalysis/ReportModule.jsx';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
-import ResidentManager from "./components/Administration/ResidentManager.jsx";
 import Simulation from "./components/Simulation/SimulationManagement.jsx";
 import Communication from "./components/Communication/CommunicationPage.jsx";
 import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
@@ -31,12 +30,23 @@ function App() {
                         <Link to="/predictions" style={styles.button}>Predictions</Link>
                         <Link to="/communication" style={styles.button}>Communication</Link>
                         {user ? (
-                            <button onClick={logout} style={styles.button}>
+                            <Link
+                                to="/"
+                                onClick={(e) => {
+                                    if (!window.confirm('Czy na pewno chcesz się wylogować?')) {
+                                        e.preventDefault();
+                                        return;
+                                    }
+                                    logout();
+
+                                }}
+                                style={styles.button}
+                            >
                                 Wyloguj
-                            </button>
+                            </Link>
                         ) : (
                             <Link to="/login" style={styles.button}>
-                                Zaloguj
+                                Zaloguj się
                             </Link>
                         )}
                     </nav>
