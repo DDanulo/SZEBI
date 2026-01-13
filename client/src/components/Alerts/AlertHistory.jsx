@@ -48,6 +48,8 @@ const AlertHistory = () =>{
                   <th className="p-2">Data</th>
                   <th className="p-2">Poziom</th>
                   <th className="p-2">Wiadomość</th>
+                  <th className="p-2">Id Użytkownika</th>
+                  <th className="p-2">Lokalizacja</th>
               </tr>
               </thead>
               <tbody>
@@ -56,6 +58,8 @@ const AlertHistory = () =>{
                       <td className="p-2">{formatujDane(alert.timestamp)}</td>
                       <td className="p-2">{alert.level}</td>
                       <td className="p-2">{alert.message}</td>
+                      <td className="p-2">{alert.userID}</td>
+                      <td className="p-2">{alert.location}</td>
                   </tr>
               ))}
               </tbody>
