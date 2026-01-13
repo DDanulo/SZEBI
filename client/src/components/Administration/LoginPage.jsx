@@ -34,7 +34,7 @@ const LoginPage = () => {
                 if (token) {
                     const payload = JSON.parse(atob(token.split('.')[1]));
                     if (payload.role === 'RESIDENT') {
-                        navigate('/admin/orders');// jeszcze nwm
+                        navigate('/');// jeszcze nwm
                     } else {
                         navigate('/');
                     }
