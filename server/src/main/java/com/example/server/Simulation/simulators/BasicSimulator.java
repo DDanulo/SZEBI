@@ -47,13 +47,13 @@ public class BasicSimulator implements Simulator {
         this.temperature = 4.0f * this.dayTime.temperatureCoefficient * this.season.temperatureCoefficient;
         this.windSpeed = Math.random() * 3.1f * this.season.windSpeedCoefficient;
         if(this.season == Season.WINTER) {
-            this.temperature -=8.0f;
+            this.temperature -=10.0f;
         }
-        if(++counter ==48) {
+        if(++counter ==49) {
             dayTime = dayTime.next();
             counter = 0;
         }
-        if(++seasonCounter ==91) {
+        if(++seasonCounter ==92) {
             season = season.next();
             seasonCounter = 0;
         }
@@ -75,10 +75,13 @@ public class BasicSimulator implements Simulator {
     void changeTimeOfDay(TimeOfDay timeOfDay) {
         this.dayTime = timeOfDay;
         counter = 0;
+        simulate();
     }
 
     void changeSeason (Season season) {
         this.season = season;
         seasonCounter = 0;
+        simulate();
     }
+
 }

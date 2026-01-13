@@ -19,7 +19,9 @@ export const changeSeason = async(season) => {
         const res = await axios.put(`${url}/season`,{season: season} );
         return res.data;
     } catch (error) {
-        alert(error);
+        if(error.status == 400) {
+            alert("Wybierz porę roku!");
+        }
     }
 }
 
@@ -28,6 +30,8 @@ export const changeDaytime = async(daytime) => {
         const res = await axios.put(`${url}/daytime`,{timeOfDay: daytime} );
         return res.data;
     } catch (error) {
-        alert(error);
+        if(error.status == 400) {
+            alert("Wybierz porę dnia!");
+        }
     }
 }

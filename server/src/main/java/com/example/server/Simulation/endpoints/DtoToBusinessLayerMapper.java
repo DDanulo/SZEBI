@@ -18,9 +18,9 @@ class DtoToBusinessLayerMapper {
         return SimulationParametersDto.builder()
                 .season((String) map.get("season"))
                 .timeOfDay((String) map.get("dayTime"))
-                .temperature((double) map.get("temperature"))
-                .insolation((float) map.get("insolation"))
-                .windSpeed((double) map.get("windSpeed"))
+                .temperature( Math.ceil( (double)map.get("temperature") *100) / 100)
+                .insolation((float) Math.ceil((float)map.get("insolation") *100) /100)
+                .windSpeed(Math.ceil((double)map.get("windSpeed") *100) /100)
                 .build();
     }
 }

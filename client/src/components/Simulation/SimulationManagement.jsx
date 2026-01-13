@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {changeDaytime, changeSeason} from "./SimulationService.js";
 import {getSimulationParameters} from "./SimulationService.js";
+import {seasonMappingProps, daytimeMappingProps} from "./responseMappingProps.js";
 
 function Simulation() {
 
@@ -11,6 +12,9 @@ function Simulation() {
     const [insolation, setInsolation] = useState("");
     const [seasonToChange, setSeasonToChange] = useState("");
     const [daytimeToChange, setDaytimeToChange] = useState("");
+
+    const seasons = seasonMappingProps;
+    const daytimes = daytimeMappingProps;
 
     useEffect(() => {
         getSimulationParameters().then(e =>
@@ -31,11 +35,11 @@ function Simulation() {
         <div className="flex flex-col justify-center">
             <div className="p-4">
                 <h2>Aktualne parametry symulacji:</h2>
-                <p>Pora roku: {season}</p>
-                <p>Pora dnia: {dayTime}</p>
-                <p>temperatura: {temperature} °C</p>
-                <p>Nasłonecznienie: {insolation} W/m</p>
-                <p>prędkość wiatru: {windSpeed} m/s</p>
+                <p>Pora roku: {seasons[season]}</p>
+                <p>Pora dnia: {daytimes[dayTime]}</p>
+                <p>Temperatura: {temperature} °C</p>
+                <p>Nasłonecznienie: {insolation} W/m<sup>2</sup></p>
+                <p>Prędkość wiatru: {windSpeed} m/s</p>
                 <button type="button" onClick={() => getSimulationParameters().then(e => {
                     updateSimulationParameters(e);
                 })}>Pobierz aktualne dane:
@@ -45,8 +49,8 @@ function Simulation() {
                 <h2>Zmień porę dnia: </h2>
                 <select onChange={e => setDaytimeToChange(e.target.value)}>
                     <option value="">Wybierz</option>
-                    <option value="early morning">Wczesny ranek (4:00 - 8:00)</option>
-                    <option value="morning">Ranek (8:00-12:00)</option>
+                    <option value="early morning">Ranek (4:00 - 8:00)</option>
+                    <option value="morning">Przedpołudnie (8:00-12:00)</option>
                     <option value="afternoon">Popołudnie (12:00 - 16:00)</option>
                     <option value="evening">Późne popołudnie (16:00 - 20:00)</option>
                     <option value="late evening">Wieczór (20:00 - 00:00)</option>
@@ -63,7 +67,7 @@ function Simulation() {
                     <option value="">Wybierz</option>
                     <option value="spring">Wiosna (marzec -maj)</option>
                     <option value="summer">Lato (czerwiec - sierpień)</option>
-                    <option value="autumn">Jesień(wrzesień - listopad)</option>
+                    <option value="autumn">Jesień (wrzesień - listopad)</option>
                     <option value="winter">Zima (grudzień -luty)</option>
                 </select>
                 <button onClick={() => changeSeason(seasonToChange).then(e => {
