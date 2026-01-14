@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class RegisterController {
 
     private final UserService userService;
@@ -21,7 +20,6 @@ public class RegisterController {
 
     @PostMapping("/register")
     public ResidentDTO createResident(@RequestBody RegisterDTO resident){
-
         return ResidentConverter.convertResidentToResidentDTO(userService.registerResident(ResidentConverter.convertRegisterDTOtoResident(resident)));
     }
 

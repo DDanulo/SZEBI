@@ -19,16 +19,13 @@ public class ConsumingDevice extends Device {
     private BigDecimal totalConsumed;
 
 
-    public ConsumingDevice(String description, boolean active,double area) {
+    public ConsumingDevice(String description, boolean active) {
         super(description,active);
+        this.totalConsumed = BigDecimal.valueOf(0.0f);
 
-        this.setArea(area);
     }
 
     public double consumeEnergy(double coeff){
-        if(this.totalConsumed == null){
-            this.totalConsumed = BigDecimal.ZERO;
-        }
         double calculated = 5 * (45.0 - coeff);
         this.totalConsumed = totalConsumed.add(BigDecimal.valueOf(calculated));
         return calculated;
