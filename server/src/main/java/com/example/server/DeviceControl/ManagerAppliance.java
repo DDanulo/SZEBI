@@ -26,7 +26,6 @@ public class ManagerAppliance implements IDeviceAuth {
                         .name(c.getDescription())
                         .type("APPLIANCE")
                         .isOn(c.isWorking())
-                        .area(c.getArea())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -56,7 +55,7 @@ public class ManagerAppliance implements IDeviceAuth {
 
     @Override
     public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
-         ConsumingDevice device = new ConsumingDevice(name, false,area);
+         ConsumingDevice device = new ConsumingDevice(name, true);
 
 
         var saved = controlDevices.addConsumingDevice(device);
@@ -66,7 +65,6 @@ public class ManagerAppliance implements IDeviceAuth {
                 .name(name)
                 .type("APPLIANCE")
                 .isOn(false)
-                .area(area)
                 .build();
     }
 

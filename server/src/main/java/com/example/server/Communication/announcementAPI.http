@@ -1,0 +1,26 @@
+### Utwórz nowe ogłoszenie
+POST http://localhost:8080/api/communication/announcements
+Content-Type: application/json
+
+{
+  "content": "Ważne ogłoszenie dla budynku A.",
+  "authorId": "----",
+  "level": "INFO",
+  "building": "Budynek A"
+}
+
+### Pobierz wszystkie ogłoszenia
+GET http://localhost:8080/api/communication/announcements
+Accept: application/json
+
+### Pobierz ogłoszenia dla konkretnego budynku
+GET http://localhost:8080/api/communication/announcements?building=Budynek%20A
+Accept: application/json
+
+### Pobierz ogłoszenie po ID
+GET http://localhost:8080/api/communication/announcements/1
+Accept: application/json
+
+### Zamknij ogłoszenie
+PATCH http://localhost:8080/api/communication/announcements/1/close
+Accept: application/json
