@@ -18,7 +18,6 @@ public class AdminSeeder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
 
-        System.out.println("dupa");
         if (!userRepository.existsByLogin("admin")) {
             Administrator admin = Administrator.builder()
                     .login("admin")
@@ -29,7 +28,6 @@ public class AdminSeeder implements ApplicationRunner {
                     .lastName("admin")
                     .build();
 
-            System.out.println("dupa");
             userRepository.save(admin);
         }
     }

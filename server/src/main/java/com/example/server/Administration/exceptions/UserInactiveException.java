@@ -9,4 +9,5 @@ public class UserInactiveException extends AppBaseException {
     public UserInactiveException(UUID id) {
         super(HttpStatus.CONFLICT, "User with id " + id + " is inactive");
     }
+    public UserInactiveException(String login) { super(HttpStatus.CONFLICT, "User with login " + login + " is inactive"); }
 }
