@@ -1,5 +1,8 @@
 package com.example.server.Administration.services;
 
+import com.example.server.Administration.exceptions.LoginAlreadyExists;
+import com.example.server.Administration.exceptions.UserInactiveException;
+import com.example.server.Administration.exceptions.UserNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.server.Administration.exceptions.InternalErrorException;
@@ -107,16 +110,19 @@ public class UserService {
 
     public List<String> loginUser(String login, String password) {
         User user = userRepo.findByLogin(login)
-                .orElseThrow(() -> new InternalErrorException());
+                .orElseThrow(() -> new UserNotFoundException(login));
 
-        if (passwordEncoder.matches(password, user.getPasswordHash()) && user.isActive()) {
-            return Arrays.asList(
-                    jwtService.generateAccessToken(user),
-                    jwtService.generateRefreshToken(user)
-            );
-        } else {
-            throw new InternalErrorException();
+        if (!(passwordEncoder.matches(password, user.getPasswordHash()))) {
+            throw new UserNotFoundException(login);
         }
+        if (!user.isActive())
+        {
+            throw new UserInactiveException(login);
+        }
+        return Arrays.asList(
+                jwtService.generateAccessToken(user),
+                jwtService.generateRefreshToken(user)
+        );
 
     }
 
@@ -126,6 +132,9 @@ public class UserService {
             resident.setPasswordHash(passwordEncoder.encode(resident.getPasswordHash()));
             return userRepo.save(resident);
         } catch (DuplicateKeyException e){
+            throw new LoginAlreadyExists(resident.getLogin());
+        }
+        catch (Exception e){
             throw new InternalErrorException();
         }
     }
