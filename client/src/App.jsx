@@ -1,7 +1,8 @@
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import './App.css';
 
-import AlertHistory from "./components/Alerts/AlertHistory.jsx";
+
+import AlertsModule from "./components/Alerts/AlertsModule.jsx";
 import ScheduleManager from './components/DeviceControl/ScheduleManager.jsx';
 import ReportModule from './components/DataAnalysis/ReportModule.jsx';
 import PredictionViewer from "./components/DataPrediction/PredictionViewer.jsx";
@@ -55,7 +56,7 @@ function App() {
                 <main style={{ padding: '20px', textAlign: 'left' }}>
                     <Routes>
                         <Route path="/simulation" element={<Simulation />} />
-                        <Route path="/alerts" element={<AlertHistory />} />
+                        <Route path="/alerts" element={<AlertsModule />} />
                         <Route path="/schedule" element={<ScheduleManager />} />
                         <Route path="/residents" element={<AdminUsersPage />} />
                         <Route path="/reports" element={<ReportModule />} />
