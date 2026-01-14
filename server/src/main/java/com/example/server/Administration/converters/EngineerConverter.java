@@ -12,7 +12,7 @@ public class EngineerConverter {
                 .firstName(engineerDTO.firstName())
                 .lastName(engineerDTO.lastName())
                 .active(engineerDTO.active())
-                .passwordHash(engineerDTO.password())
+                .passwordHash(engineerDTO.password() != null ? engineerDTO.password() : "")
                 .build();
 
     }

@@ -86,15 +86,41 @@ public class UserService {
     public <T extends User> T updateUser(T updated) {
         User user = getUserById(updated.getId());
 
-        user.setLogin(updated.getLogin());
-        user.setPasswordHash(updated.getPasswordHash());
-        user.setFirstName(updated.getFirstName());
-        user.setLastName(updated.getLastName());
-        user.setEmail(updated.getEmail());
+
+
+        if (updated.getLogin() != null && !updated.getLogin().isEmpty()) {
+            user.setLogin(updated.getLogin());
+        }
+
+
+        if (updated.getPasswordHash() != null && !updated.getPasswordHash().isEmpty()) {
+            updated.setPasswordHash(passwordEncoder.encode(updated.getPasswordHash()));
+            user.setPasswordHash(updated.getPasswordHash());
+        }
+
+
+        if (updated.getFirstName() != null && !updated.getFirstName().isEmpty()) {
+            user.setFirstName(updated.getFirstName());
+        }
+
+
+        if (updated.getLastName() != null && !updated.getLastName().isEmpty()) {
+            user.setLastName(updated.getLastName());
+        }
+
+
+        if (updated.getEmail() != null && !updated.getEmail().isEmpty()) {
+            user.setEmail(updated.getEmail());
+        }
+
+
         user.setActive(updated.isActive());
 
-        if (user instanceof Resident && updated instanceof Resident r) {
-            ((Resident) user).setRoom(r.getRoom());
+
+        if (user instanceof Resident resident && updated instanceof Resident r) {
+            if (r.getRoom() != null && !r.getRoom().isEmpty()) {
+                resident.setRoom(r.getRoom());
+            }
         }
 
         return (T) userRepo.save(user);
