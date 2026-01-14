@@ -10,6 +10,8 @@ import Communication from "./components/Communication/CommunicationPage.jsx";
 import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 import LoginPage from "./components/Administration/LoginPage.jsx";
 import RegisterPage from "./components/Administration/RegisterPage.jsx";
+import ControlDevicePage from './components/DeviceControl/ControlDevicePage.jsx';
+
 
 import { useAuth } from "./components/Administration/AuthContext.jsx";
 
@@ -29,6 +31,7 @@ function App() {
                         <Link to="/reports" style={styles.button}>Reports</Link>
                         <Link to="/predictions" style={styles.button}>Predictions</Link>
                         <Link to="/communication" style={styles.button}>Communication</Link>
+                        <Link to="/control" style={styles.button}>DeviceControl</Link>
                         {user ? (
                             <Link
                                 to="/"
@@ -63,6 +66,7 @@ function App() {
                         <Route path="/communication" element={<Communication />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/control" element={<ControlDevicePage />} />
                     </Routes>
                 </main>
 
@@ -109,4 +113,4 @@ const styles = {
     }
 };
 
-export default App;
+export default App
