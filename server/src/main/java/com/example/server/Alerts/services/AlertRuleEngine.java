@@ -21,15 +21,19 @@ public class AlertRuleEngine {
 
     public AlertLevel checkAlertLevel(SensorData data) {
         try {
-            Metric metricEnum = Metric.valueOf(data.metric().name().toUpperCase());
 
+            Metric metricEnum = data.metric();
             List<AlertRule> rules = alertRuleRepository.findByMetric(metricEnum);
+
+
             AlertLevel highestDetectedLevel = null;
 
             for (AlertRule rule : rules) {
                 boolean isBroken = rule.getOperator().check(data.value(), rule.getValue());
 
                 if (isBroken) {
+
+
                     if (highestDetectedLevel == null || rule.getLevel().ordinal() > highestDetectedLevel.ordinal()) {
                         highestDetectedLevel = rule.getLevel();
                     }
@@ -37,8 +41,7 @@ public class AlertRuleEngine {
             }
             return highestDetectedLevel;
 
-        } catch (IllegalArgumentException e) {
-            log.warn("Otrzymano nieznaną metrykę: {}", data.metric());
+        } catch (Exception e) {
             return null;
         }
     }
