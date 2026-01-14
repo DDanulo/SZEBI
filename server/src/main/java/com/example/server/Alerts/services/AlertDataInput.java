@@ -42,8 +42,6 @@ public class AlertDataInput implements IData {
         }
     }
 
-    // Metoda pomocnicza do sprawdzania, czy alert jest "taki sam"
-    // Ignorujemy timestamp, żeby nie spamować tym samym błędem co 10 sekund
     private boolean areAlertsSimilar(Alert oldAlert, Alert newAlert) {
         if (oldAlert == null) return false;
 
