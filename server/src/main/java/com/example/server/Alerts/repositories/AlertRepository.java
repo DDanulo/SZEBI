@@ -14,6 +14,4 @@ public interface AlertRepository extends JpaRepository<Alert, UUID> {
 
     List<Alert> findByLevel(AlertLevel level);
 
-    //List<Alert> getAllByTimestampBefore(LocalDateTime timestampBefore);
-    
 }

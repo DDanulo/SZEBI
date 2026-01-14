@@ -18,17 +18,24 @@ public class Alert {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = true)
+    private UUID userId;
+    @Column(nullable = true)
+    private String location;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
     @Enumerated(EnumType.STRING)
     private AlertLevel level;
     private String source;
     private String message;
+
     //private Object context;
 
     @Builder
-    public Alert(UUID id, LocalDateTime timestamp, AlertLevel level, String source, String message/*,Object context*/) {
+    public Alert(UUID id, UUID userId, String location,LocalDateTime timestamp, AlertLevel level, String source, String message/*,Object context*/) {
         this.id = id;
+        this.userId = userId;
+        this.location = location;
         this.timestamp = timestamp;
         this.level = level;
         this.source = source;
