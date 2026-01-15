@@ -1,4 +1,7 @@
 package com.example.server.Administration.dto;
 
-public record ForgotPasswordDTO() {
+public record ForgotPasswordDTO(
+        String email
+) {
+
 }

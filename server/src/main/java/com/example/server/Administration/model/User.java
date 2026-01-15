@@ -35,6 +35,7 @@ public abstract class User extends AbstractEntity {
     @Builder.Default
     private boolean active = false;
 
-    @Column(name="email")
+    @NonNull
+    @Column(name="email", unique = true)
     private String email;
 }

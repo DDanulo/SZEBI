@@ -1,4 +1,7 @@
 package com.example.server.Administration.dto;
 
-public record ResetPasswordDTO() {
+public record ResetPasswordDTO(
+        String token,
+        String password
+) {
 }

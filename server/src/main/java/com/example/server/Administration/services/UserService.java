@@ -3,6 +3,8 @@ package com.example.server.Administration.services;
 import com.example.server.Administration.exceptions.LoginAlreadyExists;
 import com.example.server.Administration.exceptions.UserInactiveException;
 import com.example.server.Administration.exceptions.UserNotFoundException;
+import com.example.server.Administration.model.PasswordResetToken;
+import com.example.server.Administration.repo.PasswordResetTokenRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.server.Administration.exceptions.InternalErrorException;
@@ -25,6 +27,7 @@ public class UserService {
     private final UserRepo userRepo;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository tokenRepo;
 
     public List<User> getAllUsers() {
         return userRepo.findAll();
@@ -163,6 +166,31 @@ public class UserService {
         catch (Exception e){
             throw new InternalErrorException();
         }
+    }
+
+
+    public void resetPassword(String token, String newPassword) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Token nie może być pusty");
+        }
+
+        if (newPassword == null || newPassword.isEmpty()) {
+            throw new IllegalArgumentException("Hasło nie może być puste");
+        }
+
+
+        PasswordResetToken resetToken = tokenRepo.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Nieprawidłowy token"));
+
+
+        User user = resetToken.getUser();
+
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+
+
+        tokenRepo.delete(resetToken);
     }
 
 

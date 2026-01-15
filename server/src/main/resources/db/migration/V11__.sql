@@ -21,22 +21,27 @@ ALTER TABLE password_reset_token
     ADD CONSTRAINT FK_PASSWORDRESETTOKEN_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
 
 ALTER TABLE conversation_participants
-    DROP CONSTRAINT pk_conversation_participants;
+DROP
+CONSTRAINT pk_conversation_participants;
 
 ALTER TABLE forecasts
-    DROP COLUMN forecasted_usage;
+DROP
+COLUMN forecasted_usage;
 
 ALTER TABLE forecasts
     ADD forecasted_usage DOUBLE PRECISION NOT NULL;
 
 ALTER TABLE device
-    ALTER COLUMN total_consumed TYPE DECIMAL USING (total_consumed::DECIMAL);
+ALTER
+COLUMN total_consumed TYPE DECIMAL USING (total_consumed::DECIMAL);
 
 ALTER TABLE device
-    ALTER COLUMN total_generated TYPE DECIMAL USING (total_generated::DECIMAL);
+ALTER
+COLUMN total_generated TYPE DECIMAL USING (total_generated::DECIMAL);
 
 ALTER TABLE energy_measure
-    DROP COLUMN value;
+DROP
+COLUMN value;
 
 ALTER TABLE energy_measure
     ADD value DOUBLE PRECISION;
