@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,19 +27,19 @@ public class DeviceController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'ENGINEER', 'RESIDENT')")
     public ResponseEntity<List<Device>> getAllDevices() {
-        // 1. Pobierz wszystko
+
         List<Device> allDevices = new ArrayList<>();
         for (IDeviceAuth manager : deviceManagers) {
             allDevices.addAll(manager.getDevices());
         }
 
-        // 2. Pobierz info o użytkowniku z Tokena
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // Zabezpieczenie: jeśli nikt nie jest zalogowany (powinno być niemożliwe przez @PreAuthorize, ale warto mieć)
+
         if (auth == null) return ResponseEntity.status(401).build();
 
-        // Sprawdzamy role
+
         boolean isAdminOrEngineer = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_ENGINEER"));
 
@@ -105,8 +106,11 @@ public ResponseEntity<List<Device>> getDevicesByOwner(@PathVariable UUID ownerId
             @RequestParam(required = false) Integer maxPower,
             @RequestParam(required = false) Integer minWind
     ) {
-        if (area == null || area <= 0) {
-            return ResponseEntity.badRequest().build();
+        if(!Objects.equals(type, "WIND"))
+             {
+            if (area == null || area <= 0) {
+                return ResponseEntity.badRequest().build();
+            }
         }
 
         int safeMaxPower = (maxPower != null) ? maxPower : 0;
