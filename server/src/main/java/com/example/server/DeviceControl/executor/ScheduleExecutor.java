@@ -40,7 +40,6 @@ public class ScheduleExecutor {
 
 
             if (!isAppliance && !isSolar && !isWind) {
-                log.info("Urządzenie nie istnieje. Usuwanie osieroconego harmonogramu: " + s.getId());
                 scheduleRepo.delete(s);
                 continue;
             }
@@ -52,6 +51,16 @@ public class ScheduleExecutor {
 
             if (isTriggerTime(s.getDateTimeTurnOff(), now)) {
                 turnOffIfOn(s.getDeviceId());
+            }
+
+            LocalDateTime lastActionTime;
+            if (s.getDateTimeTurnOn().isAfter(s.getDateTimeTurnOff())) {
+                lastActionTime = s.getDateTimeTurnOn();
+            } else {
+                lastActionTime = s.getDateTimeTurnOff();
+            }
+
+            if (isTriggerTime(lastActionTime, now)) {
                 handleScheduleCompletion(s);
             }
         }
