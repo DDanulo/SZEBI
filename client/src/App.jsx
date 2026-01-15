@@ -49,12 +49,21 @@ function App() {
                                 >
                                     Wyloguj
                                 </Link>
-                                <Link to="/simulation" style={styles.button}>Simulation</Link>
+                                {user?.role === 'ADMIN' && (
+                                    <Link to="/simulation" style={styles.button}>Simulation</Link>
+                                )}
                                 <Link to="/alerts" style={styles.button}>Alerts</Link>
                                 <Link to="/schedule" style={styles.button}>Control</Link>
-                                <Link to="/users" style={styles.button}>Administration</Link>
-                                <Link to="/reports" style={styles.button}>Reports</Link>
-                                <Link to="/predictions" style={styles.button}>Predictions</Link>
+                                {user?.role === 'ADMIN' && (
+                                    <Link to="/users" style={styles.button}>Administration</Link>
+                                )}
+                                {(user?.role === 'ADMIN' || user?.role === "ENGINEER") && (
+                                    <Link to="/reports" style={styles.button}>Reports</Link>
+                                )}
+                                {(user?.role === 'ADMIN' || user?.role === "ENGINEER") && (
+                                    <Link to="/predictions" style={styles.button}>Predictions</Link>
+                                )}
+
                                 <Link to="/communication" style={styles.button}>Communication</Link>
                             </>
                         ) : (
@@ -77,7 +86,7 @@ function App() {
                             path="/reports"
                             element={
                                 <RequireRole role="ADMIN">
-                                    <ReportModule />
+                                    <ReportModule/>
                                 </RequireRole>
                             }
                         />
