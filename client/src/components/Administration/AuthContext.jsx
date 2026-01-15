@@ -23,7 +23,7 @@ export const AuthProvider = ({children}) => {
                 if (decoded.exp * 1000 < Date.now()) {
                     logout();
                 } else {
-                    setUser({userId: decoded.userId, role: decoded.role, login: decoded.login});
+                    setUser({userId: decoded.sub, role: decoded.role, login: decoded.login});
                 }
             } catch (error) {
                 console.error("Invalid token:", error);

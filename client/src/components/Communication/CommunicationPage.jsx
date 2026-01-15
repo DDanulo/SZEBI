@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ResidentView from "./ResidentView.jsx";
 import AdminView from "./AdminView.jsx";
 import ConversationsView from "./ConversationsView.jsx";
+import {useAuth} from "../Administration/AuthContext.jsx";
 
 const CommunicationPage = () => {
     const [view, setView] = useState('resident');
@@ -14,7 +15,8 @@ const CommunicationPage = () => {
     };
 
     // Trzeba zmienić samemu
-    const currentUserId = '6d981507-0d27-48e6-826e-a87ba57433a0';
+    const { user } = useAuth(); // <-- pobieramy user z contextu
+    const currentUserId = user?.userId;
 
     return (
         <div className="communication-page">
