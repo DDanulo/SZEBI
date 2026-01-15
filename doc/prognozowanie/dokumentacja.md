@@ -1,25 +1,38 @@
 
-# Nazwa modułu
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+# Moduł prognozowania
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Michał Domagała 251505
+Mikołaj Pawłoś 258681
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł prognozowania zbiera dane zużycia energii elektrycznej z poprzednich dni, trenuje na ich podstawie algorytm uczenia maszynowego, a następnie generuje prognozy przyszłego zużycia energii elektrycznej w formie średniego zużycia na dzień.
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+"Co realizuje dany moduł, wypunktowanie przypadków użycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor"
+
+- Pobierz dane zużycia energii elektrycznej od modułu symulacji — Moduł może pobierać od modułu symulacji dane zużycia energii elektrycznej z poprzednich dni
+- Przygotuj dane do treningu modelu uczenia maszynowego — Moduł może odpowiednio przetwarzać pobrane od modułu symulacji dane zużycia energii elektrycznej z poprzednich dni
+- Wygeneruj prognozę zużycia energii elektrycznej — Moduł może prognozować prawdopodobne zużycie energii elektrycznej na kolejne 7 dni automatycznie co określony czas lub po otrzymaniu polecenia od administratora bądź inżyniera 
+- Wyświetl prognozę zużycia energii elektrycznej — Moduł może wyświetlać prognozę zużycia energii elektrycznej na kolejne 7 dni w czytelnej formie administratorowi i inżynierowi
+- Zapisz prognozę zużycia energii elektrycznej — Moduł może zapisywać wygenerowane prognozy zużycia energii elektrycznej
+- Wytrenuj model uczenia maszynowego — Moduł może automatycznie co określony czas trenować algorytm uczenia maszynowego 
+- Sprawdź poprawność prognozy zużycia energii elektrycznej — Moduł może, w przypadku wytworzenia prognozy wybiegającej znacznie poza akceptowalny przedział, ponownie wytrenować algorytm uczenia maszynowego i jeszcze raz wygenerować prognozę
+- Odczytaj prognozę energii elektrycznej — Moduł może odczytywać zapisane wcześniej prognozy
+- Przekaż prognozę zużycia energii elektrycznej do modułu alarmów — Moduł może oferować do odczytu najnowsze prognozy modułowi alarmowania i alertów
+
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+
+- Użyty do prognozowania model uczenia maszynowego to algorytm RandomForest zaimplementowany w używanej przez moduł bibliotece Smile
+- Przetwarzanie danych zużycia energii elektrycznej z poprzednich dni polega na agregacji danych zużycia do pełnych godzin
+- Najnowsze prognozy zużycia energii elektrycznej mogą zostać wyświetlone w formie wykresu liniowego oraz tabeli
+- Wartość prognozy zużycia energii elektrycznej to średnie dzienne zużycie energii elektrycznej na określony dzień
 
 # Diagramy przypadków użycia
 [Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
@@ -50,21 +63,21 @@ Opis diagramu
 
 [do wypełnienia szablon scenariusza]
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole | Treść                                                                                                                                                                                                                                                         |
+| :--- |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:** | Generowanie prognozy zużycia energii elektrycznej                                                                                                                                                                                                             |
+| **Numer:** | 1                                                                                                                                                                                                                                                             |
+| **Twórca:** | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                                                    |
+| **Poziom ważności:** | Wysoki                                                                                                                                                                                                                                                        |
+| **Typ przypadku użycia:** | Istotny                                                                                                                                                                                                                                                       |
+| **Aktorzy:** | Interwał prognozy                                                                                                                                                                                                                                             |
+| **Krótki opis:** | Wygenerowanie prognozy na podstawie danych zużycia energii elektrycznej z poprzednich dni                                                                                                                                                                     |
+| **Warunki wstępne:** | 1. Model uczenia maszynowego jest wytrenowany <br> 2. Istnieją dane zużycia energii elektrycznej sprzed przynajmniej 7 dni                                                                                                                                    |
+| **Warunki końcowe:** | System zapisuje wygenerowaną prognozę zużycia energii elektrycznej                                                                                                                                                                                            |
+| **Główny przepływ zdarzeń:** | 1. Pobranie danych zużycia energii elektrycznej <br> 2. Przetworzenie danych zużycia energii elektrycznej 3. Wygenerowanie prognozy zużycia energii elektrycznej na następne 7 dni <br> 4. Sprawdza poprawność prognozy zużycia energii elektrycznej <br> 5.  |
+| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.                                                                                                                                                                                                                                         |
+| **Specjalne wymagania:** |                                                                                                                                                                                                                                                               |
+| **Notatki i kwestie:** |                                                                                                                                                                                                                                                               |
 
 ## Diagram interakcji 1
 

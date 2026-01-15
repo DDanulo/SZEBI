@@ -94,9 +94,9 @@ public class ForecastServiceImpl implements ForecastService {
 
     /**
      * Trenowanie algorytmu na wcześniejszych danych sprzed maksymalnie 14 dni.
-     * Trening odbywa się okresowo co tydzień. Pierwszy trening jest z opóźnieniem 5 sekund, żeby jakieś dane były w bazie
+     * Trening odbywa się okresowo co tydzień. Pierwszy trening jest z opóźnieniem 30 sekund, żeby jakieś dane były w bazie
      */
-    @Scheduled(initialDelay = 5, fixedDelay = 604800, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelay = 30, fixedDelay = 604800, timeUnit = TimeUnit.SECONDS)
     void trainModel() {
         List<UsageRecord> trainData;
 
@@ -114,12 +114,12 @@ public class ForecastServiceImpl implements ForecastService {
     }
 
     /**
-     * Generuje i zapisuje do bazy 8 prognoz (7 pełnych dób) co <code>fixedDelay</code> minut.
-     * Zaczyna generować <code>initialDelay</code> minut po utworzeniu obiektu.
+     * Generuje i zapisuje do bazy 8 prognoz (7 pełnych dób) co 12 godzin.
+     * Zaczyna generować 1 minute po utworzeniu obiektu.
      *
      * @throws ModelNotTrainedException w przypadku, gdy model jeszcze nie został wytrenowany
      */
-    @Scheduled(initialDelay = 1, fixedDelay = 30, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(initialDelay = 1, fixedDelay = 720, timeUnit = TimeUnit.MINUTES)
     void generateDailyForecasts() throws ModelNotTrainedException {
         List<UsageRecord> previousUsage;
 

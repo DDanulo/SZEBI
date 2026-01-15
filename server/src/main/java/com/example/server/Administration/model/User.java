@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Data
@@ -35,6 +34,7 @@ public abstract class User extends AbstractEntity {
     @Builder.Default
     private boolean active = false;
 
-    @Column(name="email")
+    @NonNull
+    @Column(name="email", unique = true)
     private String email;
 }

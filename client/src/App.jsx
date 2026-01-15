@@ -11,40 +11,52 @@ import Communication from "./components/Communication/CommunicationPage.jsx";
 import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 import LoginPage from "./components/Administration/LoginPage.jsx";
 import RegisterPage from "./components/Administration/RegisterPage.jsx";
+import ControlDevicePage from './components/DeviceControl/ControlDevicePage.jsx';
+import RequireRole from "./components/Administration/RequireRole.jsx";
 
-import { useAuth } from "./components/Administration/AuthContext.jsx";
+import {useAuth} from "./components/Administration/AuthContext.jsx";
+import AdminUsersEditPage from "./components/Administration/AdminUsersEditPage.jsx";
+import AdminUsersCreatePage from "./components/Administration/AdminUsersCreatePage.jsx";
+import ForgotPasswordPage from "./components/Administration/ForgotPasswordPage.jsx";
+import ResetPasswordPage from "./components/Administration/ResetPasswordPage.jsx";
 
 function App() {
 
-    const { user, logout } = useAuth();
+    const {user, logout} = useAuth();
     return (
         <Router>
             <div className="app-container">
 
                 <header style={styles.header}>
                     <nav style={styles.nav}>
-                        <Link to="/simulation" style={styles.button}>Simulation</Link>
-                        <Link to="/alerts" style={styles.button}>Alerts</Link>
-                        <Link to="/schedule" style={styles.button}>Control</Link>
-                        <Link to="/residents" style={styles.button}>Administration</Link>
-                        <Link to="/reports" style={styles.button}>Reports</Link>
-                        <Link to="/predictions" style={styles.button}>Predictions</Link>
-                        <Link to="/communication" style={styles.button}>Communication</Link>
-                        {user ? (
-                            <Link
-                                to="/"
-                                onClick={(e) => {
-                                    if (!window.confirm('Czy na pewno chcesz się wylogować?')) {
-                                        e.preventDefault();
-                                        return;
-                                    }
-                                    logout();
 
-                                }}
-                                style={styles.button}
-                            >
-                                Wyloguj
-                            </Link>
+                        {user ? (
+
+                            <>
+            <span style={{color: 'white', margin: '0 10px', fontWeight: 'bold'}}>
+                Witaj, {user.login}!
+            </span>
+                                <Link
+                                    to="/"
+                                    onClick={(e) => {
+                                        if (!window.confirm('Czy na pewno chcesz się wylogować?')) {
+                                            e.preventDefault();
+                                            return;
+                                        }
+                                        logout();
+                                    }}
+                                    style={styles.button}
+                                >
+                                    Wyloguj
+                                </Link>
+                                <Link to="/simulation" style={styles.button}>Simulation</Link>
+                                <Link to="/alerts" style={styles.button}>Alerts</Link>
+                                <Link to="/schedule" style={styles.button}>Control</Link>
+                                <Link to="/users" style={styles.button}>Administration</Link>
+                                <Link to="/reports" style={styles.button}>Reports</Link>
+                                <Link to="/predictions" style={styles.button}>Predictions</Link>
+                                <Link to="/communication" style={styles.button}>Communication</Link>
+                            </>
                         ) : (
                             <Link to="/login" style={styles.button}>
                                 Zaloguj się
@@ -53,17 +65,29 @@ function App() {
                     </nav>
                 </header>
 
-                <main style={{ padding: '20px', textAlign: 'left' }}>
+                <main style={{padding: '20px', textAlign: 'left'}}>
                     <Routes>
-                        <Route path="/simulation" element={<Simulation />} />
-                        <Route path="/alerts" element={<AlertsModule />} />
-                        <Route path="/schedule" element={<ScheduleManager />} />
-                        <Route path="/residents" element={<AdminUsersPage />} />
-                        <Route path="/reports" element={<ReportModule />} />
-                        <Route path="/predictions" element={<PredictionViewer />} />
-                        <Route path="/communication" element={<Communication />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/simulation" element={<Simulation/>}/>
+                        <Route path="/alerts" element={<AlertsModule/>}/>
+                        <Route path="/schedule" element={<ScheduleManager/>}/>
+                        <Route path="/users" element={<AdminUsersPage/>}/>
+                        <Route path="/users/edit/:id" element={<AdminUsersEditPage/>}/>
+                        <Route path="/users/create" element={<AdminUsersCreatePage/>}/>
+                        <Route
+                            path="/reports"
+                            element={
+                                <RequireRole role="ADMIN">
+                                    <ReportModule />
+                                </RequireRole>
+                            }
+                        />
+
+                        <Route path="/predictions" element={<PredictionViewer/>}/>
+                        <Route path="/communication" element={<Communication/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/register" element={<RegisterPage/>}/>
+                        <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
+                        <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                     </Routes>
                 </main>
 

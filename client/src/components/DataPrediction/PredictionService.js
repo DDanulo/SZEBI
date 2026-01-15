@@ -1,17 +1,19 @@
-import axios from "axios";
+import api from "../Administration/api.js";
 
-const API = "http://localhost:8080/predictions"
+const api_pred = "/api/predictions"
 
-export const getLatestPrediction = function () {
-    return axios.get(`${API}/latest/one`, {
-        responseType: "json"
-    })
+export const getLatestPrediction = async function () {
+    return await api.get(`${api_pred}/latest/one`)
 }
 
-export const getLatestPredictions = function () {
-    return axios.get(`${API}/latest/batch`)
+export const getLatestPredictions = async function () {
+    return await api.get(`${api_pred}/latest/batch`)
 }
 
-export const generatePrediction = function () {
-    return axios.put(`${API}/generate`)
+export const generatePrediction = async function () {
+    return await api.put(`${api_pred}/generate`)
 }
+
+export const getPredictionsByDateRange = function (fromDate, toDate) {
+    return api.get(`${api_pred}/forecasts/${new Date(fromDate).getTime()}/${new Date(toDate).getTime()}`);
+};
