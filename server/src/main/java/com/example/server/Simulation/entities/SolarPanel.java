@@ -20,14 +20,20 @@ public class SolarPanel extends EnergyProducingDevice{
 
     @Override
     public double generateEnergy(double insolation) {
-        double generatedNow = area * insolation * 0.3;
+        //ostatni paramatre to czas zeby sie zgadzała jednostka (czas)
+        //bo tak jest (w/m^2) * m^2 (czyli moc) * s (czas) to energia/praca
+        double generatedNow = area * insolation * 0.3 *(1/12.0);
         this.totalGenerated = totalGenerated.add(BigDecimal.valueOf(generatedNow));
         return generatedNow;
     }
 
     public SolarPanel(String description, boolean working, double area) {
         super(description, working);
-        this.area = area;
+        if(area <= 0.001) {
+            this.area = 5.0;
+        } else {
+            this.area = area;
+        }
     }
 
 

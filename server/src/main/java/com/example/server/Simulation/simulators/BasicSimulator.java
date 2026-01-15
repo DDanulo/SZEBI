@@ -23,7 +23,7 @@ public class BasicSimulator implements Simulator {
     //in m/s
     @Getter
     private volatile double windSpeed;
-    //W/m ( per hour)
+    //W/m^2
     @Getter
     private volatile float insolation;
     private int counter;
