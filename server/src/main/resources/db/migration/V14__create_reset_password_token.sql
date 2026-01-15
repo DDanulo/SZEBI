@@ -14,8 +14,8 @@ ALTER TABLE password_reset_token
 ALTER TABLE users
     ADD CONSTRAINT uc_users_email UNIQUE (email);
 
-ALTER TABLE energy_measure
-    ADD CONSTRAINT FK_ENERGYMEASURE_ON_DEVICE FOREIGN KEY (device_id) REFERENCES device (id);
+-- ALTER TABLE energy_measure
+--     ADD CONSTRAINT FK_ENERGYMEASURE_ON_DEVICE FOREIGN KEY (device_id) REFERENCES device (id);
 
 ALTER TABLE password_reset_token
     ADD CONSTRAINT FK_PASSWORDRESETTOKEN_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
