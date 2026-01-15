@@ -76,50 +76,75 @@ const CustomTooltip = ({active, payload}) => {
     return null;
 };
 
-export const PredictionTable = ({ rawData }) => {
+export const PredictionTable = ({rawData}) => {
     if (!rawData || rawData.length === 0) {
         return <p>Brak danych do tabeli.</p>;
     }
 
-    const creationTimeRaw = rawData[0].creationTime;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const groupedData = useMemo(() => {
+        const groups = rawData.reduce((acc, item) => {
+            const key = item.creationTime;
+            if (!acc[key]) {
+                acc[key] = [];
+            }
+            acc[key].push(item);
+            return acc;
+        }, {});
 
-    const creationTimeFormatted = new Date(creationTimeRaw).toLocaleString('pl-PL', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-    });
+        return Object.entries(groups).sort((a, b) => {
+            return new Date(b[0]) - new Date(a[0]);
+        });
+    }, [rawData]);
+
+    const formatCreationTime = (isoString) => {
+        return new Date(isoString).toLocaleString('pl-PL', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    };
 
     return (
-        <div style={{ marginTop: '20px', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
+        <div style={{marginTop: '20px', overflowX: 'auto'}}>
+            <table style={{width: '100%', borderCollapse: 'collapse', textAlign: 'center'}}>
                 <thead>
-                <tr style={{ backgroundColor: '#e6bd34', borderBottom: '2px solid #000' }}>
+                <tr style={{backgroundColor: '#e6bd34', borderBottom: '2px solid #000'}}>
                     <th style={styles.th}>Data wygenerowania prognozy</th>
                     <th style={styles.th}>Dzień prognozy</th>
                     <th style={styles.th}>Przewidywane średnie dzienne zużycie</th>
                 </tr>
                 </thead>
                 <tbody>
-                {rawData.map((row, index) => (
-                    <tr key={row.id} style={{ borderBottom: '1px solid #000' }}>
+                {groupedData.map(([creationTime, rows]) => (
+                    <React.Fragment key={creationTime}>
+                        {rows.map((row, index) => (
+                            <tr key={row.id} style={{borderBottom: '1px solid #000'}}>
 
-                        {index === 0 && (
-                            <td
-                                rowSpan={rawData.length}
-                                style={{ ...styles.td, backgroundColor: '#fae16b', fontWeight: 'bold', verticalAlign: 'middle' }}
-                            >
-                                {creationTimeFormatted}
-                            </td>
-                        )}
+                                {index === 0 && (
+                                    <td
+                                        rowSpan={rows.length}
+                                        style={{
+                                            ...styles.td,
+                                            backgroundColor: '#fae16b',
+                                            fontWeight: 'bold',
+                                            verticalAlign: 'middle'
+                                        }}
+                                    >
+                                        {formatCreationTime(creationTime)}
+                                    </td>
+                                )}
 
-                        <td style={styles.td}>
-                            {new Date(row.forecastDate).toLocaleDateString('pl-PL', {
-                                weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
-                            })}
-                        </td>
-                        <td style={styles.td}>
-                            {row.forecastedUsage.toFixed(2)} kWh
-                        </td>
-                    </tr>
+                                <td style={styles.td}>
+                                    {new Date(row.forecastDate).toLocaleDateString('pl-PL', {
+                                        weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
+                                    })}
+                                </td>
+                                <td style={styles.td}>
+                                    {row.forecastedUsage.toFixed(2)} kWh
+                                </td>
+                            </tr>
+                        ))}
+                    </React.Fragment>
                 ))}
                 </tbody>
             </table>
