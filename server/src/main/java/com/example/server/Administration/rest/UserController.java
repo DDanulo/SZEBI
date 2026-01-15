@@ -9,6 +9,7 @@ import com.example.server.Administration.dto.*;
 import com.example.server.Administration.model.Administrator;
 import com.example.server.Administration.model.Resident;
 import com.example.server.Administration.model.User;
+import com.example.server.Administration.services.PasswordResetService;
 import com.example.server.Administration.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-
+    private final PasswordResetService passwordResetService;
 
     @GetMapping("/residents")
     @PreAuthorize("hasRole('ADMIN')")
@@ -119,6 +120,21 @@ public class UserController {
     }
 
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(
+            @RequestBody ForgotPasswordDTO request
+    ) {
+        passwordResetService.sendResetLink(request.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(
+            @RequestBody ResetPasswordDTO request
+    ){
+        userService.resetPassword(request.token(), request.password());
+        return ResponseEntity.ok().build();
+    }
 
 
 
