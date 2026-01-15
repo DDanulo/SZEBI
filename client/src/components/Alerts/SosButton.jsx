@@ -9,12 +9,23 @@ const SosButton = () => {
     const [status, setStatus] = useState(null);
 
     const handleSend = async () => {
-        const finalMessage = message.trim() || "ALARM SOS";
+        const trimmedLocation = location.trim();
+        const trimmedMessage = message.trim();
+
+        if (trimmedLocation.length < 3 || trimmedLocation.length > 50) {
+            alert("Lokalizacja musi miec od 3 do 50 znakow");
+            return;
+        }
+
+        if (trimmedMessage.length < 3 || trimmedMessage.length > 150) {
+            alert("Wiadomosc musi miec od 3 do 150 znakow");
+            return;
+        }
 
         const report = {
             userID: user?.id || "00000000-0000-0000-0000-000000000000",
-            location: location,
-            message: finalMessage
+            location: trimmedLocation,
+            message: trimmedMessage
         };
 
         try {
@@ -38,20 +49,23 @@ const SosButton = () => {
             </div>
 
             <div style={{marginBottom: "10px"}}>
-                <label style={styles.label}>Lokalizacja:</label>
+                <label style={styles.label}>Lokalizacja (3-50 znakow):</label>
                 <input
                     style={styles.input}
                     type="text"
                     value={location}
+                    maxLength={50}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="Wpisz lokalizacje..."
                 />
             </div>
 
+            <label style={styles.label}>Wiadomosc (3-150 znakow):</label>
             <textarea
                 style={styles.textarea}
                 placeholder="Opisz zagrozenie..."
                 value={message}
+                maxLength={150}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={3}
             />
