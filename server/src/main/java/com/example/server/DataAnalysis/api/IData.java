@@ -13,5 +13,7 @@ public interface IData {
 
     Map<String, Double> getAggregatedData(LocalDateTime from, LocalDateTime to, DataType type);
 
+    Double getLatestValue(DataType type);
+
     LocalDateTime getLastUpdated();
 }

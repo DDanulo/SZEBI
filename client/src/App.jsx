@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link, Navigate} from 'react-router-dom';
 import './App.css';
 
 
@@ -53,7 +53,7 @@ function App() {
                                     <Link to="/simulation" style={styles.button}>Simulation</Link>
                                 )}
                                 <Link to="/alerts" style={styles.button}>Alerts</Link>
-                                <Link to="/schedule" style={styles.button}>Control</Link>
+                                <Link to="/" style={styles.button}>Control</Link>
                                 {user?.role === 'ADMIN' && (
                                     <Link to="/users" style={styles.button}>Administration</Link>
                                 )}
@@ -67,7 +67,7 @@ function App() {
                                 <Link to="/communication" style={styles.button}>Communication</Link>
                             </>
                         ) : (
-                            <Link to="/login" style={styles.button}>
+                            <Link to="/" style={styles.button}>
                                 Zaloguj się
                             </Link>
                         )}
@@ -76,9 +76,13 @@ function App() {
 
                 <main style={{padding: '20px', textAlign: 'left'}}>
                     <Routes>
+                        <Route
+                            path="/"
+                            element={user ? <ScheduleManager/> : <Navigate to="/login" replace />}
+                        />
                         <Route path="/simulation" element={<Simulation/>}/>
                         <Route path="/alerts" element={<AlertsModule/>}/>
-                        <Route path="/schedule" element={<ScheduleManager/>}/>
+                        {/*<Route path="/" element={<ScheduleManager/>}/>*/}
                         <Route path="/users" element={<AdminUsersPage/>}/>
                         <Route path="/users/edit/:id" element={<AdminUsersEditPage/>}/>
                         <Route path="/users/create" element={<AdminUsersCreatePage/>}/>
