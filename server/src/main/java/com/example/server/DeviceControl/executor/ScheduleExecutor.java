@@ -1,8 +1,9 @@
-package com.example.server.DeviceControl;
+package com.example.server.DeviceControl.executor;
 
+import com.example.server.DeviceControl.entities.Schedule;
 import com.example.server.Simulation.api.IControlDevices;
 import com.example.server.Simulation.api.IShowDevices;
-import com.example.server.DeviceControl.ScheduleRepo;
+import com.example.server.DeviceControl.repo.ScheduleRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

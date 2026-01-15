@@ -26,6 +26,12 @@ public class ManagerWindmills implements IDeviceAuth {
                         .name(w.getDescription())
                         .isOn(w.isWorking())
                         .type("WIND")
+<<<<<<< Updated upstream
+=======
+                        .area(w.getArea())
+                        .totalConsumed(w.getTotalConsumed())
+                        .totalGenerated(w.getTotalGenerated())
+>>>>>>> Stashed changes
                         .build())
                 .collect(Collectors.toList());
     }
