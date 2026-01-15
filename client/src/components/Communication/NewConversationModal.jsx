@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import api from "../Administration/api.js";
 
 const NewConversationModal = ({ currentUserId, onClose, onConversationCreated }) => {
     const [users, setUsers] = useState([]);
@@ -10,12 +11,12 @@ const NewConversationModal = ({ currentUserId, onClose, onConversationCreated })
         const fetchUsers = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:8080/users/residents`);
-                if (!response.ok) {
-                    throw new Error('Nie udało się pobrać użytkowników.');
-                }
-                const data = await response.json();
-                const filteredData = data.filter(user => user.id !== currentUserId);
+                const response = await (await api.get(`users/residents`)).data;
+                // if (!response.ok) {
+                //     throw new Error('Nie udało się pobrać użytkowników.');
+                // }
+                // const data = await response.json();
+                const filteredData = response.filter(user => user.id !== currentUserId);
                 setUsers(filteredData);
             } catch (err) {
                 setError(err.message);

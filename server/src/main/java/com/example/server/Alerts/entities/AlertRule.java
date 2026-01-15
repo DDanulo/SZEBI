@@ -17,13 +17,14 @@ public class AlertRule {
     private String ruleName;
     @Enumerated(EnumType.STRING)
     private AlertLevel level;
-    private String metric;
+    @Enumerated(EnumType.STRING)
+    private Metric metric;
     private double value;
     @Enumerated(EnumType.STRING)
     private Operator operator;
 
     @Builder
-    public AlertRule(UUID id, String ruleName, AlertLevel level, String metric, double value, Operator operator) {
+    public AlertRule(UUID id, String ruleName, AlertLevel level, Metric metric, double value, Operator operator) {
         this.id = id;
         this.ruleName = ruleName;
         this.level = level;

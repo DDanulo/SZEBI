@@ -1,6 +1,7 @@
 package com.example.server.Alerts.controllers;
 
 
+import com.example.server.Alerts.dto.SosReport;
 import com.example.server.Alerts.entities.Alert;
 import com.example.server.Alerts.services.AlertService;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +20,23 @@ public class AlertController {
 
     private final AlertService alertService;
 
-    public ResponseEntity<String> triggerSos(@RequestBody Map<String, String> payload) {
-
-        String message = payload.get("message");
-        if (message == null || message.isEmpty()) {
-            message = "NIEOKREŚLONE ZGŁOSZENIE";
-        }
-        alertService.createSosAlert(message);
-
-        return ResponseEntity.ok("SOS przyjęte");
-    }
 
     @GetMapping("/logs")
     public List<Alert> getAlertsLogs(){
         return alertService.getAllAlerts();
     }
 
+    @PostMapping("/sos")
+    public ResponseEntity<String> reportSos(@RequestBody SosReport sosReport){
+
+        if(sosReport.getUserID() == null)
+        {
+            return ResponseEntity.badRequest().body("BŁAD: Brak ID użytkownika");
+        }
+
+        alertService.createSosAlert(sosReport);
+
+        return ResponseEntity.ok("Zgłoszenie zostało poprawnie przyjete");
+    }
 
 }

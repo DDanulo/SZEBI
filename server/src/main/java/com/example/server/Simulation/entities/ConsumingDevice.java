@@ -18,7 +18,6 @@ public class ConsumingDevice extends Device {
     @Column
     private BigDecimal totalConsumed;
 
-
     public ConsumingDevice(String description, boolean active) {
         super(description,active);
         this.totalConsumed = BigDecimal.valueOf(0.0f);

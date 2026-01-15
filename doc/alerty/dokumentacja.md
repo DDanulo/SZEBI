@@ -5,18 +5,45 @@
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Mateusz Chodulski, 252929
+Karol Dawid, 252931
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł Alarmowania i Alertów odbiera dane od użytkownika (SOS alert), modułu Symulacji oraz modułu Analizy Danych, pozwala administratorowi zarządzać regułami oraz sprawdzać dziennik zdarzeń. Moduł sprawdza, czy doszło do naruszenia reguł i w odpowiednich przypadkach wystawia stosowny Alert. 
 
 ### Opis możliwości funkcjonalnych modułu
 Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+
+* Moduł implementuje interfejs dostarczany z Modułu Analizy Danych, aby pasywnie odbierać obiekty w czasie rzeczywistym.
+
+* Moduł implementuje interfejs dostarczany przez z Modułu Prognozowania, aby pasywnie odbierać obiekty.
+
+* Moduł wystawia bezpieczny endpoint API do przyjmowania zgłoszeń SOS inicjowanych przez Użytkownika z warstwy GUI.
+
+* Endpoint reportSOS musi waliduje żądanie i zwraca natychmiastowe potwierdzenie przyjęcia zgłoszenia.
+ 
+[//]: # (Moduł musi posiadać wewnętrzny Silnik Reguł do analizowania danych.)
+* Moduł posiada mechanizm dla Administratora do zarządzania regułami w Silniku Reguł.
+
+[//]: # (Każda reguła musi definiować warunki oraz przypisany poziom wagi &#40;np. INFO, WARNING&#41;.)
+[//]: # (Po wykryciu naruszenia reguły lub otrzymaniu zgłoszenia SOS, moduł musi wygenerować ustandaryzowany, niemutowalny obiekt Alert.)
+[//]: # (Moduł musi implementować wzorzec Wydawca-Subskrybent.)
+
+[//]: # (Moduł musi definiować i wystawiać publiczny interfejs dla subskrybentów.)
+
+[//]: # (Moduł musi wystawiać metody subscribe&#40;IAlertObserver&#41; i unsubscribe&#40;IAlertObserver&#41; do zarządzania listą subskrybentów.)
+
+Po wygenerowaniu obiektu Alert, moduł musi natychmiast opublikować ten obiekt, wywołując metodę onAlert() u wszystkich aktualnie zarejestrowanych subskrybentów.
+Moduł musi posiadać wewnętrzny komponent AlertLogger, który implementuje interfejs IAlertObserver.
+Komponent AlertLogger musi być automatycznie subskrybowany do AlertPublishera przy starcie aplikacji.
+Metoda onAlert() komponentu AlertLogger musi realizować logikę trwałego zapisu każdego otrzymanego obiektu Alert (np. do pliku logu lub dedykowanej tabeli w bazie danych).
+
+
+
 
 ### Opis możliwości niefunkcjonalnych modułu
 Opisac wymagania niefunkcjonalne

@@ -9,12 +9,13 @@ public class AdministratorConverter {
 
     public static Administrator convertAdministratorDTOtoAdministrator(AdministratorDTO administratorDTO) {
         return Administrator.builder()
-                .login(administratorDTO.login())
+                .id(administratorDTO.id())
+                .login(administratorDTO.login() != null && !administratorDTO.login().isEmpty() ? administratorDTO.login() : "")
                 .email(administratorDTO.email())
                 .firstName(administratorDTO.firstName())
                 .lastName(administratorDTO.lastName())
                 .active(administratorDTO.active())
-                .passwordHash(administratorDTO.password())
+                .passwordHash(administratorDTO.password() != null ? administratorDTO.password() : "")
                 .build();
 
     }
