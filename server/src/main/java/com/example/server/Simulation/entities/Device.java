@@ -25,19 +25,12 @@ public abstract  class Device {
     private String description;
     @Column
     private boolean working;
-    @Column
-    protected double area;
+
     @Column
     protected int maxPowerPerHour = 0;
 
-    @Column
-    protected int minWindSpeedForMaxPower = 0;
-
-    @Column
-    protected BigDecimal totalConsumed = BigDecimal.ZERO;
-
-    @Column
-    protected BigDecimal totalGenerated = BigDecimal.ZERO;
+    @Column(name = "owner_id")
+    private UUID ownerId;
 
     public Device(String description, boolean working) {
         this.working = working;

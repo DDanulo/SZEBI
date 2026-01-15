@@ -8,5 +8,19 @@ Content-Type: application/json
 
 {
   "content": "To jest przykładowa wiadomość.",
-  "authorLogin": "itsHardStyl3r"
+  "authorLogin": "hardstyl3r"
+}
+
+### Utwórz nowego rezydenta
+POST http://localhost:8080/users/residents
+Content-Type: application/json
+
+{
+  "login": "hardstyl3r",
+  "password": "1234",
+  "firstName": "Aleksander",
+  "lastName": "Gencel",
+  "active": true,
+  "email": "thank@you.pl",
+  "room": "101A"
 }

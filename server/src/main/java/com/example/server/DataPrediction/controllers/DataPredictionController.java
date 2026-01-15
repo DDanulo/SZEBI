@@ -4,13 +4,14 @@ import com.example.server.DataPrediction.api.ForecastService;
 import com.example.server.DataPrediction.data.Forecast;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.List;
 
 @RestController
-@RequestMapping("/prediction")
+@RequestMapping("/api/predictions")
 @CrossOrigin(origins = "http://localhost:5173")
 public class DataPredictionController {
     private final ForecastService forecastService;
@@ -19,39 +20,37 @@ public class DataPredictionController {
         this.forecastService = forecastService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Forecast> getForecast(@PathVariable String id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(forecastService.getForecast(UUID.fromString(id)));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/latest")
+    @GetMapping("/latest/one")
     public ResponseEntity<Forecast> getLatestForecast() {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecast());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecast());
     }
 
-    @PutMapping("/{interval}")
-    public ResponseEntity<String> updateInterval(@PathVariable String interval) {
-        try {
-            forecastService.changeInterval(Integer.parseInt(interval));
-            return ResponseEntity.status(HttpStatus.OK).body("Generation interval has been set to: " + interval + " minutes");
-        } catch (NumberFormatException e) {
-            return ResponseEntity.unprocessableEntity().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    @PreAuthorize("hasAnyRole('ADMIN','ENGINEER')")
+    @GetMapping("/latest/batch")
+    public ResponseEntity<List<Forecast>> getLatestForecasts() {
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getLatestForecasts());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','ENGINEER')")
+    @GetMapping(value = "/forecasts/{from}/{to}")
+    public ResponseEntity<List<Forecast>> getForecasts(@PathVariable long from, @PathVariable long to) {
+        Instant fromTime = Instant.ofEpochMilli(from);
+        Instant toTime = Instant.ofEpochMilli(to);
+        return ResponseEntity.status(HttpStatus.OK).body(forecastService.getForecasts(fromTime, toTime));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','ENGINEER')")
     @PutMapping("/generate")
     public ResponseEntity<String> generateForecasts() {
         forecastService.generateForecast();
-        return ResponseEntity.created(URI.create("http://localhost:8080/prediction/latest")).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PreAuthorize("hasRole('ENGINEER')")
+    @GetMapping(value = "/mockitbro")
+    public ResponseEntity<String> mockitbro() {
+        forecastService.switchMockMode();
+        return ResponseEntity.status(HttpStatus.OK).body("Bro got mocked");
+    }
+
 }

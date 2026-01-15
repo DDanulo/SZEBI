@@ -1,63 +1,171 @@
-import React, {useEffect, useState} from "react";
-import {generatePrediction, getLatestPrediction} from "./PredictionService.js";
+import React, {useEffect, useState} from 'react';
+import {generatePrediction, getLatestPredictions, getPredictionsByDateRange} from './PredictionService';
+import {PredictionChart, PredictionTable} from './PredictionComponents';
 
-export default function PredictionViewer() {
-    const [forecast, setForecast] = useState(null);
+const PredictionViewer = () => {
+    const [rawData, setRawData] = useState([]);
+
+    const [tableData, setTableData] = useState([]);
+
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
+
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const generateForecast = async function () {
-        generatePrediction()
-        let p = await getLatestPrediction()
-        console.log(p.data)
-        setForecast(p.data)
-    }
+        try {
+            setLoading(true);
+            await generatePrediction();
+            await fetchData();
+        } catch (err) {
+            console.error("Błąd generowania:", err);
+            setError("Nie udało się wygenerować prognozy.");
+            setLoading(false);
+        }
+    };
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await getLatestPredictions();
+
+            setRawData(response.data);
+            setTableData(response.data);
+            setError(null);
+        } catch (err) {
+            console.error("Błąd pobierania danych:", err);
+            setError("Nie udało się pobrać prognoz. Brak autoryzacji.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleFilter = async () => {
+        if (!dateFrom || !dateTo) {
+            alert("Proszę wybrać obie daty (Od i Do).");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await getPredictionsByDateRange(dateFrom, dateTo);
+
+            setTableData(response.data);
+            setError(null);
+        } catch (err) {
+            console.error("Błąd filtrowania:", err);
+            setError("Nie udało się pobrać danych archiwalnych.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        fetch("http://localhost:8080/prediction/latest")
-            .then(response => response.json())
-            .then(data => {
-                setForecast(data);
-                setLoading(false);
-            })
+        fetchData();
     }, []);
 
-    if (loading) {
-        return <>
-            <button onClick={generateForecast} title="Wygeneruj prognozę">Wygeneruj prognozę</button>
-            <p>Pobieranie ostatniej prognozy...</p>
-        </>
-    }
+    if (loading && rawData.length === 0) return <p>Ładowanie modułu...</p>;
 
-    return <>
-        <h2>🤖Moduł Prognozowania</h2>
-        <button onClick={generateForecast} title="Wygeneruj prognozę">Wygeneruj prognozę</button>
-        <h3>Prognoza zużycia energii elektrycznej na dzień: {DisplayDate(forecast.forecastDate)}</h3>
-        <table className="table-auto">
-            <thead>
-            <tr>
-                <th>Czas wygenerowania</th>
-                <th>Zużycie [kWh]</th>
-                <th>Prognoza na dzień</th>
-            </tr>
-            </thead>
-            <tbody>
-            {ForecastsList([forecast])}
-            </tbody>
-        </table>
-    </>
-}
+    if (error) return <p style={{color: 'red', textAlign: 'center'}}>{error}</p>
 
-function ForecastsList(forecasts) {
-    return forecasts.map((f) => {
-        return <tr>
-            <td>{f.creationTime}</td>
-            <td>{f.forecastedUsage}</td>
-            <td>{DisplayDate(f.forecastDate)}</td>
-        </tr>
-    })
-}
+    return (
+        <div style={{padding: '20px', maxWidth: '1200px', margin: '0 auto'}}>
+            <h2 style={{textAlign: 'center', marginBottom: '30px'}}>
+                🤖〽⚡ Moduł prognozowania
+            </h2>
 
-function DisplayDate(date) {
-    let d = new Date(date)
-    return d.getDate() + " " + (d.getMonth() + 1) + " " + d.getFullYear()
-}
+            <div style={{
+                marginBottom: '40px',
+                padding: '20px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                borderRadius: '8px'
+            }}>
+                <h3 style={{marginBottom: '15px'}}>Wizualizacja graficzna najnowszych prognoz</h3>
+                <PredictionChart rawData={rawData}/>
+            </div>
+
+            <div style={{padding: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', borderRadius: '8px'}}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    marginBottom: '15px'
+                }}>
+                    <h3>Historia prognoz</h3>
+
+                    <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                        <label>
+                            Od:
+                            <input
+                                type="datetime-local"
+                                value={dateFrom}
+                                onChange={(e) => setDateFrom(e.target.value)}
+                                style={{marginLeft: '5px', padding: '5px'}}
+                            />
+                        </label>
+                        <label>
+                            Do:
+                            <input
+                                type="datetime-local"
+                                value={dateTo}
+                                onChange={(e) => setDateTo(e.target.value)}
+                                style={{marginLeft: '5px', padding: '5px'}}
+                            />
+                        </label>
+                        <button
+                            onClick={handleFilter}
+                            style={{
+                                padding: '6px 12px',
+                                cursor: 'pointer',
+                                backgroundColor: '#007bff',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            Filtruj
+                        </button>
+                        <button
+                            onClick={fetchData}
+                            title="Reset tabeli do najnowszych"
+                            style={{
+                                padding: '6px 12px',
+                                cursor: 'pointer',
+                                backgroundColor: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <PredictionTable rawData={tableData}/>
+            </div>
+
+            <div style={{marginTop: '30px', textAlign: 'center'}}>
+                <button
+                    onClick={generateForecast}
+                    title="Wygeneruj nową prognozę na podstawie aktualnych danych"
+                    style={{
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        cursor: 'pointer',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px'
+                    }}
+                >
+                    Wygeneruj nową prognozę
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default PredictionViewer;

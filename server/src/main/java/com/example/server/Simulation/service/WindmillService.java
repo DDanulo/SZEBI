@@ -9,6 +9,7 @@ import com.example.server.Simulation.entities.Windmill;
 import com.example.server.Simulation.exceptions.DeviceNotFoundException;
 import com.example.server.Simulation.simulators.BasicSimulator;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,7 @@ public class WindmillService {
         return maybeWindmill.get();
     }
 
+    @Transactional
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
     public void simulateEnergyGeneration() {
         double windSpeed = simulator.getWindSpeed();
