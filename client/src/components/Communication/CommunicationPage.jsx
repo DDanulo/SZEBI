@@ -37,12 +37,14 @@ const CommunicationPage = () => {
                 >
                     Wiadomości
                 </button>
-                <button
-                    onClick={() => setView('admin')}
-                    className={`switch-button ${view === 'admin' ? 'active' : ''}`}
-                >
-                    Panel Admina
-                </button>
+                {user?.role === 'ADMIN' && (
+                    <button
+                        onClick={() => setView('admin')}
+                        className={`switch-button ${view === 'admin' ? 'active' : ''}`}
+                    >
+                        Panel Admina
+                    </button>
+                )}
             </div>
 
             <hr className="divider" />

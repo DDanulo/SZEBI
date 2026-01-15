@@ -11,7 +11,7 @@ import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 import LoginPage from "./components/Administration/LoginPage.jsx";
 import RegisterPage from "./components/Administration/RegisterPage.jsx";
 import ControlDevicePage from './components/DeviceControl/ControlDevicePage.jsx';
-
+import RequireRole from "./components/Administration/RequireRole.jsx";
 
 import {useAuth} from "./components/Administration/AuthContext.jsx";
 import AdminUsersEditPage from "./components/Administration/AdminUsersEditPage.jsx";
@@ -72,7 +72,15 @@ function App() {
                         <Route path="/users" element={<AdminUsersPage/>}/>
                         <Route path="/users/edit/:id" element={<AdminUsersEditPage/>}/>
                         <Route path="/users/create" element={<AdminUsersCreatePage/>}/>
-                        <Route path="/reports" element={<ReportModule/>}/>
+                        <Route
+                            path="/reports"
+                            element={
+                                <RequireRole role="ADMIN">
+                                    <ReportModule />
+                                </RequireRole>
+                            }
+                        />
+
                         <Route path="/predictions" element={<PredictionViewer/>}/>
                         <Route path="/communication" element={<Communication/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
