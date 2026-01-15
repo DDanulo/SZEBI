@@ -1,33 +1,33 @@
-/* ScheduleManager.css */
 
-/* Resetujemy ustawienia globalne dla tego kontenera */
+
+
 .schedule-container {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    text-align: left; /* Kluczowe: kontruje globalne text-align: center */
+    text-align: left;
     color: #fff;
     font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* Układ dwukolumnowy (Grid) */
+
 .schedule-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dwie równe kolumny */
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    align-items: start; /* Elementy zaczynają się od góry */
+    align-items: start;
 }
 
-/* Na mniejszych ekranach (poniżej 1000px) zrób jedną kolumnę */
+
 @media (max-width: 1000px) {
     .schedule-layout {
         grid-template-columns: 1fr;
     }
 }
 
-/* Wygląd kart (modułów) */
+
 .schedule-card {
-    background-color: #1a1a1a; /* Ciemne tło zgodne z index.css */
+    background-color: #1a1a1a;
     border: 1px solid #333;
     border-radius: 12px;
     padding: 24px;
@@ -40,11 +40,11 @@
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #333;
     padding-bottom: 10px;
-    color: #646cff; /* Kolor akcentu z index.css */
+    color: #646cff;
     font-size: 1.25rem;
 }
 
-/* Style formularzy */
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -65,7 +65,7 @@
     border-radius: 6px;
     color: white;
     font-size: 1rem;
-    box-sizing: border-box; /* Ważne, żeby padding nie psuł szerokości */
+    box-sizing: border-box;
 }
 
 .form-input:focus {
@@ -78,7 +78,7 @@
     gap: 15px;
 }
 
-/* Przycisk */
+
 .btn-primary {
     width: 100%;
     background-color: #646cff;
@@ -96,7 +96,7 @@
     background-color: #535bf2;
 }
 
-/* Tabele */
+
 .device-table {
     width: 100%;
     border-collapse: collapse;
@@ -121,7 +121,7 @@
     border-bottom: none;
 }
 
-/* Statusy i przyciski w tabeli */
+
 .status-badge {
     display: inline-block;
     padding: 2px 8px;

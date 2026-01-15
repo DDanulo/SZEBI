@@ -10,4 +10,5 @@ public class ScheduleDTO {
     private UUID deviceId;
     private LocalDateTime turnOn;
     private LocalDateTime turnOff;
+    private boolean recurring;
 }

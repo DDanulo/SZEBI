@@ -22,18 +22,34 @@ public class ScheduleService {
     public ScheduleDTO addDailySchedule(ScheduleDTO dto) {
         validateDate(dto.getTurnOn(), "Data włączenia");
         validateDate(dto.getTurnOff(), "Data wyłączenia");
+        checkOverlap(dto.getDeviceId(), dto.getTurnOn(), dto.getTurnOff());
+        if(dto.getTurnOn().isEqual(dto.getTurnOff())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Konflikt! Nie można wyłączyć i włączyć o tej samej chwili.");
+        }
 
         Schedule schedule = Schedule.builder()
                 .deviceId(dto.getDeviceId())
                 .dateTimeTurnOn(dto.getTurnOn())
                 .dateTimeTurnOff(dto.getTurnOff())
+                .isRecurring(dto.isRecurring())
                 .build();
 
         Schedule saved = scheduleRepo.save(schedule);
         return mapToDTO(saved);
     }
 
+    private void checkOverlap(UUID deviceId, LocalDateTime newStart, LocalDateTime newEnd) {
+        List<Schedule> existing = scheduleRepo.findByDeviceId(deviceId);
 
+        for (Schedule s : existing) {
+
+            if (newStart.isBefore(s.getDateTimeTurnOff()) && newEnd.isAfter(s.getDateTimeTurnOn())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Konflikt! W tym czasie istnieje już harmonogram dla tego urządzenia.");
+            }
+        }
+    }
 
     public ScheduleDTO updateDailySchedule(ScheduleDTO dto) {
 
@@ -47,6 +63,7 @@ public class ScheduleService {
 
         schedule.setDateTimeTurnOn(dto.getTurnOn());
         schedule.setDateTimeTurnOff(dto.getTurnOff());
+        schedule.setRecurring(dto.isRecurring());
 
         return mapToDTO(scheduleRepo.save(schedule));
     }
@@ -76,6 +93,7 @@ public class ScheduleService {
         dto.setDeviceId(s.getDeviceId());
         dto.setTurnOn(s.getDateTimeTurnOn());
         dto.setTurnOff(s.getDateTimeTurnOff());
+        dto.setRecurring(s.isRecurring());
         return dto;
     }
 }

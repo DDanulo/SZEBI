@@ -20,7 +20,13 @@ function App() {
     const { user, logout } = useAuth();
     return (
         <Router>
+<<<<<<< Updated upstream
             <div className="app-container">
+=======
+            <Routes>
+                {/* Wpisz se na stronce na koncu /control na razie pozniej bedzie ladny przycisk */}
+                <Route path="/control" element={<ControlDevicePage />} />
+>>>>>>> Stashed changes
 
                 <header style={styles.header}>
                     <nav style={styles.nav}>

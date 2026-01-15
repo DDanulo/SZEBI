@@ -20,9 +20,13 @@ public class Schedule {
     @Column(name = "device_id", nullable = false)
     private UUID deviceId;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "turn_on_time", nullable = false)
     private LocalDateTime dateTimeTurnOn;
 
-    @Column(name = "end_time", nullable = false)
+
+    @Column(name = "turn_off_time", nullable = false)
     private LocalDateTime dateTimeTurnOff;
+
+    @Column(name = "is_recurring")
+    private boolean isRecurring;
 }

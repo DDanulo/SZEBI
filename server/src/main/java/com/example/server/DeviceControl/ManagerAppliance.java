@@ -26,6 +26,12 @@ public class ManagerAppliance implements IDeviceAuth {
                         .name(c.getDescription())
                         .type("APPLIANCE")
                         .isOn(c.isWorking())
+<<<<<<< Updated upstream
+=======
+                        .area(c.getArea())
+                        .totalConsumed(c.getTotalConsumed())
+                        .totalGenerated(c.getTotalGenerated())
+>>>>>>> Stashed changes
                         .build())
                 .collect(Collectors.toList());
     }

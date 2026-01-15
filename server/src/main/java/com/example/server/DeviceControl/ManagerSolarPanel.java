@@ -27,6 +27,8 @@ public class ManagerSolarPanel implements IDeviceAuth {
                         .type("SOLAR")
                         .isOn(p.isWorking())
                         .area(p.getArea())
+                        .totalConsumed(p.getTotalConsumed())
+                        .totalGenerated(p.getTotalGenerated())
                         .build())
                 .collect(Collectors.toList());
     }
