@@ -10,3 +10,4 @@ CREATE TABLE energy_measure
 
 ALTER TABLE energy_measure
     ADD CONSTRAINT FK_ENERGYMEASURE_ON_DEVICE FOREIGN KEY (device_id) REFERENCES device (id);
+
