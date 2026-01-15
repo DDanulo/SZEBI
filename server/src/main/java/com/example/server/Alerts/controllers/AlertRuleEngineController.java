@@ -16,19 +16,18 @@ public class AlertRuleEngineController {
 
     private final AlertRuleEngine alertRuleEngine;
 
-@GetMapping
-    private List<AlertRule> getAllRules(){
-    return alertRuleEngine.getAllRules();
-}
+    @GetMapping
+    public List<AlertRule> getAllRules() {
+        return alertRuleEngine.getAllRules();
+    }
 
-@PostMapping
-    private final AlertRule saveRule(@RequestBody AlertRule rule){
-    return alertRuleEngine.addRule(rule);
-}
+    @PostMapping
+    public AlertRule saveRule(@RequestBody AlertRule rule) {
+        return alertRuleEngine.addRule(rule);
+    }
 
-@DeleteMapping("/{id}")
-    private final void removeRule(@PathVariable UUID id){
-    alertRuleEngine.deleteRule(id);
-}
-
+    @DeleteMapping("/{id}")
+    public void removeRule(@PathVariable UUID id) {
+        alertRuleEngine.deleteRule(id);
+    }
 }

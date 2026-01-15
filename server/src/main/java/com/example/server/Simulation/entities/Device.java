@@ -29,6 +29,9 @@ public abstract  class Device {
     @Column
     protected int maxPowerPerHour = 0;
 
+    @Column(name = "owner_id")
+    private UUID ownerId;
+
     public Device(String description, boolean working) {
         this.working = working;
         this.description = description;

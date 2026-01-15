@@ -1,6 +1,6 @@
 package com.example.server;
 
-import com.example.server.DeviceControl.ManagerAppliance;
+import com.example.server.DeviceControl.manager.ManagerAppliance;
 import com.example.server.Simulation.data.ConsumingDeviceRepository;
 import com.example.server.Simulation.data.ConsumingMeasureRepository;
 import com.example.server.Simulation.entities.ConsumedEnergyMeasure;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Component
@@ -25,11 +26,14 @@ class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        if (measureRepository.count() > 4000){
+            return;
+        }
         System.out.println("Inicjalizacja danych zużycia energii elektrycznej sprzed 15 dni...");
 
         String name = "SigmaBoy";
         System.out.println("Dodawanie urządzenia: " + name);
-        deviceManager.addDevice(name, 67.0, 2137, 420);
+        deviceManager.addDevice(name, 67.0, 2137, 420, UUID.randomUUID());
         System.out.println("Dodano urządzenie: " + deviceManager.getDevices().getFirst().getName());
 
         int days = 15;

@@ -7,12 +7,13 @@ public class EngineerConverter {
 
     public static Engineer convertEngineerDTOtoEngineer(EngineerDTO engineerDTO) {
         return Engineer.builder()
-                .login(engineerDTO.login())
+                .id(engineerDTO.id())
+                .login(engineerDTO.login() != null && !engineerDTO.login().isEmpty() ? engineerDTO.login() : "")
                 .email(engineerDTO.email())
                 .firstName(engineerDTO.firstName())
                 .lastName(engineerDTO.lastName())
                 .active(engineerDTO.active())
-                .passwordHash(engineerDTO.password())
+                .passwordHash(engineerDTO.password() != null ? engineerDTO.password() : "")
                 .build();
 
     }

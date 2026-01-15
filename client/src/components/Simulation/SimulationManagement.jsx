@@ -32,14 +32,14 @@ function Simulation() {
     }
 
     return (
-        <div className="flex flex-col justify-center">
-            <div className="p-4">
+        <div className="flex flex-col items-center w-full">
+            <div className="p-4 mx-auto">
                 <h2>Aktualne parametry symulacji:</h2>
-                <p>Pora roku: {seasons[season]}</p>
-                <p>Pora dnia: {daytimes[dayTime]}</p>
-                <p>Temperatura: {temperature} °C</p>
-                <p>Nasłonecznienie: {insolation} W/m<sup>2</sup></p>
-                <p>Prędkość wiatru: {windSpeed} m/s</p>
+                <p>🗓️ Pora roku: {seasons[season]}</p>
+                <p>🕙 Pora dnia: {daytimes[dayTime]}</p>
+                <p>🌡️ Temperatura: {temperature} °C</p>
+                <p>☀️ Nasłonecznienie: {insolation} W/m<sup>2</sup></p>
+                <p>💨 Prędkość wiatru: {windSpeed} m/s</p>
                 <button type="button" onClick={() => getSimulationParameters().then(e => {
                     updateSimulationParameters(e);
                 })}>Pobierz aktualne dane:
