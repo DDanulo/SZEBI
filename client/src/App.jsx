@@ -11,18 +11,20 @@ import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 import LoginPage from "./components/Administration/LoginPage.jsx";
 import RegisterPage from "./components/Administration/RegisterPage.jsx";
 
-import { useAuth } from "./components/Administration/AuthContext.jsx";
+import {useAuth} from "./components/Administration/AuthContext.jsx";
 
 function App() {
 
-    const { user, logout } = useAuth();
+    const {user, logout} = useAuth();
     return (
         <Router>
             <div className="app-container">
 
                 <header style={styles.header}>
                     <nav style={styles.nav}>
-                        <Link to="/simulation" style={styles.button}>Simulation</Link>
+                        { user !== null && user.role === 'ADMIN' &&
+                            <Link to="/simulation" style={styles.button}>Simulation</Link>
+                        }
                         <Link to="/alerts" style={styles.button}>Alerts</Link>
                         <Link to="/schedule" style={styles.button}>Control</Link>
                         <Link to="/residents" style={styles.button}>Administration</Link>
@@ -52,17 +54,17 @@ function App() {
                     </nav>
                 </header>
 
-                <main style={{ padding: '20px', textAlign: 'left' }}>
+                <main style={{padding: '20px', textAlign: 'left'}}>
                     <Routes>
-                        <Route path="/simulation" element={<Simulation />} />
-                        <Route path="/alerts" element={<AlertHistory />} />
-                        <Route path="/schedule" element={<ScheduleManager />} />
-                        <Route path="/residents" element={<AdminUsersPage />} />
-                        <Route path="/reports" element={<ReportModule />} />
-                        <Route path="/predictions" element={<PredictionViewer />} />
-                        <Route path="/communication" element={<Communication />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/simulation" element={<Simulation/>}/>
+                        <Route path="/alerts" element={<AlertHistory/>}/>
+                        <Route path="/schedule" element={<ScheduleManager/>}/>
+                        <Route path="/residents" element={<AdminUsersPage/>}/>
+                        <Route path="/reports" element={<ReportModule/>}/>
+                        <Route path="/predictions" element={<PredictionViewer/>}/>
+                        <Route path="/communication" element={<Communication/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/register" element={<RegisterPage/>}/>
                     </Routes>
                 </main>
 
