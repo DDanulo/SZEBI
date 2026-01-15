@@ -1,5 +1,5 @@
 // src/context/AuthContext.jsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {createContext, useContext, useState, useEffect} from 'react';
 import api from './api.js';
 import {jwtDecode} from 'jwt-decode';
 
@@ -7,7 +7,7 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
                 if (decoded.exp * 1000 < Date.now()) {
                     logout();
                 } else {
-                    setUser({ userId: decoded.userId, role: decoded.role });
+                    setUser({userId: decoded.userId, role: decoded.role, login: decoded.login});
                 }
             } catch (error) {
                 console.error("Invalid token:", error);
@@ -35,28 +35,25 @@ export const AuthProvider = ({ children }) => {
 
     // funkcja wejscia
     const login = async (login, password) => {
-        try {
-            const response = await api.post('/login', { login, password });
-            const { accessToken, refreshToken } = response.data;
-            console.log(response.status)
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
 
-            const decoded = jwtDecode(accessToken);
-            setUser({ userId: decoded.userId, role: decoded.role });
+        const response = await api.post('/login', {login, password});
+        const {accessToken, refreshToken} = response.data;
+        console.log(response.status)
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
 
-            return true;
+        const decoded = jwtDecode(accessToken);
+        setUser({userId: decoded.userId, role: decoded.role, login: decoded.login});
 
-        } catch (error) {
-            console.error('Błąd logowania:', error.response?.data?.message || 'Nieznany błąd.');
-            return false;
-        }
+        return response;
+
+
     };
 
 
-    const register = async (login, password,firstName,lastName,email,room) => {
+    const register = async (login, password, firstName, lastName, email, room) => {
         try {
-            const response = await api.post('/register', { login, password, firstName,lastName,email,room});
+            const response = await api.post('/register', {login, password, firstName, lastName, email, room});
 
             return response.status === 201;
 
