@@ -36,6 +36,8 @@ const AdminUsersEditPage = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        console.log("dupa")
+        console.log(name,value,type,checked)
         setUser((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value
@@ -64,15 +66,21 @@ const AdminUsersEditPage = () => {
             if (role === 'resident') {
                 url = '/users/residents';
                 req.room = body.details?.roomNumber;
+                body.room = body.details?.roomNumber;
                 console.log(req)
             }
             else if (role === 'engineer') url = '/users/engineers';
-            else if (role === 'administrator') url = '/users/administrators';
+            else if (role === 'admin') url = '/users/administrators';
 
             await api.patch(url, body);
             setSuccess('Dane użytkownika zostały zaktualizowane pomyślnie.');
-
-            setUser(req);
+            console.log("cos tam ",req)
+            const merged = {
+                ...user,
+                ...req
+            }
+            console.log("cos tam ",merged)
+            setUser(merged);
         } catch (err) {
             console.error(err);
             setError('Nie udało się zaktualizować danych użytkownika.');
@@ -154,9 +162,16 @@ const AdminUsersEditPage = () => {
                         <Form.Label>Pokój</Form.Label>
                         <Form.Control
                             type="text"
-                            name="room"
                             value={user.details?.roomNumber || ''}
-                            onChange={handleChange}
+                            onChange={(e) =>
+                                setUser(prev => ({
+                                    ...prev,
+                                    details: {
+                                        ...prev.details,
+                                        roomNumber: e.target.value
+                                    }
+                                }))
+                            }
                         />
                     </Form.Group>
                 )}

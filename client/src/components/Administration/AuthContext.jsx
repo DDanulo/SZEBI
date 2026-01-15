@@ -33,7 +33,7 @@ export const AuthProvider = ({children}) => {
         setLoading(false);
     }, []);
 
-    // funkcja wejscia
+
     const login = async (login, password) => {
 
         const response = await api.post('/login', {login, password});
@@ -43,7 +43,8 @@ export const AuthProvider = ({children}) => {
         localStorage.setItem('refreshToken', refreshToken);
 
         const decoded = jwtDecode(accessToken);
-        setUser({userId: decoded.userId, role: decoded.role, login: decoded.login});
+        console.log(decoded)
+        setUser({userId: decoded.sub, role: decoded.role, login: decoded.login});
 
         return response;
 
@@ -58,9 +59,7 @@ export const AuthProvider = ({children}) => {
             return response.status === 201;
 
         } catch (error) {
-            console.error('Błąd rejestracji:', error.response?.data?.message || 'Nieznany błąd.');
-
-            throw new Error(error.response?.data?.message || 'Błąd serwera podczas rejestracji');
+            throw error
         }
     };
 
@@ -75,6 +74,8 @@ export const AuthProvider = ({children}) => {
     const hasRole = (role) => {
         return user && user.role === role;
     }
+
+
 
     const value = {
         user,

@@ -1,198 +1,159 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
-    const [loginState, setLoginState] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [room, setRoom] = useState('');
-    const [error, setError] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [validated, setValidated] = useState(false);
-
-
-    const { register } = useAuth();
+    const { register: registerUser } = useAuth();
     const navigate = useNavigate();
+    const [serverError, setServerError] = React.useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const form = e.currentTarget;
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors, isSubmitting },
+    } = useForm();
 
-        setValidated(true);
-
-        if (!form.checkValidity()) {
-            e.stopPropagation();
-            return;
-        }
-
-        setIsSubmitting(true);
-        setError('');
-
+    const onSubmit = async (data) => {
+        setServerError('');
         try {
-            await register(loginState, password, firstName, lastName, email, room);
-
-            window.alert(
-                'Rejestracja zakończona sukcesem. Konto zostanie aktywowane przez administratora.'
+            await registerUser(
+                data.login,
+                data.password,
+                data.firstName,
+                data.lastName,
+                data.email,
+                data.room
             );
-
+            alert('Rejestracja zakończona sukcesem!');
             navigate('/login');
         } catch (err) {
-            const { status, message } = err || {};
-
-            let errorMessage = 'Coś poszło nie tak. Spróbuj ponownie.';
-
-            if (message?.includes('already')) {
-                errorMessage = 'Login lub email już istnieje.';
-            } else if (status === 400) {
-                errorMessage = message || 'Niepoprawne dane.';
-            } else if (status === 500) {
-                errorMessage = 'Błąd serwera.';
+            if (err.code === 'CONFLICT' && err.errors?.length > 0) {
+                const fieldError = err.errors[0];
+                setServerError(`${fieldError.field.toUpperCase()}: ${fieldError.message}`);
+            } else {
+                setServerError(err.message || 'Coś poszło nie tak');
             }
-
-            setError(errorMessage);
-        } finally {
-            setIsSubmitting(false);
         }
     };
 
 
+    const getGroupClass = (fieldName) => errors[fieldName] ? 'mb-2 border border-danger rounded p-2' : 'mb-2';
+
     return (
-        <Container className="mt-5" style={{ maxWidth: '400px' }}>
-            <Card>
-                <Card.Header as="h3" className="text-center">Rejestracja</Card.Header>
+
+        <Container className="mt-5 d-flex justify-content-center">
+            <Card style={{ width: '100%', maxWidth: '450px' }}>
+                <Card.Header as="h3" className="text-center">
+                    Rejestracja
+                </Card.Header>
                 <Card.Body>
-                    {error && (
-                        <Alert
-                            variant="danger"
-                            className="d-flex justify-content-between align-items-start"
-                        >
-                            <div>
-                                <strong>Błąd:</strong> {error}
-                            </div>
-                            <Button
-                                variant="outline-danger"
-                                size="sm"
-                                onClick={() => setError('')}
-                            >
-                                Zamknij
-                            </Button>
-                        </Alert>
-                    )}
+                    {serverError && <Alert variant="danger">{serverError}</Alert>}
 
-
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Login</Form.Label>
+                    <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+                        {/** Login */}
+                        <Form.Group className={getGroupClass('login')}>
+                            <Form.Label className="mb-1">Login</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={loginState}
-                                onChange={(e) => setLoginState(e.target.value)}
-                                required
-                                minLength={8}
-                                isInvalid={validated && loginState.length < 8}
+                                {...register('login', { required: 'Login jest wymagany', minLength: { value: 8, message: 'Login min 8 znaków' } })}
+                                isInvalid={!!errors.login}
                             />
-                            <Form.Control.Feedback type="invalid">
-                                Login musi mieć długość minimum 8 znaków.
-                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.login?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Hasło</Form.Label>
+                        <Form.Group className={getGroupClass('password')}>
+                            <Form.Label className="mb-1">Hasło</Form.Label>
                             <Form.Control
                                 type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                minLength={8}
-                                required
-                                isInvalid={validated && password.length < 8}
+                                {...register('password', {
+                                    required: 'Hasło jest wymagane',
+                                    validate: {
+                                        length: v => v.length >= 8 || 'Minimum 8 znaków',
+                                        lower: v => /[a-z]/.test(v) || 'Min. 1 mała litera',
+                                        upper: v => /[A-Z]/.test(v) || 'Min. 1 duża litera',
+                                        special: v => /[^A-Za-z0-9]/.test(v) || 'Min. 1 znak specjalny',
+                                    },
+                                })}
+                                isInvalid={!!errors.password}
                             />
                             <Form.Control.Feedback type="invalid">
-                                Hasło musi mieć minimum 8 znaków.
+                                {errors.password?.message}
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Potwierdź Hasło</Form.Label>
+
+                        <Form.Group className={getGroupClass('confirmPassword')}>
+                            <Form.Label className="mb-1">Potwierdź Hasło</Form.Label>
                             <Form.Control
                                 type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                isInvalid={validated && password !== confirmPassword}
+                                {...register('confirmPassword', {
+                                    required: 'Potwierdź hasło',
+                                    validate: (value) => value === watch('password') || 'Hasła muszą być identyczne',
+                                })}
+                                isInvalid={!!errors.confirmPassword}
                             />
-                            <Form.Control.Feedback type="invalid">
-                                Hasła muszą być identyczne.
-                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Imię</Form.Label>
+
+                        <Form.Group className={getGroupClass('firstName')}>
+                            <Form.Label className="mb-1">Imię</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                required
+                                {...register('firstName', { required: 'Imię jest wymagane' })}
+                                isInvalid={!!errors.firstName}
                             />
+                            <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Nazwisko</Form.Label>
+
+                        <Form.Group className={getGroupClass('lastName')}>
+                            <Form.Label className="mb-1">Nazwisko</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                required
+                                {...register('lastName', { required: 'Nazwisko jest wymagane' })}
+                                isInvalid={!!errors.lastName}
                             />
+                            <Form.Control.Feedback type="invalid">{errors.lastName?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
+
+                        <Form.Group className={getGroupClass('email')}>
+                            <Form.Label className="mb-1">Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
+                                {...register('email', {
+                                    required: 'Email jest wymagany',
+                                    pattern: {
+                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: 'Niepoprawny email',
+                                    },
+                                })}
+                                isInvalid={!!errors.email}
                             />
-                            <Form.Control.Feedback type="invalid">
-                                Podaj poprawny adres email.
-                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Pokój</Form.Label>
+
+                        <Form.Group className={getGroupClass('room')}>
+                            <Form.Label className="mb-1">Pokój</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={room}
-                                onChange={(e) => setRoom(e.target.value)}
-                                required
+                                {...register('room', { required: 'Pokój jest wymagany' })}
+                                isInvalid={!!errors.room}
                             />
+                            <Form.Control.Feedback type="invalid">{errors.room?.message}</Form.Control.Feedback>
                         </Form.Group>
 
-                        <Button
-                            variant="success"
-                            type="submit"
-                            className="w-100 mt-3"
-                            disabled={isSubmitting}
-                        >
+                        <Button type="submit" className="w-100 mt-3" disabled={isSubmitting}>
                             {isSubmitting ? 'Trwa rejestracja...' : 'Zarejestruj się'}
                         </Button>
-
-                        <p className="mt-3 text-center">
-                            Masz już konto?{' '}
-                            <Button variant="link" onClick={() => navigate('/login')}>
-                                Zaloguj się
-                            </Button>
-                        </p>
                     </Form>
                 </Card.Body>
             </Card>
-
-
         </Container>
     );
 };

@@ -28,14 +28,9 @@ function App() {
 
                 <header style={styles.header}>
                     <nav style={styles.nav}>
-                        <Link to="/simulation" style={styles.button}>Simulation</Link>
-                        <Link to="/alerts" style={styles.button}>Alerts</Link>
-                        <Link to="/schedule" style={styles.button}>Control</Link>
-                        <Link to="/users" style={styles.button}>Administration</Link>
-                        <Link to="/reports" style={styles.button}>Reports</Link>
-                        <Link to="/predictions" style={styles.button}>Predictions</Link>
-                        <Link to="/communication" style={styles.button}>Communication</Link>
+
                         {user ? (
+
                             <>
             <span style={{color: 'white', margin: '0 10px', fontWeight: 'bold'}}>
                 Witaj, {user.login}!
@@ -53,6 +48,13 @@ function App() {
                                 >
                                     Wyloguj
                                 </Link>
+                                <Link to="/simulation" style={styles.button}>Simulation</Link>
+                                <Link to="/alerts" style={styles.button}>Alerts</Link>
+                                <Link to="/schedule" style={styles.button}>Control</Link>
+                                <Link to="/users" style={styles.button}>Administration</Link>
+                                <Link to="/reports" style={styles.button}>Reports</Link>
+                                <Link to="/predictions" style={styles.button}>Predictions</Link>
+                                <Link to="/communication" style={styles.button}>Communication</Link>
                             </>
                         ) : (
                             <Link to="/login" style={styles.button}>

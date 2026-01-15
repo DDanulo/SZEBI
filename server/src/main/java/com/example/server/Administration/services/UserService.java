@@ -1,13 +1,11 @@
 package com.example.server.Administration.services;
 
-import com.example.server.Administration.exceptions.LoginAlreadyExists;
-import com.example.server.Administration.exceptions.UserInactiveException;
-import com.example.server.Administration.exceptions.UserNotFoundException;
+import com.example.server.Administration.exceptions.*;
 import com.example.server.Administration.model.PasswordResetToken;
 import com.example.server.Administration.repo.PasswordResetTokenRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.example.server.Administration.exceptions.InternalErrorException;
 import com.example.server.Administration.model.Resident;
 import com.example.server.Administration.model.User;
 import com.example.server.Administration.repo.UserRepo;
@@ -157,17 +155,23 @@ public class UserService {
 
 
     public Resident registerResident(Resident resident) {
-        try{
+        try {
             resident.setPasswordHash(passwordEncoder.encode(resident.getPasswordHash()));
             return userRepo.save(resident);
-        } catch (DuplicateKeyException e){
-            throw new LoginAlreadyExists(resident.getLogin());
-        }
-        catch (Exception e){
+        } catch (DataIntegrityViolationException e) {
+
+            if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException cve) {
+                String constraintName = cve.getConstraintName();
+                if ("uc_users_email".equals(constraintName)) {
+                    throw new EmailAlreadyExists(resident.getEmail());
+                }
+                if ("uc_users_login".equals(constraintName)) {
+                    throw new LoginAlreadyExists(resident.getLogin());
+                }
+            }
             throw new InternalErrorException();
         }
     }
-
 
     public void resetPassword(String token, String newPassword) {
         if (token == null || token.isEmpty()) {

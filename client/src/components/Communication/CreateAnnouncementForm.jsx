@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import {useAuth} from "../Administration/AuthContext.jsx";
+
+
 
 const CreateAnnouncementForm = ({ onAnnouncementCreated }) => {
     const [content, setContent] = useState('');
@@ -8,7 +11,10 @@ const CreateAnnouncementForm = ({ onAnnouncementCreated }) => {
     const [success, setSuccess] = useState('');
 
     // Trzeba zmienić samemu
-    const authorId = '6d981507-0d27-48e6-826e-a87ba57433a0';
+    const { user } = useAuth(); // <-- pobieramy user z contextu
+    const authorId = user?.userId;
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
