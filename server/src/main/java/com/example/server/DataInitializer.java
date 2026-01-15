@@ -26,6 +26,9 @@ class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        if (measureRepository.count() > 4000){
+            return;
+        }
         System.out.println("Inicjalizacja danych zużycia energii elektrycznej sprzed 15 dni...");
 
         String name = "SigmaBoy";
