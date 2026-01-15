@@ -16,9 +16,8 @@ import java.util.UUID;
 public  abstract class EnergyProducingDevice extends Device {
 
 
-    /*@Column
+    @Column
     protected BigDecimal totalGenerated;
-*/
 
 
     public EnergyProducingDevice(String description, boolean working) {

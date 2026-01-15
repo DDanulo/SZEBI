@@ -15,9 +15,8 @@ import java.util.UUID;
 public class ConsumingDevice extends Device {
 
 
-   /* @Column
+    @Column
     private BigDecimal totalConsumed;
-*/
 
     public ConsumingDevice(String description, boolean active) {
         super(description,active);
