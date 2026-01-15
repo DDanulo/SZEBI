@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getSchedulesByDevice, addSchedule, deleteSchedule, getAllDevices, turnDeviceOn, turnDeviceOff, addDevice, removeDevice } from './ScheduleService';
+
+
 const ScheduleManager = () => {
     const [devices, setDevices] = useState([]);
     const [selectedDeviceId, setSelectedDeviceId] = useState('');

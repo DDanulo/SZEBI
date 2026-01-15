@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Card  } from 'react-bootstrap';
+import { Container, Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,6 @@ const RegisterPage = () => {
         e.preventDefault();
         const form = e.currentTarget;
 
-        setError('');
         setValidated(true);
 
         if (!form.checkValidity()) {
@@ -32,30 +31,35 @@ const RegisterPage = () => {
         }
 
         setIsSubmitting(true);
+        setError('');
 
         try {
-
             await register(loginState, password, firstName, lastName, email, room);
-
 
             window.alert(
                 'Rejestracja zakończona sukcesem. Konto zostanie aktywowane przez administratora.'
             );
 
-
             navigate('/login');
-
         } catch (err) {
+            const { status, message } = err || {};
 
-            if (err.response?.status === 409) {
-                window.alert('Ten login lub email jest już zajęty.');
-            } else {
-                window.alert(err.message || 'Błąd serwera podczas rejestracji.');
+            let errorMessage = 'Coś poszło nie tak. Spróbuj ponownie.';
+
+            if (message?.includes('already')) {
+                errorMessage = 'Login lub email już istnieje.';
+            } else if (status === 400) {
+                errorMessage = message || 'Niepoprawne dane.';
+            } else if (status === 500) {
+                errorMessage = 'Błąd serwera.';
             }
+
+            setError(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
     };
+
 
     return (
         <Container className="mt-5" style={{ maxWidth: '400px' }}>
@@ -63,8 +67,23 @@ const RegisterPage = () => {
                 <Card.Header as="h3" className="text-center">Rejestracja</Card.Header>
                 <Card.Body>
                     {error && (
-                        <div className="alert alert-danger">{error}</div>
+                        <Alert
+                            variant="danger"
+                            className="d-flex justify-content-between align-items-start"
+                        >
+                            <div>
+                                <strong>Błąd:</strong> {error}
+                            </div>
+                            <Button
+                                variant="outline-danger"
+                                size="sm"
+                                onClick={() => setError('')}
+                            >
+                                Zamknij
+                            </Button>
+                        </Alert>
                     )}
+
 
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
@@ -72,9 +91,10 @@ const RegisterPage = () => {
                             <Form.Control
                                 type="text"
                                 value={loginState}
-                                minLength={8}
                                 onChange={(e) => setLoginState(e.target.value)}
                                 required
+                                minLength={8}
+                                isInvalid={validated && loginState.length < 8}
                             />
                             <Form.Control.Feedback type="invalid">
                                 Login musi mieć długość minimum 8 znaków.
@@ -87,11 +107,12 @@ const RegisterPage = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                minLength={6}
+                                minLength={8}
                                 required
+                                isInvalid={validated && password.length < 8}
                             />
                             <Form.Control.Feedback type="invalid">
-                                Hasło musi mieć minimum 6 znaków.
+                                Hasło musi mieć minimum 8 znaków.
                             </Form.Control.Feedback>
                         </Form.Group>
 
@@ -101,8 +122,8 @@ const RegisterPage = () => {
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                pattern={password}
                                 required
+                                isInvalid={validated && password !== confirmPassword}
                             />
                             <Form.Control.Feedback type="invalid">
                                 Hasła muszą być identyczne.
@@ -145,9 +166,7 @@ const RegisterPage = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Pokój</Form.Label>
                             <Form.Control
-                                type="number"
-                                min={1}
-                                step={1}
+                                type="text"
                                 value={room}
                                 onChange={(e) => setRoom(e.target.value)}
                                 required

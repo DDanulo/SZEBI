@@ -142,6 +142,13 @@ const AdminUsersPage = () => {
                                                 'Aktywuj'
                                             )}
                                         </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="primary"
+                                            onClick={() => navigate(`/users/edit/${user.id}`)}
+                                        >
+                                            Edytuj
+                                        </Button>
                                     </td>
                                 </tr>
                             ))
@@ -152,6 +159,10 @@ const AdminUsersPage = () => {
 
                 <Button variant="secondary" onClick={() => navigate('/')} className="mt-3">
                     Wróć do strony głównej
+                </Button>
+
+                <Button variant="success" onClick={() => navigate('/users/create')}>
+                    Stwórz użytkownika
                 </Button>
             </Container>
         );
