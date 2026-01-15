@@ -24,6 +24,8 @@ const ReportModule = () => {
     const [seriesKeys, setSeriesKeys] = useState([]);
     const [devices, setDevices] = useState([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [fetchError, setFetchError] = useState(null);
 
     const PIE_COLORS = {
         "Produkcja": "#16a34a",
@@ -38,12 +40,16 @@ const ReportModule = () => {
 
     const handleGenerateChart = useCallback(async () => {
         setChartData([]);
+        setIsLoading(true);
+        setFetchError(null);
         try {
             if (viewType === 'line' || viewType === 'bar') {
                 const response = await getChartData(dateFrom, dateTo, reportType, selectedDeviceIds);
                 const data = response.data || [];
 
-                if (!selectedDeviceIds || selectedDeviceIds.length === 0) {
+                if (data.length === 0) {
+                    setChartData([]);
+                } else if (!selectedDeviceIds || selectedDeviceIds.length === 0) {
                     const sumByTs = new Map();
                     data.forEach(item => {
                         const d = new Date(item.timestamp);
@@ -76,14 +82,23 @@ const ReportModule = () => {
                     getDataTotal(dateFrom, dateTo, 'ENERGY_CONSUMPTION', selectedDeviceIds),
                     getDataTotal(dateFrom, dateTo, 'ENERGY_PRODUCTION', selectedDeviceIds)
                 ]);
-                setChartData([
-                    { name: "Produkcja", value: resProd.data || 0 },
-                    { name: "Zużycie", value: resCons.data || 0 }
-                ]);
+                const consVal = resCons.data || 0;
+                const prodVal = resProd.data || 0;
+
+                if (consVal === 0 && prodVal === 0) {
+                    setChartData([]);
+                } else {
+                    setChartData([
+                        { name: "Produkcja", value: prodVal },
+                        { name: "Zużycie", value: consVal }
+                    ]);
+                }
             }
         } catch (error) {
             console.error("Błąd pobierania danych:", error);
-            alert("Nie udało się pobrać danych.");
+            setFetchError("Nie udało się pobrać danych.");
+        } finally {
+            setIsLoading(false);
         }
     }, [dateFrom, dateTo, reportType, viewType, selectedDeviceIds]);
 
@@ -113,99 +128,175 @@ const ReportModule = () => {
     const COLORS = ['#2563eb', '#16a34a', '#db2777', '#ea580c', '#9333ea', '#0891b2'];
 
     return (
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-gray-800">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-gray-800">
 
             {/* --- PANEL KONTROLNY --- */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                <div className="flex flex-col">
-                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Typ Danych</label>
-                    <select value={reportType} onChange={(e) => setReportType(e.target.value)} className="p-2 rounded border border-gray-300 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        <option value="ENERGY_CONSUMPTION">Zużycie Energii</option>
-                        <option value="ENERGY_PRODUCTION">Produkcja Energii</option>
-                        <option value="DEVICE_EFFICIENCY">Efektywność</option>
-                    </select>
-                </div>
+            <div className="flex flex-col mb-10 p-10 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm gap-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-16">
+                    <div className="flex flex-col gap-8">
+                        <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            Typ Danych
+                        </label>
+                        <select
+                            value={reportType}
+                            onChange={(e) => setReportType(e.target.value)}
+                            className="p-4 rounded-xl border border-gray-300 bg-white text-base shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all hover:border-gray-400"
+                        >
+                            <option value="ENERGY_CONSUMPTION">Zużycie Energii</option>
+                            <option value="ENERGY_PRODUCTION">Produkcja Energii</option>
+                        </select>
+                    </div>
 
-                <div className="flex flex-col">
-                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Urządzenie</label>
-                    <select value={selectedDeviceIds[0] || 'ALL'} onChange={(e) => setSelectedDeviceIds(e.target.value === 'ALL' ? [] : [e.target.value])} className="p-2 rounded border border-gray-300 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                        <option value="ALL">Wszystkie urządzenia</option>
-                        {devices.map(d => <option key={d.id} value={d.id}>{d.description || d.id}</option>)}
-                    </select>
+                    <div className="flex flex-col gap-8">
+                        <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            Urządzenie
+                        </label>
+                        <select
+                            value={selectedDeviceIds[0] || 'ALL'}
+                            onChange={(e) => setSelectedDeviceIds(e.target.value === 'ALL' ? [] : [e.target.value])}
+                            className="p-4 rounded-xl border border-gray-300 bg-white text-base shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all hover:border-gray-400"
+                        >
+                            <option value="ALL">Wszystkie urządzenia</option>
+                            {devices.map(d => <option key={d.id} value={d.id}>{d.description || d.id}</option>)}
+                        </select>
+                    </div>
                 </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-24 gap-y-16 items-end">
+                    <div className="flex flex-col gap-8">
+                        <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            Data Od
+                        </label>
+                        <input
+                            type="datetime-local"
+                            value={dateFrom}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            className="p-4 rounded-xl border border-gray-300 bg-white text-base shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all hover:border-gray-400"
+                        />
+                    </div>
 
-                <div className="flex flex-col">
-                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Data Od</label>
-                    <input type="datetime-local" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="p-2 rounded border border-gray-300 bg-white text-sm" />
-                </div>
+                    <div className="flex flex-col gap-8">
+                        <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                            Data Do
+                        </label>
+                        <input
+                            type="datetime-local"
+                            value={dateTo}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            className="p-4 rounded-xl border border-gray-300 bg-white text-base shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all hover:border-gray-400"
+                        />
+                    </div>
 
-                <div className="flex flex-col">
-                    <label className="text-xs font-bold text-gray-500 mb-1 uppercase">Data Do</label>
-                    <input type="datetime-local" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="p-2 rounded border border-gray-300 bg-white text-sm" />
-                </div>
-
-                <div className="flex items-end gap-2">
-                    <button onClick={handleGenerateChart} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded flex justify-center items-center gap-2 font-semibold transition">
-                        <RefreshCw size={18} /> Generuj
-                    </button>
-                    <button onClick={handleDownloadPdf} className="bg-red-600 hover:bg-red-700 text-white p-2 rounded flex justify-center items-center gap-2 font-semibold transition" title="Pobierz PDF">
-                        <Download size={18} /> PDF
-                    </button>
+                    <div className="flex items-end gap-6">
+                        <button
+                            onClick={handleGenerateChart}
+                            className="flex-1 h-[54px] bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-xl flex justify-center items-center gap-3 font-bold transition-all shadow-md hover:shadow-lg active:scale-95"
+                        >
+                            <RefreshCw size={22} /> Generuj
+                        </button>
+                        <button
+                            onClick={handleDownloadPdf}
+                            className="w-[54px] h-[54px] bg-red-600 hover:bg-red-700 text-white rounded-xl flex justify-center items-center transition-all shadow-md hover:shadow-lg active:scale-95"
+                            title="Pobierz PDF"
+                        >
+                            <Download size={22} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {/* --- OBSZAR WYKRESU --- */}
-            <div style={{ height: '500px', width: '100%' }} className="bg-white p-4">
-                <div className="flex justify-end mb-4 gap-2">
-                    <button onClick={() => setViewType('line')} className={`px-3 py-1 text-sm rounded ${viewType === 'line' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-100'}`}>Liniowy</button>
-                    <button onClick={() => setViewType('bar')} className={`px-3 py-1 text-sm rounded ${viewType === 'bar' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-100'}`}>Słupkowy</button>
-                    <button onClick={() => setViewType('pie')} className={`px-3 py-1 text-sm rounded ${viewType === 'pie' ? 'bg-blue-600 text-white font-bold' : 'bg-gray-100'}`}>Kołowy (Suma)</button>
+            <div style={{ minHeight: '500px', width: '100%' }} className="bg-white p-6 border-t border-gray-100 mt-4">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-semibold text-gray-700">Wizualizacja danych</h3>
+                    <div className="flex gap-2">
+                        <button onClick={() => setViewType('line')} className={`px-4 py-2 text-sm rounded-lg transition ${viewType === 'line' ? 'bg-blue-600 text-white font-bold shadow-md' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}>Liniowy</button>
+                        <button onClick={() => setViewType('bar')} className={`px-4 py-2 text-sm rounded-lg transition ${viewType === 'bar' ? 'bg-blue-600 text-white font-bold shadow-md' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}>Słupkowy</button>
+                        <button onClick={() => setViewType('pie')} className={`px-4 py-2 text-sm rounded-lg transition ${viewType === 'pie' ? 'bg-blue-600 text-white font-bold shadow-md' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}>Kołowy (Suma)</button>
+                    </div>
                 </div>
 
-                <ResponsiveContainer width="100%" height="100%">
-                    {viewType === 'pie' ? (
-                        <PieChart>
-                            <Pie
-                                data={chartData}
-                                cx="50%"
-                                cy="50%"
-                                label={({name, value}) => `${name}: ${value.toFixed(2)} kWh`}
-                                outerRadius={105}
-                                dataKey="value"
-                                nameKey="name"
-                            >
-                                {chartData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name] || COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Legend />
-                        </PieChart>
-                    ) : viewType === 'bar' ? (
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="timestamp" />
-                            <YAxis tickFormatter={formatYAxis} width={80} />
-                            <Tooltip formatter={formatTooltip} />
-                            <Legend />
-                            {seriesKeys.length > 0
-                                ? seriesKeys.map((key, idx) => <Bar key={key} dataKey={key} name={deviceNameMap[key] || key} fill={COLORS[idx % COLORS.length]} />)
-                                : <Bar dataKey="value" name="Wartość" fill="#2563eb" />
-                            }
-                        </BarChart>
-                    ) : (
-                        <LineChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="timestamp" />
-                            <YAxis tickFormatter={formatYAxis} width={80} />
-                            <Tooltip formatter={formatTooltip} />
-                            <Legend />
-                            {seriesKeys.length > 0
-                                ? seriesKeys.map((key, idx) => <Line key={key} type="monotone" dataKey={key} name={deviceNameMap[key] || key} stroke={COLORS[idx % COLORS.length]} strokeWidth={2} dot={false} />)
-                                : <Line type="monotone" dataKey="value" name="Wartość" stroke="#2563eb" strokeWidth={2} dot={false} />
-                            }
-                        </LineChart>
+                <div className="relative" style={{ height: '400px' }}>
+                    {isLoading && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white bg-opacity-70">
+                            <div className="flex flex-col items-center">
+                                <RefreshCw className="animate-spin text-blue-600 mb-2" size={32} />
+                                <p className="text-gray-500 font-medium">Pobieranie danych...</p>
+                            </div>
+                        </div>
                     )}
-                </ResponsiveContainer>
+
+                    {fetchError && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-50 rounded-lg">
+                            <div className="text-center p-6">
+                                <p className="text-red-600 font-bold text-lg mb-2">Błąd!</p>
+                                <p className="text-red-500">{fetchError}</p>
+                                <button onClick={handleGenerateChart} className="mt-4 text-blue-600 font-semibold underline">Spróbuj ponownie</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {devices.length === 0 && !isLoading && (
+                         <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                            <p className="text-gray-500 font-medium text-lg">Brak dostępnych urządzeń w systemie.</p>
+                         </div>
+                    )}
+
+                    {chartData.length === 0 && !isLoading && !fetchError && devices.length > 0 && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                            <div className="text-center">
+                                <p className="text-gray-500 font-medium text-lg">Brak danych do wyświetlenia dla wybranego okresu.</p>
+                                <p className="text-gray-400 text-sm mt-1">Spróbuj zmienić zakres dat lub typ danych.</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <ResponsiveContainer width="100%" height="100%">
+                        {viewType === 'pie' ? (
+                            <PieChart>
+                                <Pie
+                                    data={chartData}
+                                    cx="50%"
+                                    cy="50%"
+                                    label={({name, value}) => `${name}: ${value.toFixed(2)} kWh`}
+                                    outerRadius={100}
+                                    dataKey="value"
+                                    nameKey="name"
+                                >
+                                    {chartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name] || COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                                <Legend />
+                            </PieChart>
+                        ) : viewType === 'bar' ? (
+                            <BarChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                <XAxis dataKey="timestamp" tick={{fontSize: 12}} tickMargin={10} />
+                                <YAxis tickFormatter={formatYAxis} width={80} tick={{fontSize: 12}} />
+                                <Tooltip formatter={formatTooltip} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
+                                <Legend wrapperStyle={{paddingTop: '20px'}} />
+                                {seriesKeys.length > 0
+                                    ? seriesKeys.map((key, idx) => <Bar key={key} dataKey={key} name={deviceNameMap[key] || key} fill={COLORS[idx % COLORS.length]} radius={[4, 4, 0, 0]} />)
+                                    : <Bar dataKey="value" name="Wartość" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                                }
+                            </BarChart>
+                        ) : (
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                <XAxis dataKey="timestamp" tick={{fontSize: 12}} tickMargin={10} />
+                                <YAxis tickFormatter={formatYAxis} width={80} tick={{fontSize: 12}} />
+                                <Tooltip formatter={formatTooltip} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
+                                <Legend wrapperStyle={{paddingTop: '20px'}} />
+                                {seriesKeys.length > 0
+                                    ? seriesKeys.map((key, idx) => <Line key={key} type="monotone" dataKey={key} name={deviceNameMap[key] || key} stroke={COLORS[idx % COLORS.length]} strokeWidth={3} dot={false} activeDot={{ r: 6 }} />)
+                                    : <Line type="monotone" dataKey="value" name="Wartość" stroke="#2563eb" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                                }
+                            </LineChart>
+                        )}
+                    </ResponsiveContainer>
+                </div>
             </div>
         </div>
     );

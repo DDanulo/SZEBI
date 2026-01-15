@@ -18,9 +18,9 @@ const DataAnalysisMenu = () => {
                 </button>
 
                 {/* Nagłówek sekcji */}
-                <div className="mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Analiza i Raportowanie</h1>
-                    <p className="text-gray-500 mt-1">
+                <div className="mb-10">
+                    <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">Analiza i Raportowanie</h1>
+                    <p className="text-gray-500 mt-2 text-lg">
                         Generuj wykresy historyczne oraz pobieraj raporty w formacie PDF.
                     </p>
                 </div>
