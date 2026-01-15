@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:server/src/main/java/com/example/server/DeviceControl/manager/ManagerSolarPanel.java
 package com.example.server.DeviceControl.manager;
 
 import com.example.server.DeviceControl.entities.Device;
@@ -85,4 +86,89 @@ public class ManagerSolarPanel implements IDeviceAuth {
         }
         return false;
     }
+========
+package com.example.server.DeviceControl;
+
+import com.example.server.Simulation.api.IControlDevices;
+import com.example.server.Simulation.api.IShowDevices;
+import com.example.server.Simulation.entities.SolarPanel;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ManagerSolarPanel implements IDeviceAuth {
+
+    private final IControlDevices controlDevices;
+    private final IShowDevices showDevices;
+
+    @Override
+    public List<Device> getDevices() {
+        return showDevices.getSolarPanels().stream()
+                .map(p -> Device.builder()
+                        .id(p.getId())
+                        .name(p.getDescription())
+                        .type("SOLAR")
+                        .isOn(p.isWorking())
+                        .area(p.getArea())
+                        .totalConsumed(p.getTotalConsumed())
+                        .totalGenerated(p.getTotalGenerated())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean turnDeviceOn(UUID id) {
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.activateSolarPanel(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean turnDeviceOff(UUID id) {
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.deactivateSolarPanel(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean supports(String type) {
+        return "SOLAR".equalsIgnoreCase(type);
+    }
+
+    @Override
+    public Device addDevice(String name, Double area, Integer maxPower, Integer minWind) {
+        SolarPanel panel = new SolarPanel(name,true, area);
+
+        var saved = controlDevices.addSolarPanel(panel);
+
+        return Device.builder()
+                .id(saved.getId())
+                .name(panel.getDescription())
+                .type("SOLAR")
+                .isOn(false)
+                .area(area)
+                .build();
+    }
+
+
+
+    @Override
+    public boolean removeDevice(UUID id) {
+        if (showDevices.getSolarPanel(id).isPresent()) {
+            controlDevices.removeSolarPanel(id);
+            return true;
+        }
+        return false;
+    }
+>>>>>>>> origin/DeviceControl-vlad-Adam:server/src/main/java/com/example/server/DeviceControl/ManagerSolarPanel.java
 }

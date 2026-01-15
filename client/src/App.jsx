@@ -10,6 +10,8 @@ import Communication from "./components/Communication/CommunicationPage.jsx";
 import AdminUsersPage from "./components/Administration/AdminUsersPage.jsx";
 import LoginPage from "./components/Administration/LoginPage.jsx";
 import RegisterPage from "./components/Administration/RegisterPage.jsx";
+import ControlDevicePage from './components/DeviceControl/ControlDevicePage.jsx';
+
 
 import { useAuth } from "./components/Administration/AuthContext.jsx";
 
