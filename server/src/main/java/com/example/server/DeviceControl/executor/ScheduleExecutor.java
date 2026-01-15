@@ -26,7 +26,7 @@ public class ScheduleExecutor {
     private final IShowDevices showDevices;
 
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 1000)
     public void executeSchedules() {
         List<Schedule> allSchedules = scheduleRepo.findAll();
         LocalDateTime now = LocalDateTime.now();
