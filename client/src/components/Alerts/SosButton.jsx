@@ -1,137 +1,129 @@
 import React, { useState } from "react";
-import { sendSos } from "./SosService";
+import { sendSosAlert } from "./SosService";
+import { useAuth } from "../Administration/AuthContext";
 
 const SosButton = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const { user } = useAuth();
+    const [message, setMessage] = useState("");
+    const [location, setLocation] = useState("Brak Lokalizacji");
     const [status, setStatus] = useState(null);
 
-    const [message, setMessage] = useState("");
-    const [location, setLocation] = useState("");
-
-    const MOCK_USER_ID = "123e4567-e89b-12d3-a456-426614174000";
-
     const handleSend = async () => {
-        setIsLoading(true);
-        setStatus(null);
+        const finalMessage = message.trim() || "ALARM SOS";
+
+        const report = {
+            userID: user?.id || "00000000-0000-0000-0000-000000000000",
+            location: location,
+            message: finalMessage
+        };
+
         try {
-            await sendSos(MOCK_USER_ID, message, location);
+            await sendSosAlert(report);
             setStatus("success");
-            setTimeout(() => {
-                setIsOpen(false);
-                setStatus(null);
-                setMessage("");
-                setLocation("");
-            }, 2000);
+            setMessage("");
+
+            setTimeout(() => setStatus(null), 3000);
         } catch (error) {
             console.error(error);
             setStatus("error");
-        } finally {
-            setIsLoading(false);
+            setTimeout(() => setStatus(null), 3000);
         }
     };
 
     return (
-        <>
+        <div style={styles.container}>
+            <div style={styles.headerRow}>
+                <h3 style={styles.header}>PANEL AWARYJNY SOS</h3>
+                {user && <span style={styles.userInfo}>Zglasza: {user.name}</span>}
+            </div>
+
+            <div style={{marginBottom: "10px"}}>
+                <label style={styles.label}>Lokalizacja:</label>
+                <input
+                    style={styles.input}
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Wpisz lokalizacje..."
+                />
+            </div>
+
+            <textarea
+                style={styles.textarea}
+                placeholder="Opisz zagrozenie..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={3}
+            />
 
             <button
-                onClick={() => setIsOpen(true)}
-                style={styles.sosButton}
+                onClick={handleSend}
+                style={status === "success" ? styles.buttonSuccess : status === "error" ? styles.buttonError : styles.button}
+                disabled={status === "success"}
             >
-                ZGŁOŚ AWARIĘ (SOS)
+                {status === "success" ? "WYSLANO ZGLOSZENIE" : status === "error" ? "BLAD WYSYLANIA" : "WYSLIJ SOS"}
             </button>
-
-
-            {isOpen && (
-                <div style={styles.overlay}>
-                    <div style={styles.modal}>
-                        <div style={styles.header}>
-                            <h2 style={{ margin: 0, color: "#d32f2f" }}>WEZWANIE POMOCY</h2>
-                            <button onClick={() => setIsOpen(false)} style={styles.closeX}>✕</button>
-                        </div>
-
-                        <p style={{ fontSize: "14px", color: "#ccc" }}>
-                            Opisz sytuację.
-                        </p>
-
-                        <div style={styles.field}>
-                            <label style={styles.label}>Treść zgłoszenia:</label>
-                            <input
-                                type="text"
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                style={styles.input}
-                            />
-                        </div>
-
-                        <div style={styles.field}>
-                            <label style={styles.label}>Lokalizacja:</label>
-                            <input
-                                type="text"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                style={styles.input}
-                            />
-                        </div>
-
-                        {status === "success" && <div style={{ color: "#388e3c", fontWeight: "bold", marginBottom: "10px" }}>Wysłano!</div>}
-                        {status === "error" && <div style={{ color: "#d32f2f", fontWeight: "bold", marginBottom: "10px" }}>Błąd wysyłania!</div>}
-
-                        <div style={styles.footer}>
-                            <button onClick={() => setIsOpen(false)} style={styles.btnCancel} disabled={isLoading}>Anuluj</button>
-                            <button onClick={handleSend} style={styles.btnConfirm} disabled={isLoading}>
-                                {isLoading ? "..." : "WYŚLIJ"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
+        </div>
     );
 };
 
 const styles = {
-    sosButton: {
-        backgroundColor: "#d32f2f",
+    container: {
+        backgroundColor: "#b71c1c",
+        padding: "20px",
+        borderRadius: "8px",
         color: "white",
-        border: "none",
-        borderRadius: "4px",
-        padding: "15px 30px",
-        fontWeight: "bold",
-        fontSize: "16px",
-        cursor: "pointer",
-        textTransform: "uppercase",
-        letterSpacing: "1px",
+        marginBottom: "20px",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.5)"
     },
-    overlay: {
-        position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.8)", // Ciemniejsze tło
-        display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10000,
+    headerRow: {
+        display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px"
     },
-    modal: {
-        backgroundColor: "#1e1e1e",
-        color: "#ffffff",
-        padding: "25px",
-        border: "1px solid #333",
-        width: "400px",
-        fontFamily: "Arial, sans-serif",
-    },
-    header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid #333", paddingBottom: "10px" },
-    closeX: { background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#fff" },
-    field: { marginBottom: "15px", textAlign: "left" },
-    label: { display: "block", marginBottom: "5px", fontWeight: "bold", fontSize: "13px", color: "#ccc" },
+    header: { margin: 0, color: "#fff" },
+    userInfo: { fontSize: "0.85rem", opacity: 0.8 },
+
+    label: { fontSize: "0.8rem", textTransform: "uppercase", fontWeight: "bold", display: "block", marginBottom: "5px" },
+
     input: {
         width: "100%",
-        padding: "10px",
-        backgroundColor: "#121212",
-        color: "#fff",
-        border: "1px solid #444",
-        fontSize: "14px",
-        boxSizing: "border-box"
+        padding: "8px",
+        borderRadius: "4px",
+        border: "none",
+        backgroundColor: "#ffebee",
+        color: "#b71c1c",
+        fontWeight: "bold",
+        marginBottom: "10px"
     },
-    footer: { display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "25px" },
-    btnCancel: { padding: "10px 20px", border: "1px solid #444", backgroundColor: "transparent", color: "#fff", cursor: "pointer" },
-    btnConfirm: { padding: "10px 20px", border: "none", backgroundColor: "#d32f2f", color: "white", cursor: "pointer", fontWeight: "bold" }
+    textarea: {
+        width: "100%",
+        padding: "10px",
+        borderRadius: "4px",
+        border: "none",
+        backgroundColor: "#ffebee",
+        color: "#b71c1c",
+        fontWeight: "bold",
+        marginBottom: "10px",
+        resize: "vertical",
+        minHeight: "60px"
+    },
+    button: {
+        width: "100%",
+        padding: "12px",
+        backgroundColor: "#fff",
+        color: "#b71c1c",
+        fontWeight: "900",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        fontSize: "1.1rem",
+        textTransform: "uppercase"
+    },
+    buttonSuccess: {
+        width: "100%", padding: "12px", backgroundColor: "#2e7d32", color: "white", fontWeight: "bold", border: "none", borderRadius: "4px"
+    },
+    buttonError: {
+        width: "100%", padding: "12px", backgroundColor: "#000", color: "white", fontWeight: "bold", border: "none", borderRadius: "4px"
+    }
 };
 
 export default SosButton;
