@@ -1,7 +1,8 @@
 // src/pages/Auth/LoginPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
+import { Container, Form, Button, Alert, Card, Spinner } from 'react-bootstrap';
 import { useAuth } from './AuthContext.jsx';
+import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -12,8 +13,8 @@ const LoginPage = () => {
     const { login, user } = useAuth();
     const navigate = useNavigate();
 
+
     useEffect(() => {
-        // Jeśli użytkownik jest już zalogowany, przekierowujemy na stronę główną
         if (user && window.location.pathname === '/login') {
             navigate('/');
         }
@@ -24,75 +25,119 @@ const LoginPage = () => {
         setError('');
         setIsSubmitting(true);
 
-        const success = await login(loginState, password);
+        try {
+            await login(loginState, password);
 
-        if (success) {
-            // Logowanie udane. Sprawdzamy rolę, aby przekierować na odpowiednią ścieżkę.
-            // Odczyt roli z tokena zapisanego w localStorage (dla szybkiego przekierowania)
-            try {
-                const token = localStorage.getItem('accessToken');
-                if (token) {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    if (payload.role === 'RESIDENT') {
-                        navigate('/');// jeszcze nwm
-                    } else {
-                        navigate('/');
-                    }
-                } else {
-                    navigate('/');
-                }
-            } catch (err) {
-                // W razie błędu parsowania tokena, domyślnie przekierowujemy na stronę główną
-                navigate('/');
+        } catch (err) {
+            console.log(err)
+            const { status, message, code } = err || {};
+
+            let errorMessage = 'Coś poszło nie tak. Spróbuj ponownie.';
+
+            if (message?.includes('is inactive')) {
+                errorMessage = 'Konto jest nieaktywne. Skontaktuj się z administratorem.';
+            } else if (code === 'INVALID_CREDENTIALS' || status === 401) {
+                errorMessage = 'Nieprawidłowy login lub hasło.';
+            } else if (status === 404) {
+                errorMessage = 'Nieprawidłowy login lub hasło.';
+            } else if (status === 400) {
+                errorMessage = message || 'Wprowadzono niepoprawne dane.';
+            } else if (status === 500) {
+                errorMessage = 'Błąd serwera. Spróbuj ponownie za chwilę.';
+            } else if (message) {
+                errorMessage = message;
             }
-        } else {
-            setError('Błędny login lub hasło. Spróbuj ponownie.');
-        }
 
-        setIsSubmitting(false);
+            setError(errorMessage);
+            console.error('Błąd logowania:', err);
+
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
+        <Container className="mt-5" style={{ maxWidth: '420px' }}>
+            <Card className="shadow-lg border-0">
+                <Card.Header as="h3" className="text-center bg-primary text-white py-3">
+                    Logowanie
+                </Card.Header>
+                <Card.Body className="p-4">
+                    {error && (
+                        <Alert variant="danger" className="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>Błąd:</strong> {error}
+                            </div>
 
-        <Container className="mt-5" style={{ maxWidth: '400px' }}>
-            <Card>
-                <Card.Header as="h3" className="text-center">Logowanie</Card.Header>
-                <Card.Body>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSubmit}>
+                            <Button
+                                variant="outline-danger"
+                                size="sm"
+                                onClick={() => setError('')}
+                                className="ms-3"
+                            >
+                                Zamknij
+                            </Button>
+                        </Alert>
+                    )}
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Login</Form.Label>
+                    <Form onSubmit={handleSubmit} className="mt-3">
+                        <Form.Group className="mb-4" controlId="formLogin">
+                            <Form.Label className="fw-bold">Login</Form.Label>
                             <Form.Control
                                 type="text"
+                                placeholder="Wpisz login"
                                 value={loginState}
                                 onChange={(e) => setLoginState(e.target.value)}
                                 required
+                                disabled={isSubmitting}
+                                autoFocus
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Hasło</Form.Label>
+                        <Form.Group className="mb-4" controlId="formPassword">
+                            <Form.Label className="fw-bold">Hasło</Form.Label>
                             <Form.Control
                                 type="password"
+                                placeholder="Wpisz hasło"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={isSubmitting}
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isSubmitting}>
-                            {isSubmitting ? 'Trwa logowanie...' : 'Zaloguj'}
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            className="w-100 py-2 fw-bold"
+                            disabled={isSubmitting}
+                            size="lg"
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <Spinner as="span" animation="border" size="sm" role="status" className="me-2" />
+                                    Trwa logowanie...
+                                </>
+                            ) : (
+                                'Zaloguj się'
+                            )}
                         </Button>
 
-                        <p className="mt-3 text-center">
-                            Nie masz konta? <Button variant="link" onClick={() => navigate('/register')}>Zarejestruj się</Button>
-                        </p>
+                        <div className="text-center mt-4">
+                            <p className="text-muted mb-2">Nie masz konta?</p>
+                            <Button variant="link" onClick={() => navigate('/register')} className="p-0">
+                                Zarejestruj się
+                            </Button>
+                        </div>
                     </Form>
                 </Card.Body>
             </Card>
+            <div className="text-center mt-3">
+                <Link to="/forgot-password">
+                    Zapomniałem hasła
+                </Link>
+            </div>
         </Container>
-
     );
 };
 
