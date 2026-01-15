@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Alert, Card, Spinner } from 'react-bootstrap';
 import { useAuth } from './AuthContext.jsx';
+import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -131,6 +132,11 @@ const LoginPage = () => {
                     </Form>
                 </Card.Body>
             </Card>
+            <div className="text-center mt-3">
+                <Link to="/forgot-password">
+                    Zapomniałem hasła
+                </Link>
+            </div>
         </Container>
     );
 };

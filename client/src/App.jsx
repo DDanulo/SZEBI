@@ -14,6 +14,8 @@ import RegisterPage from "./components/Administration/RegisterPage.jsx";
 import {useAuth} from "./components/Administration/AuthContext.jsx";
 import AdminUsersEditPage from "./components/Administration/AdminUsersEditPage.jsx";
 import AdminUsersCreatePage from "./components/Administration/AdminUsersCreatePage.jsx";
+import ForgotPasswordPage from "./components/Administration/ForgotPasswordPage.jsx";
+import ResetPasswordPage from "./components/Administration/ResetPasswordPage.jsx";
 
 function App() {
 
@@ -71,6 +73,8 @@ function App() {
                         <Route path="/communication" element={<Communication/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route path="/register" element={<RegisterPage/>}/>
+                        <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
+                        <Route path="/reset-password" element={<ResetPasswordPage/>}/>
                     </Routes>
                 </main>
 
