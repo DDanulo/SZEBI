@@ -54,6 +54,9 @@ export const requestAddDevice = (name, type, extraParams) => {
     params.append('name', name);
     params.append('type', type);
     params.append('area', extraParams.area);
+    extraParams.maxPower = 500;
+    console.log(extraParams.maxPower);
+    // extraParams.minWind = 0.1;
     if (extraParams.maxPower) params.append('maxPower', extraParams.maxPower);
     if (extraParams.minWind) params.append('minWind', extraParams.minWind);
 
