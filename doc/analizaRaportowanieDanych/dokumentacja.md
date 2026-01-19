@@ -1,70 +1,71 @@
 
-# Nazwa modułu
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+# Moduł analizy danych i raportowania
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Remigiusz Bartczak 251677,252926
+Jan Kozłowski 251562
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł pobiera, przetwarza i analizuje, a następnie wizualizuje dane. Dotyczą one zużycia i produkcji energii poszczególnych lub wszystkich urządzeń w budynku na przestrzeni danego okresu w czasie. Dostarcza on Administratorom i Inżynierom niezbędne informacje do monitorowania oraz optymalizacji działania poszczególnych urządzeń.
+
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+* Generowanie raportu zużycia energii (w kWh) w wybranym zakresie dat dla np. Lodówki.
+* Generowanie raportu produkcji energii (w kWh) np. dla paneli słonecznych w wybranym zakresie dat.
+* Wybranie rodzaju raportu (liniowy, słupkowy, kołowy) oraz filtrowanie po odpowiednik okresie w czasie, oraz po poszczególnych urządzeniach.
+* Zapis dowolnie wygenerowanego raportu analitycznego do pliku w formacie PDF na dysk użytkownika.
+* Interfejs udostępniający generowanie oraz pobieranie raportów wraz z odpowiednimi opcjami wybranymi przez użytkownika.
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+* Złożone zapytania raportowe (np. roczne zestawienie zużycia wg urządzenia) muszą być przetworzone i zwrócone z bazy danych PostgreSQL w czasie skończonym (raport musi zostać wygenerowany, o ile dane istnieją).
+* Wartości zużycia i produkcji energii (w kWh) prezentowane w raporcie muszą być zgodne w 100% z danymi źródłowymi zapisanymi przez Moduł Symulacji.
+* W przypadku błędu zapisu pliku PDF system musi wyświetlić dedykowany komunikat o błędzie (np. "Błąd zapisu: ścieżka niedostępna" lub "Brak wolnego miejsca") zamiast ogólnej awarii aplikacji.
+* Dostęp do raportów musi być ściśle ograniczony wyłącznie dla ról Administratora oraz Inżyniera. Pozostali użytkownicy nie mają dostępu do tej funkcjonalności.
 
 # Diagramy przypadków użycia
-[Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
-## Nazwa przypadku użycia
 
-Tutaj miejsce na diagram
+## Diagram 1 - przypadki użycia dla inżyniera
 
-Podpis z numeracją (wystarczy diagram 1,2,3...)
+![Diagram przypadków użycia dla inżyniera](img/diagram-przypadkow-uzycia-1_inzynier.png)
 
-Opis diagramu
+Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest inżynier, który może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
-np.:
-Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
+## Diagram 2 - przypadki użycia dla administratora
 
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
+![Diagram przypadków użycia dla administratora](img/diagram-przypadkow-uzycia-2_administrator.png)
+
+Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest administrator, który bardzo podobnie do inżyniera może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
 # Diagramy klas
-[diagram(y) klas (obejmują wszystkie klasy)]
 
-Miejsce na diagram
+![Diagram klas](img/diagram-klas.png)
 
 Opis diagramu
 
 # Diagramy interakcji
-[diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
 
 ## Scenariusz 1
 
-[do wypełnienia szablon scenariusza]
-
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                                                       |
+|:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Generowanie raportu zużycia energii                                                                                                                                                                                                                                         |
+| **Numer:**                          | 1                                                                                                                                                                                                                                                                           |
+| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                      |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                      |
+| **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                      |
+| **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                     |
+| **Krótki opis:**                    | Generowanie raportu zużycia energii dla wybranego okresu w czasie.                                                                                                                                                                                                          |
+| **Warunki wstępne:**                | Użytkownik bazodanowy jest zalogowany i posiada uprawnienia (jest administratorem lub inżynierem). W bazie danych PostgreSQL istnieją dane dotyczące zużycia energii w danym okresie czasu z Modułu Symulacji.                                                              |
+| **Warunki końcowe:**                | Raport zostaje wygenerowany i wyświetlony.                                                                                                                                                                                                                                  |
+| **Główny przepływ zdarzeń:**        | 1. Administrator/inżynier wybiera raport zużycia energii. <br> 2. Zalogowany użytkownik wybiera dany okres czasu. <br> 3. Użytkownik wybiera opcję "Generuj raport" <br/> 4. System pobiera dane z bazy PostgreSQL, przetwarza je. <br/> 5. System wyświetla gotowy raport. |
+| **Alternatywne przepływy zdarzeń:** | 5a. Użytkownik pobiera raport jako plik PDF.                                                                                                                                                                                                                                |
+| **Specjalne wymagania:**            | -                                                                                                                                                                                                                                                                           |
+| **Notatki i kwestie:**              | Scenariusz ten będzie zilustrowany na Diagramie Sekwencji 1.                                                                                                                                                                                                                |
 
 ## Diagram interakcji 1
 
@@ -76,21 +77,21 @@ Miejsce na opis diagramu
 
 ## Scenariusz 2
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                                                             |
+|:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Generowanie raportu produkcji energii                                                                                                                                                                                                                                             |
+| **Numer:**                          | 2                                                                                                                                                                                                                                                                                 |
+| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                            |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                            |
+| **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                            |
+| **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                           |
+| **Krótki opis:**                    | Generowanie raportu produkcji energii dla wybranych urządzeń.                                                                                                                                                                                                                     |
+| **Warunki wstępne:**                | Użytkownik bazodanowy jest zalogowany i posiada uprawnienia (jest administratorem lub inżynierem). W bazie danych PostgreSQL istnieją dane dotyczące produkcji energii dla danych urządzeń z Modułu Symulacji.                                                                    |
+| **Warunki końcowe:**                | Raport zostaje wygenerowany i wyświetlony.                                                                                                                                                                                                                                        |
+| **Główny przepływ zdarzeń:**        | 1. Administrator/inżynier wybiera raport produkcji energii. <br> 2. Zalogowany użytkownik wybiera konkretne urządzenie. <br> 3. Użytkownik wybiera opcję "Generuj raport" <br/> 4. System pobiera dane z bazy PostgreSQL, przetwarza je. <br/> 5. System wyświetla gotowy raport. |
+| **Alternatywne przepływy zdarzeń:** | 2a. Zalogowany użytkownik wybiera "Wszystkie urządzenia"                                                                                                                                                                                                                          |
+| **Specjalne wymagania:**            | -                                                                                                                                                                                                                                                                                 |
+| **Notatki i kwestie:**              | Scenariusz ten będzie zilustrowany na Diagramie Sekwencji 2.                                                                                                                                                                                                                      |
 
 ## Diagram interakcji 2
 
@@ -112,11 +113,12 @@ Miejsce na diagram
 
 Miejsce na opis diagramu
 
-# Diagram komponentów [z czym dany moduł się łączy (wycinek)]
+# Diagram komponentów
 
-Miejsce na diagram
+![Diagram komponetów](img/diagram-komponentow.png)
 
-Miejsce na opis diagramu
+Moduł analizy danych odczytuje dane historyczne (zużycie, produkcja) zapisane przez Moduł Symulacji w bazie dancyh PostgreSQL. Stanowi to surowiec do wszelkich analiz, wykresów i raportów.
+Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zużycie z ostatniego tygodnia), umożliwiając Modułowi Alarmowania i Alertów szybkie wykrywanie anomalii i awarii (np. nagłe skoki zużycia energii przez dane urządzenie).
 
 # Diagram pakietów
 
