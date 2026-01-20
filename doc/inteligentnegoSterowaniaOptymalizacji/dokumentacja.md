@@ -18,14 +18,14 @@ Moduł ma za zadanie sterować urządzeniami (włącz/wyłącz), dodawać je alb
 
 ### Opis możliwości funkcjonalnych modułu
 Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
-Aktor: RESIDENT
+Aktor: Mieszkaniec
 1) Może wysłać prośbę o dodanie urządzenia ale przed tym musi wpisać nazwę, wybrać typ urządzenia i opcjonalnie wpisać pole powierzchni.
 2) Może wysłać prośbę o usunięciu urządzenia.
 3) Może wyłączyć urządzenie (tylko do którego ma dostęp).
 4) Może włączyć urządzenie (tylko do którego ma dostęp).
 5) Może stworzyć harmonogram dla urządzenia, gdzie musi wskazać czas włączenia, czas wyłączenia urządzenia.
 
-Aktorzy: ADMINISTRATOR, ENGINEER
+Aktorzy: Administrator, Inżynier
 1) Mogą dodać urządzenie ale przed tym muszą wpisać nazwę, wybrać typ urządzenia i opcjonalnie wpisać pole powierzchni.
 2) Mogą usunąć urządzenie.
 3) Mogą wyłączyć urządzenie.
@@ -43,17 +43,23 @@ Data włączenia może być po dacie wyłączenia.
 # Diagramy przypadków użycia
 [Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
 ## Nazwa przypadku użycia
-
-Tutaj miejsce na diagram
-
 Podpis z numeracją (wystarczy diagram 1,2,3...)
 
 Opis diagramu
-
 np.:
 Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
 
 [powtórzyć dla każdego diagramu, tak samo nagłówki]
+
+![Diagram przypadków użycia dla aktora Mieszkaniec](https://github.com/DDanulo/IO_IAS_25/blob/DeviceControl-vlad-Adam/doc/inteligentnegoSterowaniaOptymalizacji/img/przypadki%20mieszaniec%20diagram.png)
+Diagram 1
+Diagram przypadków użycia przedstawia system zarządzania urządzeniami domowymi z perspektywy aktora Mieszkaniec. Mieszkaniec ten może planować harmonogramy pracy sprzętu, definiując czasy włączenia i wyłączenia, a także przeglądać i usuwać istniejące harmonogramy. Mieszkaniec wyświetla listę urządzeń oraz bezpośrednio steruje ich zasilaniem (włączanie/wyłączanie). Diagram obrazuje również proces zgłaszania próśb o dodanie nowych urządzeń (określając ich parametry) lub usunięcie istniejących z systemu.
+
+![Diagram przypadków użycia dla aktorów Administrator i Inżynier](https://github.com/DDanulo/IO_IAS_25/blob/DeviceControl-vlad-Adam/doc/inteligentnegoSterowaniaOptymalizacji/img/Przypadki%20admin%20diagram.png)
+Diagram 2
+Diagram przedstawia praktycznie te same interakcje, tylko różnica jest taka, żę Inżynier/Administrator nie wysyłają prośbę o dodaniu/usunięciu urządzenia. a mają bezpośredni dostęp do tego.
+
+
 
 # Diagramy klas
 [diagram(y) klas (obejmują wszystkie klasy)]
