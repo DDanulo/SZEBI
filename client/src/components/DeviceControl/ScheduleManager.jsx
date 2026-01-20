@@ -35,8 +35,8 @@ const ScheduleManager = () => {
         e.preventDefault();
         const trimmedName = newDeviceName.trim();
 
-        if (!trimmedName || !/^[a-zA-Z0-9_ ]+$/.test(trimmedName)) {
-            alert("Nazwa nie może być pusta i może zawierać tylko litery i cyfry!");
+        if (!trimmedName || !/^[\p{L}0-9_ ]+$/u.test(trimmedName)) {
+            alert("Nazwa zawiera niedozwolone znaki!");
             return;
         }
 
@@ -230,7 +230,7 @@ const ScheduleManager = () => {
                                 </div>
                                 <div className="form-group" style={{flex: 1}}>
                                     {/* ZMIANA: Blokujemy input dla Wiatraków */}
-                                    <label>{newDeviceType === 'APPLIANCE' ? "Zyżycie (kwh)" : "Pow. (m²)"}</label>
+                                    <label>{ "Pow. (m²)"}</label>
                                     <input
                                         type="number"
                                         className="form-input"
@@ -303,16 +303,16 @@ const ScheduleManager = () => {
                                 </label>
                             </div>
 
-                            <button onClick={handleAddSchedule} className="btn-primary">Zaplanuj Zadanie</button>
+                            <button onClick={handleAddSchedule} className="btn-primary">Zaplanuj Harmonogram</button>
                         </div>
 
                         <h4 style={{fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', borderBottom: '1px solid #333', paddingBottom: '5px'}}>
-                            Zaplanowane zadania:
+                            Zaplanowane harmonogramy:
                         </h4>
 
                         {schedules.length === 0 ? (
                             <div style={{padding: '20px', textAlign: 'center', color: '#555', fontStyle: 'italic'}}>
-                                Brak zadań dla wybranego urządzenia.
+                                Brak harmonogramów dla wybranego urządzenia.
                             </div>
                         ) : (
                             <table className="device-table">
