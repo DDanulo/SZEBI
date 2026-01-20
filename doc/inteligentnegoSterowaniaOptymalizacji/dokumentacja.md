@@ -1,25 +1,44 @@
 
 # Nazwa modułu
+Moduł Inteligentnego Sterowania i Optymalizacji
 [usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
 [wpisy bez nawiasów są do zastąpienia zawartością]
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Vladyslav Shpyhariev 253830
+Adam Jędrzejek 251537
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł ma za zadanie sterować urządzeniami (włącz/wyłącz), dodawać je albo usuwać. Także tworzy harmonogramy (włącz/wyłącz) dla urządzeń o konkretnej porze dnia z możliwością cykliczności.
 
 ### Opis możliwości funkcjonalnych modułu
 Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+Aktor: RESIDENT
+1) Może wysłać prośbę o dodanie urządzenia ale przed tym musi wpisać nazwę, wybrać typ urządzenia i opcjonalnie wpisać pole powierzchni.
+2) Może wysłać prośbę o usunięciu urządzenia.
+3) Może wyłączyć urządzenie (tylko do którego ma dostęp).
+4) Może włączyć urządzenie (tylko do którego ma dostęp).
+5) Może stworzyć harmonogram dla urządzenia, gdzie musi wskazać czas włączenia, czas wyłączenia urządzenia.
+
+Aktorzy: ADMINISTRATOR, ENGINEER
+1) Mogą dodać urządzenie ale przed tym muszą wpisać nazwę, wybrać typ urządzenia i opcjonalnie wpisać pole powierzchni.
+2) Mogą usunąć urządzenie.
+3) Mogą wyłączyć urządzenie.
+4) Mogą włączyć urządzenie.
+5) Mogą stworzyć harmonogram dla urządzenia, gdzie muszą wskazać czas włączenia, czas wyłączenia urządzenia.
+
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+System informuje w czytelny sposób o aktualnym stanie urządzeń (włączone/wyłączone) oraz komunikaty są zrozumiałe i czytelne.
+Jest możliwość codziennego powtarzania się harmonogramu.
+Pod każdym urządzeniem jest informacja ile zużyło/wyprodukowało energii.
+Nazwa urządzenia musi być unikalna, a czas włączenia albo wyłączenia nie może być w przeszłości (w momencie tworzenia harmonogramu).
+Data włączenia może być po dacie wyłączenia.
 
 # Diagramy przypadków użycia
 [Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
