@@ -52,10 +52,12 @@ Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jes
 [powtórzyć dla każdego diagramu, tak samo nagłówki]
 
 ![Diagram przypadków użycia dla aktora Mieszkaniec](https://github.com/DDanulo/IO_IAS_25/blob/DeviceControl-vlad-Adam/doc/inteligentnegoSterowaniaOptymalizacji/img/przypadki%20mieszaniec%20diagram.png)
+
 Diagram 1
 Diagram przypadków użycia przedstawia system zarządzania urządzeniami domowymi z perspektywy aktora Mieszkaniec. Mieszkaniec ten może planować harmonogramy pracy sprzętu, definiując czasy włączenia i wyłączenia, a także przeglądać i usuwać istniejące harmonogramy. Mieszkaniec wyświetla listę urządzeń oraz bezpośrednio steruje ich zasilaniem (włączanie/wyłączanie). Diagram obrazuje również proces zgłaszania próśb o dodanie nowych urządzeń (określając ich parametry) lub usunięcie istniejących z systemu.
 
 ![Diagram przypadków użycia dla aktorów Administrator i Inżynier](https://github.com/DDanulo/IO_IAS_25/blob/DeviceControl-vlad-Adam/doc/inteligentnegoSterowaniaOptymalizacji/img/Przypadki%20admin%20diagram.png)
+
 Diagram 2
 Diagram przedstawia praktycznie te same interakcje, tylko różnica jest taka, żę Inżynier/Administrator nie wysyłają prośbę o dodaniu/usunięciu urządzenia. a mają bezpośredni dostęp do tego.
 
@@ -67,6 +69,10 @@ Diagram przedstawia praktycznie te same interakcje, tylko różnica jest taka, �
 Miejsce na diagram
 
 Opis diagramu
+
+
+![Diagram UML wszystkich klas](https://github.com/DDanulo/IO_IAS_25/blob/DeviceControl-vlad-Adam/doc/inteligentnegoSterowaniaOptymalizacji/img/package.png)
+Są na diagramie dwa repozytorium  w których są przechowywane harmonogramy i prośby o usunięciu/dodania urządzeń, dwa serwisy zawierające logikę biznesową dla poszczególnej "dziedziny" (prośby, harmonogramy), 3 kontrolery API dla każdej dziedzimy, dane każdej dziedziny oraz menedżery dla każdego typu urządzeń (wiatraki, agd, panele słoneczne), implementujące interfejs IDeviceAuth, który jest wykorzystywany przez moduł Administracji. ScheduleExecutor: Komponent działający w tle i cyklicznie sprawdza, czy nadszedł czas wykonania zadania.
 
 # Diagramy interakcji
 [diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
