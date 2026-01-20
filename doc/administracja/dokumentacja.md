@@ -1,50 +1,92 @@
 
 # Nazwa modułu
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+Moduł administracyjny
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Maciej Walczak 251655
+Mikita Karabeika
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł administracyjny ma za zadanie zarządzać działaniem programu oraz urządzeń podczas użytkowania.
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+Co realizuje dany moduł, wypunktowanie przypadków użycia wraz z opisami, trzeba podzielić fragmentami co może robić dany aktor
+
+## Aktor - Użytkownik niezalogowany
+
+- logowanie użytkowników w systemie.
+
+Użytkownik niezalogowany może zalogować się do systemu przy użyciu login oraz hasła. Po poprawnym uwierzytelnieniu uzyskuje dostęp do funkcjonalności zgodnych z przypisaną rolą. 
+
+- Odzyskiwanie/Zmiana hasła poprzez wysłanie linku do zresetowania hasła poprzez pocztę elektroniczną.
+
+Użytkownik niezalogowany może skorzystać z funkcji odzyskiwania hasła. System wysyła na podany adres e-mail link umożliwiający zresetowanie hasła.
+
+- rejestracja mieszkańca w systemie
+
+Tylko mieszkaniec może samodzielnie stworzyć konto w systemie, które musi być aktywowany przez adminstratora, żeby mieszkaniec mógł się uwierzytelnić.
+
+
+## Aktor - Administrator
+
+- Zarządzanie kontami użytkowników.
+
+Administrator może:
+- tworzyć konta użytkowników (mieszkańców, administratorów, inżynierów),
+- edytować konta użytkowników (zmienić hasło oraz informacje o użytkowniku).
+- usuwać konta użytkowników,
+- aktywować i dezaktywować konta.
+
+- Nadawanie uprawnień do korzystania z urządzeń (przez administratora).
+
+Administrator zatwierdza dodanie lub usunięcie urządzenia przez Mieszkańca.
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+
+- Dane użytkowników będą szyfrowane korzystając z biblioteki BcryptPasswordEncoder.
+
+- Wymóg silnych haseł (minimum 8 znaków, kombinacja małych i wielkich liter, cyfr oraz znaków specjalnych).
+
+- Sesje użytkowników będą wygasać po 15 minutach nieaktywności.
+
+- System informuje użytkownika o błędach logowania w sposób zrozumiały, nie ujawniając szczegółów bezpieczeństwa.
 
 # Diagramy przypadków użycia
-[Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
-## Nazwa przypadku użycia
 
-Tutaj miejsce na diagram
 
-Podpis z numeracją (wystarczy diagram 1,2,3...)
+## Przypadki użycia dla użytkownika niezalogowanego
+
+
+<img src="img/notloggeduser.drawio.png">
+diagram 1
 
 Opis diagramu
 
-np.:
-Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
+Diagram przypadków użycia przedstawia system logowania do aplikacji. Aktorem jest Użytkownik niezalogowany, który może zalogować się do systemu, zarejestrować się (tylko jako mieszkaniec) oraz zresetować swoje hasło. Diagram pokazuje sposób, w jaki użytkownik uwierzytelnia się do systemu.
 
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
+## Przypdaki użycia dla Mieszkańca, Inżyniera oraz Administratora
+
+<img src="img/loggeduser.drawio.png">
+diagram 2
+
+Opis diagramu 
+
+Diagram przypadków użycia przedstawia system zarządzania uprawnieniami oraz użytkownikami w aplikacji. Aktorami są Mieszkaniec, Inżynier oraz Administrator, którzy mogą się wylogować, tylko Administrator może dodać, usunąć, aktywować, edytować konta użytkowników. Administrator również może zatwierdzać dodanie lub usuniecie urządzenia systemu przez Mieszkańca. Digram pokazuje, w jaki sposób Administrator zarządza systemem.
+
 
 # Diagramy klas
-[diagram(y) klas (obejmują wszystkie klasy)]
 
-Miejsce na diagram
+<img src="./img/package.png">
 
-Opis diagramu
+Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, poprzez wysłanie linku na poczte, tworzenie, usuwanie, edycje użytkowników o różnym dostępie do systemu, tworzenie Tokena JWT oraz filtrowanie wg. niego dostępu do poszczególnych metod, hashowanie haseł, logowanie oraz rejestracje do aplikacji. 
 
 # Diagramy interakcji
-[diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
+
 
 ## Scenariusz 1
 
