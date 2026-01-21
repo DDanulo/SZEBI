@@ -11,20 +11,21 @@ Mikołaj Pawłoś 258681
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-Moduł prognozowania zbiera dane zużycia energii elektrycznej z poprzednich dni, trenuje na ich podstawie algorytm uczenia maszynowego, a następnie generuje prognozy przyszłego zużycia energii elektrycznej w formie średniego zużycia na dzień.
+Moduł prognozowania pobiera dane zużycia energii elektrycznej z poprzednich dni wygenerowane przez moduł symulacji, trenuje na ich podstawie algorytm uczenia maszynowego, a następnie generuje prognozy przyszłego zużycia energii elektrycznej w formie średniego zużycia na dzień.
 
 ### Opis możliwości funkcjonalnych modułu
-"Co realizuje dany moduł, wypunktowanie przypadków użycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor"
-
+Aktorzy czasowi (Interwał prognozy i Interwał treningu), Administrator oraz Inżynier mogą wykonywać następujące czynności:
 - Pobierz dane zużycia energii elektrycznej od modułu symulacji — Moduł może pobierać od modułu symulacji dane zużycia energii elektrycznej z poprzednich dni
 - Przygotuj dane do treningu modelu uczenia maszynowego — Moduł może odpowiednio przetwarzać pobrane od modułu symulacji dane zużycia energii elektrycznej z poprzednich dni
-- Wygeneruj prognozę zużycia energii elektrycznej — Moduł może prognozować prawdopodobne zużycie energii elektrycznej na kolejne 7 dni automatycznie co określony czas lub po otrzymaniu polecenia od administratora bądź inżyniera 
-- Wyświetl prognozę zużycia energii elektrycznej — Moduł może wyświetlać prognozę zużycia energii elektrycznej na kolejne 7 dni w czytelnej formie administratorowi i inżynierowi
-- Zapisz prognozę zużycia energii elektrycznej — Moduł może zapisywać wygenerowane prognozy zużycia energii elektrycznej
+- Przekaż prognozę zużycia energii elektrycznej do modułu alarmów — Moduł może oferować do odczytu najnowsze prognozy modułowi alarmowania i alertów
+- Wygeneruj prognozę zużycia energii elektrycznej — Moduł może prognozować prawdopodobne zużycie energii elektrycznej na kolejne 7 dni automatycznie co określony czas lub po otrzymaniu polecenia od administratora bądź inżyniera
+- Zapisz prognozę zużycia energii elektrycznej — Moduł może zapisywać wygenerowane prognozy zużycia energii elektrycznej do bazy danych
 - Wytrenuj model uczenia maszynowego — Moduł może automatycznie co określony czas trenować algorytm uczenia maszynowego 
 - Sprawdź poprawność prognozy zużycia energii elektrycznej — Moduł może, w przypadku wytworzenia prognozy wybiegającej znacznie poza akceptowalny przedział, ponownie wytrenować algorytm uczenia maszynowego i jeszcze raz wygenerować prognozę
-- Odczytaj prognozę energii elektrycznej — Moduł może odczytywać zapisane wcześniej prognozy
-- Przekaż prognozę zużycia energii elektrycznej do modułu alarmów — Moduł może oferować do odczytu najnowsze prognozy modułowi alarmowania i alertów
+
+Dodatkowo Administrator i Inżynier mogą jeszcze:
+- Odczytaj prognozę zużycia energii elektrycznej — Moduł może odczytywać zapisane wcześniej prognozy
+- Wyświetl prognozę zużycia energii elektrycznej — Moduł może wyświetlać prognozę zużycia energii elektrycznej na kolejne 7 dni w czytelnej formie administratorowi i inżynierowi
 
 
 ### Opis możliwości niefunkcjonalnych modułu
@@ -32,36 +33,45 @@ Moduł prognozowania zbiera dane zużycia energii elektrycznej z poprzednich dni
 - Użyty do prognozowania model uczenia maszynowego to algorytm RandomForest zaimplementowany w używanej przez moduł bibliotece Smile
 - Przetwarzanie danych zużycia energii elektrycznej z poprzednich dni polega na agregacji danych zużycia do pełnych godzin
 - Najnowsze prognozy zużycia energii elektrycznej mogą zostać wyświetlone w formie wykresu liniowego oraz tabeli
+- Można przeglądać poprzednie prognozy zużycia energii elektrycznej podając zakres dat wygenerowania
 - Wartość prognozy zużycia energii elektrycznej to średnie dzienne zużycie energii elektrycznej na określony dzień
 
 # Diagramy przypadków użycia
-[Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
-## Nazwa przypadku użycia
 
-Tutaj miejsce na diagram
+## Okresowe generowanie prognoz zużycia energii elektrycznej oraz trenowanie modelu uczenia maszynowego.
 
-Podpis z numeracją (wystarczy diagram 1,2,3...)
+![Diagram przypadków użycia dla aktorów "czasowych"](./img/io_use_case_diagram_time_actors.png)
+Diagram 1
 
-Opis diagramu
+Ten diagram przypadków użycia przedstawia automatyczne generowanie prognozy zużycia energii elektrycznej oraz trening modelu uczenia maszynowego.
+Głównymi aktorami w tym diagramie są interwał prognozy oraz interwał treningu, które to odpowiadają odpowiednio za częstotliwość generowania prognozy zużycia energii elektrycznej i częstotliwość wykonywania treningu modelu uczenia maszynowego.
 
-np.:
-Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
+## Generowanie i wyświetlanie prognoz zużycia energii elektrycznej.
 
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
+![Diagram przypadków użycia dla ludzkich aktorów](./img/io_use_case_diagram_actors.png)
+Diagram 2
+
+Powyższy diagram przypadków użycia przedstawia generowanie prognozy zużycia energii elektrycznej na żądanie oraz wyświetlanie jej.
+Główni aktorzy tego diagramu to Inżynier oraz Administrator. 
+Mogą oni wygenerować prognozę, co wiąże się z pobraniem danych zużycia energii elektrycznej z poprzednich dni, przetworzeniem ich i zapisaniem wygenerowanej prognozy zużycia energii elektrycznej.
+Gdy podczas sprawdzania poprawności prognozy zużycia energii elektrycznej dojdzie do wykrycia nieprawidłowości, zostanie przeprowadzony trening modelu uczenia maszynowego.
+Inna czynności dostępna dla tych aktorów to wyświetlenie prognozy zużycia energii elektrycznej, co wiąże się z odczytaniem poprzednio wygenerowanych i zapisanych prognoz.
 
 # Diagramy klas
-[diagram(y) klas (obejmują wszystkie klasy)]
 
-Miejsce na diagram
+![Diagram klas](img/class_diagram.jpg)
+Diagram 3
 
-Opis diagramu
+Na przedstawionym diagramie zostały uwidocznione klasy związane z modułem prognozowania
+Najistotniejszą klasą w tym module jest klasa **ForecastServiceImpl** implementująca interfejs **ForecastService**.
+Steruje ona przepływem danych pomiędzy repozytorium **ForecastRepository**, a algorytmem uczenia maszynowego zdefiniowanym w **ForecasterModel**.
+Klasy pomocnicze **UsageRecord** i **Forecast** służą do przechowywania odpowiednio przeszłego i prognozowanego zużycia energii elektrycznej.
+**DataPredictionController** zapewnia komunikację modułu prognozowania z warstwą prezentacji.
 
 # Diagramy interakcji
 [diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
 
 ## Scenariusz 1
-
-[do wypełnienia szablon scenariusza]
 
 | Pole | Treść                                                                                                                                                                                                                                                         |
 | :--- |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
