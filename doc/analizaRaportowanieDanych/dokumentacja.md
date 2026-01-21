@@ -45,7 +45,11 @@ Diagram przypadków użycia przedstawia system zarządzania energią w budynkach
 
 ![Diagram klas](img/diagram-klas.png)
 
-Opis diagramu
+Diagram klas przedstawia architekturę systemu raportowania, którego fundamentem są klasy modelu DataPoint i DeviceInfo oraz definiujący rodzaj pomiaru typ wyliczeniowy DataType.
+
+Za warstwę danych i logiki odpowiadają: DataFetcher, który pobiera surowe informacje z bazy, oraz DataProcessor, który wykonuje na nich obliczenia matematyczne i agregacje. Te dwa komponenty są wykorzystywane przez główny serwis DataProvider (implementujący interfejs IData), który integruje pobieranie z przetwarzaniem.
+
+Całością steruje ReportController, który udostępnia dane poprzez API i – przy wsparciu klasy PdfReportGenerator – generuje gotowe raporty w formacie PDF.
 
 # Diagramy interakcji
 
@@ -69,11 +73,15 @@ Opis diagramu
 
 ## Diagram interakcji 1
 
-Miejsce na diagram interakcji
+![Diagram interakcji 1](img/diagram-interakcji-1.png)
 
-Miejsce na podpis
+Diagram 1: Generowanie raportu zużycia energii
 
-Miejsce na opis diagramu
+Diagram ten ilustruje przepływ danych rozpoczynający się od żądania użytkownika w ReportController. Proces rozpoczyna się od wspólnego kroku pobrania surowych danych z bazy PostgreSQL za pośrednictwem DataFetcher. Następnie zastosowano blok alternatywny (alt), który rozdziela logikę na dwie ścieżki:
+
+Wyświetlenie wykresu: Dane trafiają do DataProcessor w celu agregacji (np. miesięcznej), a wynik jest zwracany jako JSON.
+
+Pobranie PDF: Surowe dane są przekazywane do PdfReportGenerator, który tworzy i zwraca plik dokumentu.
 
 ## Scenariusz 2
 
@@ -95,11 +103,15 @@ Miejsce na opis diagramu
 
 ## Diagram interakcji 2
 
-Miejsce na diagram interakcji
+![Diagram interakcji 2](img/diagram-interakcji-2.png)
 
-Miejsce na podpis
+Diagram 2: Generowanie raportu produkcji energii
 
-Miejsce na opis diagramu
+Ten diagram koncentruje się na różnicach w sposobie pozyskiwania danych w zależności od kryteriów wyboru urządzenia. Blok alternatywny (alt) występuje tutaj na samym początku interakcji z warstwą danych:
+
+Konkretne urządzenie: System wywołuje metodę queryMeasure w DataFetcher, filtrując wyniki po ID urządzenia.
+
+Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając pełen zakres danych. Niezależnie od wybranej ścieżki, uzyskana lista jest następnie przetwarzana przez DataProcessor (sumowanie, agregacja dzienna) przed finalną prezentacją użytkownikowi.
 
 # Diagram czynności [minimum 1]
 
