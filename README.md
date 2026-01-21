@@ -13,7 +13,7 @@ Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ście�
 ### Client
 Technologia główna: ReactJS\
 Technologie pomocnicze:
-  - Tailwind: szybki CSS dla ułatwienia jego pisania
+  - Tailwind: CSS z predefiniowanymi klasami, ułatwiającymi pisanie
   - ...
 
 Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ścieżką `client/src/components/` odpowiadające nazwom modułów projektu.
