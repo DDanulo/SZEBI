@@ -165,9 +165,20 @@ oraz warstwy controller (obsługującej komunikację REST), zapewniając wysoką
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+![Diagram przeglądu interakcji](img/diagram-przegladu-interakcji.png)
 
-Miejsce na opis diagramu
+Diagram przeglądu interakcji syntetyzuje logikę biznesową modułu, 
+przedstawiając przepływ sterowania pomiędzy wysokopoziomowymi fragmentami interakcji, 
+oznaczonymi ramkami odniesienia (ref). Całość procesu rozpoczyna się od zdefiniowania parametrów 
+wejściowych przez użytkownika (zakres czasowy oraz typ danych: produkcja/zużycie), 
+co inicjuje wywołania odpowiednich endpointów w klasie ReportController. 
+Pierwszym kluczowym krokiem jest odniesienie do procedury pobierania danych z bazy PostgreSQL, 
+realizowanej przez DataFetcher. Następnie system przechodzi przez węzły decyzyjne:
+
+1. Jeśli wybrano konkretne urządzenie, uruchamiany jest mechanizm filtracji strumieniowej po deviceIds.
+2. System sprawdza, czy użytkownik zażądał pliku PDF; jeśli tak, sterowanie trafia do fragmentu ref:
+Generowanie PDF, gdzie PdfReportGenerator renderuje dokument.
+3. Niezależnie od generowania pliku, proces kończy się przygotowaniem danych do wykresu, co domyka cykl analityczny.
 
 # Diagram strukturalny
 
