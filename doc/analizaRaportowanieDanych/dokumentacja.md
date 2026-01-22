@@ -3,7 +3,7 @@
 
 ## Projektanci: 
 ```
-Remigiusz Bartczak 251677,252926
+Remigiusz Bartczak 251677, 252926
 Jan Kozłowski 251562
 ```
 # Dokumentacja techniczna
@@ -32,18 +32,21 @@ Moduł pobiera, przetwarza i analizuje, a następnie wizualizuje dane. Dotyczą 
 ## Diagram 1 - przypadki użycia dla inżyniera
 
 ![Diagram przypadków użycia dla inżyniera](img/diagram-przypadkow-uzycia-1_inzynier.png)
+Diagram 1.
 
 Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest inżynier, który może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
 ## Diagram 2 - przypadki użycia dla administratora
 
 ![Diagram przypadków użycia dla administratora](img/diagram-przypadkow-uzycia-2_administrator.png)
+Diagram 2.
 
 Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest administrator, który bardzo podobnie do inżyniera może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
 # Diagramy klas
 
 ![Diagram klas](img/diagram-klas.png)
+Diagram 3.
 
 Diagram klas przedstawia architekturę systemu raportowania, którego fundamentem są klasy modelu DataPoint i DeviceInfo oraz definiujący rodzaj pomiaru typ wyliczeniowy DataType.
 
@@ -59,7 +62,7 @@ Całością steruje ReportController, który udostępnia dane poprzez API i – 
 |:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:**                          | Generowanie raportu zużycia energii                                                                                                                                                                                                                                         |
 | **Numer:**                          | 1                                                                                                                                                                                                                                                                           |
-| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                      |
+| **Twórca:**                         | Remigiusz Bartczak 251677, 252926, Jan Kozłowski 251562 - projektanci                                                                                                                                                                                                                    |
 | **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                      |
 | **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                      |
 | **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                     |
@@ -74,6 +77,8 @@ Całością steruje ReportController, który udostępnia dane poprzez API i – 
 ## Diagram interakcji 1
 
 ![Diagram interakcji 1](img/diagram-interakcji-1.png)
+Diagram 4.
+
 
 Diagram 1: Generowanie raportu zużycia energii
 
@@ -89,7 +94,7 @@ Pobranie PDF: Surowe dane są przekazywane do PdfReportGenerator, który tworzy 
 |:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:**                          | Generowanie raportu produkcji energii                                                                                                                                                                                                                                             |
 | **Numer:**                          | 2                                                                                                                                                                                                                                                                                 |
-| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                            |
+| **Twórca:**                         | Remigiusz Bartczak 251677, 252926, Jan Kozłowski 251562 - projektanci                                                                                                                                                                                                                            |
 | **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                            |
 | **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                            |
 | **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                           |
@@ -104,6 +109,8 @@ Pobranie PDF: Surowe dane są przekazywane do PdfReportGenerator, który tworzy 
 ## Diagram interakcji 2
 
 ![Diagram interakcji 2](img/diagram-interakcji-2.png)
+Diagram 5.
+
 
 Diagram 2: Generowanie raportu produkcji energii
 
@@ -116,6 +123,7 @@ Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając peł
 # Diagram czynności 1
 
 ![Diagram czynnosci 1](img/diagram-czynnosci-pdf.png)
+Diagram 6.
 
 Diagram przedstawia sekwencyjny proces tworzenia dokumentu raportowego. 
 Rozpoczyna się od pobrania surowych danych historycznych przez DataFetcher, 
@@ -127,6 +135,7 @@ przed wysłaniem gotowego strumienia bajtów do użytkownika.
 # Diagram czynności 2
 
 ![Diagram czynnosci 2](img/diagram-czynnosci-przebieg-analizy-danych-i-agregacji.png)
+Diagram 7.
 
 Przepływ ten ilustruje logikę obliczeniową systemu. Po odebraniu zapytania o statystyki, 
 serwis DataProvider pobiera dane pomiarowe i aktualizuje znacznik czasu ostatniej aktywności. 
@@ -136,6 +145,7 @@ wykonuje operacje sumowania lub uśredniania przy użyciu strumieni Javy.
 # Diagram maszyny stanowej
 
 ![Diagram maszyny stanowej](img/diagram-maszyny-stanowej.png)
+Diagram 8.
 
 Diagram obrazuje cykl życia pojedynczego żądania analitycznego. 
 Moduł znajduje się w stanie "Bezczynności" do momentu otrzymania sygnału z kontrolera API. 
@@ -147,6 +157,7 @@ Po wysłaniu danych do klienta system automatycznie powraca do stanu oczekiwania
 # Diagram komponentów
 
 ![Diagram komponetów](img/diagram-komponentow.png)
+Diagram 9.
 
 Moduł analizy danych odczytuje dane historyczne (zużycie, produkcja) zapisane przez Moduł Symulacji w bazie dancyh PostgreSQL. Stanowi to surowiec do wszelkich analiz, wykresów i raportów.
 Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zużycie z ostatniego tygodnia), umożliwiając Modułowi Alarmowania i Alertów szybkie wykrywanie anomalii i awarii (np. nagłe skoki zużycia energii przez dane urządzenie).
@@ -154,6 +165,7 @@ Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zuży
 # Diagram pakietów
 
 ![Diagram pakietów](img/diagram-pakietow.png)
+Diagram 10.
 
 Struktura pakietów izoluje od siebie kluczowe warstwy odpowiedzialne za logikę biznesową. 
 Pakiet model dostarcza wspólny język danych dla całego modułu. 
@@ -164,6 +176,7 @@ oraz warstwy controller (obsługującej komunikację REST), zapewniając wysoką
 # Diagram przeglądu interakcji
 
 ![Diagram przeglądu interakcji](img/diagram-przegladu-interakcji.png)
+Diagram 11.
 
 Diagram przeglądu interakcji syntetyzuje logikę biznesową modułu, 
 przedstawiając przepływ sterowania pomiędzy wysokopoziomowymi fragmentami interakcji, 
@@ -181,12 +194,14 @@ Generowanie PDF, gdzie PdfReportGenerator renderuje dokument.
 # Diagram strukturalny
 
 ![Diagram strukturalny](img/diagram-strukturalny.png)
+Diagram 12.
 
 Diagram strukturalny ukazuje wewnętrzną budowę Modułu Analizy Danych jako kooperację współdziałających części, takich jak ReportController, DataProvider czy DataFetcher, niezbędnych do realizacji procesu raportowania. Przedstawia on instancje klas jako elementy połączone konektorami, które obrazują rzeczywiste ścieżki komunikacji i delegowania zadań wewnątrz systemu. Dzięki temu widoczne jest, jak poszczególne komponenty współpracują ze sobą, tworząc funkcjonalną całość, której działanie wykracza poza możliwości pojedynczego obiektu.
 
 # Diagram harmonogramowania
 
 ![Diagram harmonogramowania](img/diagram-harmonogramowania.png)
+Diagram 12.
 
 Diagram harmonogramowania precyzuje dynamikę czasową modułu, 
 przedstawiając zmiany stanów poszczególnych komponentów w trakcie realizacji żądania analitycznego.
@@ -197,6 +212,7 @@ aż po moment renderowania binarnej zawartości raportu PDF.
 # Dokumentacja użytkownika
 
 ![Zrzut logowanie](img/zrzut-ekranu-logowanie.png)
+Diagram 13.
 
 Do skorzystania z modułu analizy danych należy uwierzytelnić się w systemie jako inżynier lub administrator. Można to zrobić uruchamiając aplikację na komputerze w przeglądarce pod odpowiednim adresem URL i następnie:
 1. Wpisując dane do zalogowania administratora/inżyniera.
@@ -205,6 +221,7 @@ Do skorzystania z modułu analizy danych należy uwierzytelnić się w systemie 
 ## Przypadek użycia 1 - generowanie wykresu liniowego
 
 ![Zrzut liniowy](img/zrzut-ekranu-liniowy.png)
+Zrzut ekranu 1.
 
 Po zalogowaniu użytkownik z odpowiednimi uprawnieniami ma możliwość analizy historycznej danych zużycia lub produkcji energii. W następujący sposób może wygenerować raport z wykresem liniowym:
 1. Z górnego menu nawigacyjnego należy wybrać sekcję "Reports".
@@ -218,6 +235,7 @@ Po zalogowaniu użytkownik z odpowiednimi uprawnieniami ma możliwość analizy 
 ## Przypadek użycia 2 - generowanie wykresu słupkowego
 
 ![Zrzut slupkowy](img/zrzut-ekranu-slupkowy.png)
+Zrzut ekranu 2.
 
 System umożliwia dynamiczną zmianę sposobu prezentacji tych samych danych bez konieczności ponownego wysyłania zapytania do serwera. Można to zrobić w ten sposób:
 1. Po wygenerowaniu danych (według kroków z Przypadku użycia 1), można przejść do sekcji "Wizualizacja danych" nad wykresem.
