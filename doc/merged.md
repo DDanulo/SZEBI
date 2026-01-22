@@ -1,0 +1,8 @@
+![[architekci/dokumentacja|dokumentacja]]
+![[alerty/dokumentacja|dokumentacja]]
+![[analizaRaportowanieDanych/dokumentacja|dokumentacja]]
+![[administracja/dokumentacja|dokumentacja]]
+![[inteligentnegoSterowaniaOptymalizacji/dokumentacja|dokumentacja]]
+![[komunikacja/dokumentacja|dokumentacja]]
+![[prognozowanie/dokumentacja|dokumentacja]]
+![[symulacja/img/dokumentacja|dokumentacja]]
