@@ -41,6 +41,13 @@ Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jes
 
 ![img.png](img/klas-1.png)
 
+Diagram X.Y.Z Pierwsza część diagramu klas
+
+![img.png](img/klas-2.png)
+Diagram X.Y.Z Pierwsza część diagramu klas
+
+
+
 # Diagramy interakcji
 [diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
 
