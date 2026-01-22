@@ -5,7 +5,7 @@ Moduł administracyjny
 ## Projektanci: 
 ```
 Maciej Walczak 251655
-Mikita Karabeika
+Mikita Karabeika 252496
 ```
 # Dokumentacja techniczna
 
@@ -63,7 +63,8 @@ Administrator zatwierdza dodanie lub usunięcie urządzenia przez Mieszkańca.
 
 
 <img src="img/notloggeduser.drawio.png">
-diagram 1
+
+Diagram 1
 
 Opis diagramu
 
@@ -72,7 +73,8 @@ Diagram przypadków użycia przedstawia system logowania do aplikacji. Aktorem j
 ## Przypdaki użycia dla Mieszkańca, Inżyniera oraz Administratora
 
 <img src="img/loggeduser.drawio.png">
-diagram 2
+
+Diagram 2
 
 Opis diagramu 
 
@@ -83,6 +85,8 @@ Diagram przypadków użycia przedstawia system zarządzania uprawnieniami oraz u
 
 <img src="./img/package.png">
 
+Diagram 3
+
 Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, poprzez wysłanie linku na poczte, tworzenie, usuwanie, edycje użytkowników o różnym dostępie do systemu, tworzenie Tokena JWT oraz filtrowanie wg. niego dostępu do poszczególnych metod, hashowanie haseł, logowanie oraz rejestracje do aplikacji. 
 
 # Diagramy interakcji
@@ -92,95 +96,109 @@ Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, 
 
 [do wypełnienia szablon scenariusza]
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                                                                                                               |
+|:------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Logowanie użytkownika do systemu                                                                                                                                                                                                                                                                                                    |
+| **Numer:**                          | 1                                                                                                                                                                                                                                                                                                                                   |
+| **Twórca:**                         | Mikita Karabeika 252496, Maciej Walczak 251655 - projektanci                                                                                                                                                                                                                                                                        |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                                                                              |
+| **Typ przypadku użycia:**           | Szczegółowy niezbędny                                                                                                                                                                                                                                                                                                               |
+| **Aktorzy:**                        | Użytkownik niezalogowany                                                                                                                                                                                                                                                                                                            |
+| **Krótki opis:**                    | Użytkownik loguje się do systemu za pomocą loginu lub e-maila i hasła, a system weryfikuje dane.                                                                                                                                                                                                                                    |
+| **Warunki wstępne:**                | 1. Konto użytkownika istnieje w systemie.<br/>2. Konto użytkownika jest aktywne.                                                                                                                                                                                                                                                      |
+| **Warunki końcowe:**                | Użytkownik zostaje zalogowany i może korzystać z systemu zgodnie ze swoimi uprawnieniami, lub logowanie nie powiodło się i użytkownik otrzymuje odpowiedni komunikat                                                                                                                                                                |
+| **Główny przepływ zdarzeń:**        | 1. Użytkownik wprowadza login/e-mail i hasło.<br> 2. System weryfikuje poprawność danych. <br>3.Jeśli dane są poprawne, generuje unikalne ID sesji. <br> 4. System zapisuje informacje o logowaniu (czas, ID sesji, adres IP).<br> 5. Użytkownik uzyskuje dostęp do swojego pulpitu i modułów systemu, do których ma uprawnienia. |
+| **Alternatywne przepływy zdarzeń:** | 1. Jeśli login/e-mail lub hasło są niepoprawne, system wyświetla komunikat o błędzie i zapisuje próbę logowania. <br> 2. Jeśli konto jest dezaktywowane, system blokuje logowanie i wyświetla odpowiedni komunikat.                                                                                                                 |
+| **Specjalne wymagania:**            | Hasła muszą być bezpiecznie przechowywane w postaci hash-u. <br> Sesja musi mieć limit czasu bezczynności (20 min). <br> System musi logować wszystkie próby logowania i generować ID sesji                                                                                                                                         |
+| **Notatki i kwestie:**              | Scenariusz 1 odpowiada diagramowi sekwencji 1.                                                                                                                                                                                                                                                                                      |
 
 ## Diagram interakcji 1
 
-Miejsce na diagram interakcji
+<img src="img/przypadek1.drawio.png">
 
-Miejsce na podpis
+Diagram 4
 
 Miejsce na opis diagramu
 
 ## Scenariusz 2
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole | Treść                                                                                                                                                                                                                    |
+| :--- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:** | Dodanie konta inżyniera                                                                                                                                                                                                  |
+| **Numer:** | 2                                                                                                                                                                                                                        |
+| **Twórca:** | Mikita Karabeika 252496, Maciej Walczak 251655 - projektanci                                                                                                                                                             |
+| **Poziom ważności:** | Wysoki                                                                                                                                                                                                                   |
+| **Typ przypadku użycia:** | Szczegółowy niezbędny                                                                                                                                                                                                    |
+| **Aktorzy:** | Administrator, Inżynier                                                                                                                                                                                                  |
+| **Krótki opis:** | Administrator próbuje dodać konto inżyniera, a system weryfikuje wszystkie warunki przed dokonaniem dodania.                                                                                                             |
+| **Warunki wstępne:** | 1. Administrator jest zalogowany do systemu. <br> 2. login konta inżyniera jest unikalny w systemie.                                                                                                                     |
+| **Warunki końcowe:** | Konto inżyniera jest dodane do systemu, lub operacja jest zablokowana z powodu niespełnienia warunków.                                                                                                                   |
+| **Główny przepływ zdarzeń:** | 1. Administrator wypełnia formularz dodania inżyniera. <br> 2. System sprawdza, czy login inżyniera jest unikalny i czy wszystkie pola w formularzu są wypełnione. <br> 3. System dodaje konto inżyniera do bazy danych. |
+| **Alternatywne przepływy zdarzeń:** | System blokuje operację, jeżeli login przypisany do konta inżyniera jest nieunikalny.                                                                                                                                    |
+| **Specjalne wymagania:** | Operacja powinna być atomowa — w przypadku błędu żadne częściowe dane nie powinny pozostać.                                                                                                                              |
+| **Notatki i kwestie:** | Scenariusz 2 odpowiada diagramowi sekwencji 2                                                                                                                                                                            |
 
 ## Diagram interakcji 2
 
-Miejsce na diagram interakcji
+<img src="img/przypadek2.drawio.png">
 
-Miejsce na podpis
-
-Miejsce na opis diagramu
-
-# Diagram czynności [minimum 1]
-
-Miejsce na diagram
+Diagram 5
 
 Miejsce na opis diagramu
 
-# Diagram maszyny stanowej [minimum 1]
+# Diagram czynności - Rejestracja 
 
-Miejsce na diagram
+<img src="./img/dgrczynności.drawio(1).png">
+
+Diagram 6
 
 Miejsce na opis diagramu
 
-# Diagram komponentów [z czym dany moduł się łączy (wycinek)]
+# Diagram maszyny stanowej
 
-Miejsce na diagram
+<img src="./img/stanu.drawio(2).png">
+
+Diagram 7
+
+Miejsce na opis diagramu
+
+# Diagram komponentów
+
+<img src="img/komp.png">
+
+Diagram 8
 
 Miejsce na opis diagramu
 
 # Diagram pakietów
 
-Miejsce na diagram
+<img src="img/packet.drawio.png">
+
+Diagram 9
 
 Miejsce na opis diagramu
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+<img src="img/przebieg.drawio.png">
+
+Diagram 10
 
 Miejsce na opis diagramu
 
-# Diagram strukturalny
+# Diagram strukturalny - Dodanie konta inżyniera
 
-Miejsce na diagram
+<img src="img/strukturalny.drawio.png">
+
+Diagram 11
 
 Miejsce na opis diagramu
 
-# Diagram harmonogramowania
+# Diagram harmonogramowania - Dodanie konta inżyniera
 
-Miejsce na diagram
+<img src="img/harmonogram.drawio.png">
+
+Diagram 12
 
 Miejsce na opis diagramu
 
