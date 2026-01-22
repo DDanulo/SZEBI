@@ -118,7 +118,7 @@ Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, 
 
 Diagram 4.
 
-Miejsce na opis diagramu
+Diagram przedstawia przebieg procesu logowania użytkownika. Pokazuje komunikację pomiędzy widokiem uwierzytelniania, kontrolerem logowania, serwisem użytkownika oraz repozytorium. Diagram uwzględnia również alternatywny przebieg w przypadku błędnych danych logowania.
 
 ## Scenariusz 2
 
@@ -144,7 +144,7 @@ Miejsce na opis diagramu
 
 Diagram 5.
 
-Miejsce na opis diagramu
+Diagram obrazuje proces obsługi operacji użytkownika po poprawnym uwierzytelnieniu. Przedstawia wymianę komunikatów pomiędzy warstwą interfejsu, kontrolerem oraz logiką biznesową. Diagram uwzględnia warianty alternatywne w zależności od wyniku operacji.
 
 # Diagram czynności - Rejestracja 
 
@@ -152,7 +152,7 @@ Miejsce na opis diagramu
 
 Diagram 6.
 
-Miejsce na opis diagramu
+Diagram przedstawia proces rejestracji użytkownika w systemie. Obejmuje on weryfikację unikalności loginu i adresu e-mail oraz sprawdzenie poprawności hasła. Po spełnieniu wszystkich warunków konto zostaje utworzone.
 
 # Diagram maszyny stanowej
 
@@ -160,7 +160,7 @@ Miejsce na opis diagramu
 
 Diagram 7.
 
-Miejsce na opis diagramu
+Diagram pokazuje stany użytkownika oraz przejścia pomiędzy nimi. Użytkownik może znajdować się w stanie niezalogowanym lub zalogowanym. Przejścia zależą od wykonania operacji logowania lub wylogowania.
 
 # Diagram komponentów
 
@@ -168,7 +168,7 @@ Miejsce na opis diagramu
 
 Diagram 8.
 
-Miejsce na opis diagramu
+Diagram prezentuje podział systemu na główne komponenty oraz ich zależności. Komponent administracyjny zarządza autoryzacją i komunikacją między pozostałymi elementami. Struktura umożliwia modularną budowę systemu.
 
 # Diagram pakietów
 
@@ -176,7 +176,7 @@ Miejsce na opis diagramu
 
 Diagram 9.
 
-Miejsce na opis diagramu
+Diagram pakietów obrazuje logiczny podział systemu na pakiety funkcjonalne. Każdy pakiet grupuje elementy o podobnym przeznaczeniu.
 
 # Diagram przeglądu interakcji
 
@@ -184,7 +184,7 @@ Miejsce na opis diagramu
 
 Diagram 10.
 
-Miejsce na opis diagramu
+Diagram przedstawia ogólny przebieg interakcji użytkownika z systemem. Pokazuje główne decyzje oraz alternatywne ścieżki procesu.
 
 # Diagram strukturalny - Dodanie konta inżyniera
 
@@ -192,7 +192,7 @@ Miejsce na opis diagramu
 
 Diagram 11.
 
-Miejsce na opis diagramu
+Diagram obrazuje strukturę elementów biorących udział w procesie dodania konta inżyniera. Przedstawia zależności pomiędzy administratorem, API oraz repozytorium.
 
 # Diagram harmonogramowania - Dodanie konta inżyniera
 
@@ -200,7 +200,7 @@ Miejsce na opis diagramu
 
 Diagram 12.
 
-Miejsce na opis diagramu
+Diagram pokazuje kolejność wykonywania działań w czasie podczas dodawania konta inżyniera. Obejmuje etapy wprowadzania danych, walidacji oraz zapisu do bazy danych.
 
 # Dokumentacja użytkownika
 
@@ -311,6 +311,5 @@ Dostęp do funkcji systemu został zabezpieczony poprzez użycie tokena JWT, kt�
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
-
+Opracowany moduł zapewnia funkcjonalności rejestracji, logowania oraz resetowania hasła użytkowników. Administrator posiada możliwość pełnego zarządzania użytkownikami (CRUD), ich aktywacji oraz dezaktywacji. Moduł umożliwia również obsługę i potwierdzanie zgłoszeń użytkowników dotyczących dodania urządzeń. Zarządzanie odbywa się poprzez interfejs administracyjny oraz udostępnione punkty końcowe warstwy logiki. Moduł został zaprojektowany w sposób umożliwiający łatwą rozbudowę i integrację z innymi częściami systemu.
 
