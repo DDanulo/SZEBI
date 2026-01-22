@@ -117,19 +117,34 @@ Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając peł
 
 ![Diagram czynnosci 1](img/diagram-czynnosci-pdf.png)
 
-Miejsce na opis diagramu
+Diagram czynności 1 (Generowanie PDF) - Diagram przedstawia sekwencyjny proces 
+tworzenia dokumentu raportowego. 
+Rozpoczyna się od pobrania surowych danych historycznych przez DataFetcher, 
+po czym następuje opcjonalna filtracja rekordów według identyfikatorów urządzeń. 
+Kluczowym elementem jest równoległe pobranie metadanych (aliasów) z bazy PostgreSQL, 
+co pozwala klasie PdfReportGenerator na renderowanie czytelnych nazw urządzeń zamiast surowych kluczy technicznych 
+przed wysłaniem gotowego strumienia bajtów do użytkownika.
 
 # Diagram czynności 2 [minimum 1]
 
 ![Diagram czynnosci 2](img/diagram-czynnosci-przebieg-analizy-danych-i-agregacji.png)
 
-Miejsce na opis diagramu
+Diagram czynności 2 (Przebieg analizy i agregacji) - Przepływ ten ilustruje logikę obliczeniową systemu. 
+Po odebraniu zapytania o statystyki, serwis DataProvider pobiera dane pomiarowe 
+i aktualizuje znacznik czasu ostatniej aktywności. Dane są następnie przekazywane do DataProcessor, 
+który w zależności od parametru czasu (godzina, dzień, rok) wykonuje operacje sumowania lub uśredniania przy 
+użyciu strumieni Javy.
 
 # Diagram maszyny stanowej [minimum 1]
 
 ![Diagram maszyny stanowej](img/diagram-maszyny-stanowej.png)
 
-Miejsce na opis diagramu
+Diagram maszyny stanowej - Diagram obrazuje cykl życia pojedynczego żądania analitycznego. 
+Moduł znajduje się w stanie "Bezczynności" do momentu otrzymania sygnału z kontrolera API. 
+Proces przechodzi przez fazy ekstrakcji danych z bazy PostgreSQL, 
+aktywnego przetwarzania w procesorze lub generowania dokumentu, 
+kończąc się stanem finalizacji odpowiedzi. 
+Po wysłaniu danych do klienta system automatycznie powraca do stanu oczekiwania, zwalniając zajęte zasoby.
 
 # Diagram komponentów
 
@@ -142,7 +157,11 @@ Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zuży
 
 ![Diagram pakietów](img/diagram-pakietow.png)
 
-Miejsce na opis diagramu
+Diagram pakietów - Struktura pakietów izoluje od siebie kluczowe warstwy odpowiedzialne za logikę biznesową. 
+Pakiet model dostarcza wspólny język danych dla całego modułu. 
+Pakiet api definiuje abstrakcyjne kontrakty (interfejsy), 
+co pozwala na niezależny rozwój warstwy service (implementującej logikę) 
+oraz warstwy controller (obsługującej komunikację REST), zapewniając wysoką modularność i łatwość testowania.
 
 # Diagram przeglądu interakcji
 
@@ -158,9 +177,15 @@ Miejsce na opis diagramu
 
 # Diagram harmonogramowania
 
-Miejsce na diagram
+![Diagram harmonogramowania](img/diagram-harmonogramowania.png)
 
-Miejsce na opis diagramu
+Diagram harmonogramowania (Czasowy)
+
+Diagram harmonogramowania precyzuje dynamikę czasową modułu, 
+przedstawiając zmiany stanów poszczególnych komponentów w trakcie realizacji żądania analitycznego.
+Obrazuje on sekwencyjne przejścia od stanu bezczynności, 
+przez fazę intensywnej komunikacji z bazą danych PostgreSQL w celu pobrania pomiarów i metadanych, 
+aż po moment renderowania binarnej zawartości raportu PDF.
 
 # Dokumentacja użytkownika
 
