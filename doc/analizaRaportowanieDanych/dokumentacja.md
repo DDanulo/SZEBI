@@ -113,9 +113,15 @@ Konkretne urządzenie: System wywołuje metodę queryMeasure w DataFetcher, filt
 
 Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając pełen zakres danych. Niezależnie od wybranej ścieżki, uzyskana lista jest następnie przetwarzana przez DataProcessor (sumowanie, agregacja dzienna) przed finalną prezentacją użytkownikowi.
 
-# Diagram czynności [minimum 1]
+# Diagram czynności 1 [minimum 1]
 
-Miejsce na diagram
+![Diagram czynnosci 1](img/diagram-czynnosci-pdf.png)
+
+Miejsce na opis diagramu
+
+# Diagram czynności 2 [minimum 1]
+
+![Diagram czynnosci 2](img/diagram-czynnosci-przebieg-analizy-danych-i-agregacji.png)
 
 Miejsce na opis diagramu
 
