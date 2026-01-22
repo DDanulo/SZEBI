@@ -146,7 +146,7 @@ Kluczowe elementy przepływu sterowania:
 
 # Diagram czynności 
 
-![Diagram_Czynnosci](img/slimshady.png)
+![Diagram_Czynnosci](img/paint.png)
 
 Diagram czynności przedstawia algorytm automatycznego monitorowania Modułów, z których są pobierane dane. Proces jest inicjowany cyklicznie (Timer) i rozpoczyna się od pobrania oraz normalizacji danych z modułów analitycznych i prognostycznych do wspólnego formatu `SensorData`.
 
@@ -193,7 +193,7 @@ Diagram pakietów ilustruje pełną architekturę modułu `Alerts`, z podziałem
 
 # Diagram przeglądu interakcji
 
-![Diagram_Przeglądu_Interakcji](img/aleBujaTaMuza.png)
+![Diagram_Przeglądu_Interakcji](img/poprawa2.png)
 
 Diagram prezentuje wysokopoziomowy przepływ sterowania w module alertowania, integrujący różne scenariusze zachowań systemu. Ukazuje on mechanizm współbieżnej obsługi dwóch niezależnych źródeł zdarzeń, co odzwierciedla wielowątkową naturę aplikacji (osobny wątek harmonogramu @Scheduled oraz wątek obsługi żądań HTTP).
 
