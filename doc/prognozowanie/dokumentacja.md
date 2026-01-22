@@ -149,9 +149,9 @@ Na diagramie zostały zaprezentowane relacje pomiędzy poszczególnymi pakietami
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+![Diagram przeglądu interakcji](img/interaction_diagram.jpeg)
 
-Miejsce na opis diagramu
+Diagram przedstawia przepływ sterowania dla przypadku wyświetlenia prognozy zużycia energii elektrycznej.
 
 # Diagram strukturalny
 
