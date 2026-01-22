@@ -167,30 +167,48 @@ Miejsce na opis diagramu
 
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+## Przypadek użycia 1 - Wyświetl prognozę zużycia energii elektrycznej
 
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
+Zaloguj się do systemu jako Administrator lub Inżynier.
+![Ekran logowania się](img/man-login.jpg)
 
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
+Wybierz widok modułu prognozowania, klikając przycisk z napisem **Predictions** zlokalizowany w górnej częsci aplikacji.
+![Strona po zalogowaniu się](img/man-main-marked.jpg)
 
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
+Po załadowaniu strony widok powinien być podobny do tego przedstawionego na poniższych zrzutach ekranu.
+![Moduł prognozowania wykres](img/man-view-chart.jpg)
+![Moduł prognozowania tabela](img/man-view-table.jpg)
+
+Aby w tabeli zmienić zakres dat, w którym mają się znajdować, należy ustawić je w poniższych polach, a następnie kliknąć przycisk **Filtruj**:
+![Filtrowanie prognoz](img/man-view-table-marked-filter.jpg)
+![Filtrowane prognozy](img/man-view-table-ext.jpg)
+
+## Przypadek użycia 2 - Wygeneruj prognozę zużycia energii elektrycznej
+
+Zaloguj się do systemu jako Administrator lub Inżynier.
+![Ekran logowania się](img/man-login.jpg)
+
+Wybierz widok modułu prognozowania, klikając przycisk z napisem **Predictions** zlokalizowany w górnej częsci aplikacji.
+![Strona po zalogowaniu się](img/man-main-marked.jpg)
+
+Po załadowaniu strony widok powinien być podobny do tego przedstawionego na poniższych zrzutach ekranu.
+![Moduł prognozowania wykres](img/man-view-chart.jpg)
+![Moduł prognozowania tabela](img/man-view-table.jpg)
+
+Aby wygenerować nową prognozę, należy nacisnąć przycisk **Wygeneruj nową prognozę**.
+![Wygenerowanie prognozy](img/man-view-table-marked-button.jpg)
+![Nowa prognoza](img/man-view-table-marked-timestamp.jpg)
+
+## Diagram użycia 
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+Uprawnienia do generowania i przeglądania prognoz zużycia energii elektrycznej posiada jedynie Inżynier oraz Administrator.
+Do generowania prognozy zużycia energii elektrycznej używane jest zużycie energii elektrycznej sprzed 7 dni.
+Gdyby tych danych było za mało, to w danej iteracji nie dojdzie do wygenerowania i zapisania prognozy zużycia energii elektrycznej.
+Podobnie z treningiem, który pobiera dane zużycia energii sprzed 14 dni.
+Gdy z powodu zbyt małej ilości danych zużycia model uczenia maszynowego nie zostanie wytrenowany, automatycznie nie można wygenerować nowych prognoz zużycia energii elektrycznej.
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
+Aby moduł prognozowania działał prawidłowo, należy zapewnić ciągłe generowanie i zapisywanie danych zużycia energii.
 
