@@ -13,26 +13,31 @@ imie, nazwisko numer indeksu
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Celem modułu jest generowanie danych dotyczących produkcji energii przez odnawiane źródła oraz zużycia energii przez sprzęt.
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+Administrator:
+* Ma możliwość pobrania aktualnych parametrów symulacji.
+* Ma możliwość zmiany pory roku oraz dnia.
+
+Moduł Zarządzania:
+* Ma możliwość pobrania danych o wszytskich urządzeniach lub tylko o konkretnych.
+* Ma możliwość dodawania, usuwania, włączania oraz wyłączania wszystkich urządzeń.
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+* Dane będą generowane w czasie rzeczywistym co T = 5 min.
+* Generowanie danych dotyczących zużycia i generowania energii(w kWh) na podstawie czynników takich jak pora dnia, pora roku, warunki atmosferyczne.
+* Zapis wygenerowanych danych do bazy danych PostgreSQL.
+* Możliwość zmiany ustawień symulacji (pora roku, pora dnia) musi być ściśle ograniczona i dostępna wyłączeni dla roli Administrator.
+* Możliwość zmiany ustawień, dodawania i usuwania urządzeń musi być ściśle ograniczona i udostępniona tylko dla modułu zarządzania poprzez odpowiedni interface.
 
 # Diagramy przypadków użycia
-[Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
-## Nazwa przypadku użycia
 
-Tutaj miejsce na diagram
+<img src="img/diagram_przypadków_uzycia.png">
 
-Podpis z numeracją (wystarczy diagram 1,2,3...)
+Diagram 1
 
-Opis diagramu
-
-np.:
-Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
+Dirgram przypadków użycia przedstawia moduł symulacji. Aktorami są użtkownika z rolą Administrator, który może zmieniać porę roku i dnia i pobierać aktualne parametry, oraz Moduł Zarządzania, który może dodawać, usuwać, włączać, wyłączać wszystkoe urządzenia oraz pobierać wszystkie urządzenia lub listę konkretnych urządzeń.
 
 [powtórzyć dla każdego diagramu, tak samo nagłówki]
 
@@ -102,9 +107,11 @@ Miejsce na opis diagramu
 
 # Diagram czynności [minimum 1]
 
-Miejsce na diagram
+<img src="img/diagram_czynnosci.png">
 
-Miejsce na opis diagramu
+Diagram 5
+
+Diagram przedstawia kolejne czynności będące częścią cyklu generowania danych produkcji i zużycia energii oraz zapisania ich do bazy danych. Czynnikiem rozpoczynającym cały przebieg jest w tym wypadku określony odstęp czasu, który musi upłynąć między kolejnymi cyklami (5 minut).
 
 # Diagram maszyny stanowej [minimum 1]
 
@@ -114,15 +121,19 @@ Miejsce na opis diagramu
 
 # Diagram komponentów [z czym dany moduł się łączy (wycinek)]
 
-Miejsce na diagram
+<img src="img/diagram_komponentow.png">
 
-Miejsce na opis diagramu
+Diagram 7
+
+Diagram komponentów przedstawia powiązania z 3 innymi modułami (zarządzania, alalizy danych, predykcji) oraz interfejsy, za pomocą których te powiązania są realizowane.
 
 # Diagram pakietów
 
-Miejsce na diagram
+<img src="img/diagram_pakietow.png">
 
-Miejsce na opis diagramu
+Diagram 8
+
+Diagram pakietów przedstawia jakie pakiety zawiera pakiet Symulacji.
 
 # Diagram przeglądu interakcji
 
@@ -132,15 +143,19 @@ Miejsce na opis diagramu
 
 # Diagram strukturalny
 
-Miejsce na diagram
+<img src="img/diagram_strukturalny.png">
 
-Miejsce na opis diagramu
+Diagram 10
+
+Diagram pokazuje powiązanie między obeiktami uczestniczącymi w procesie generowania danych o produkcji i zużyciu energii.
 
 # Diagram harmonogramowania
 
-Miejsce na diagram
+<img src="img/diagram_harmonogramowania.png">
 
-Miejsce na opis diagramu
+Diagram 11
+
+Diagram przedstawia szacukowy czas w jakim przebiegają kolejne etapy symulowania produkcji oraz zużycia energii.
 
 # Dokumentacja użytkownika
 
