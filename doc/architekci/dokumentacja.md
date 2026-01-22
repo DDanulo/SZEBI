@@ -64,7 +64,7 @@ Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkownik
 | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Nazwa:**                          | Edytuj konta innych użytkowników                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Numer:**                          | 1                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **Twórca:**                         | Danylo Dobrianskyi 258668, Paweł Rajnert 251618                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Twórca:**                         | Danylo Dobrianskyi 258668, Paweł Rajnert 251618 - architekci                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Typ przypadku użycia:**           | Szczegółowy niezbędny                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | **Aktorzy:**                        | Administrator                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -89,7 +89,7 @@ Diagram interakcji (sekwencji) 1 przedstawia przypadek użycia "Edytuj konta inn
 | :---------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Nazwa:**                          | Usuń regułe dla alarmów                                                                                                                                                                                                |
 | **Numer:**                          | 2                                                                                                                                                                                                                      |
-| **Twórca:**                         | Danylo Dobrianskyi 258668, Paweł Rajnert 251618                                                                                                                                                                        |
+| **Twórca:**                         | Danylo Dobrianskyi 258668, Paweł Rajnert 251618 - architekci                                                                                                                                                                    |
 | **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                 |
 | **Typ przypadku użycia:**           | Szczegółowy niezbędny                                                                                                                                                                                                  |
 | **Aktorzy:**                        | Administrator                                                                                                                                                                                                          |
@@ -168,13 +168,36 @@ Krok 3:
 Wylogowano się!
 ![s3](./img/screenshot_3.png)
 
+## Przypadek użycia 2 - Dezaktywacja konta użytkownika systemu
 
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
+Krok 1:
+Zaloguj się na konto administratora systemu.
+
+![Przypadek uzycia screen 1](./img/pu2_1.png)
+
+Krok 2:
+Przejdź do zakładki **Administraion**, gdzie znajduje się panel administratora i zarządzania kontami w systemie.
+![Przypadek uzycia screen 2](./img/pu2_2.png)
+
+Krok 3:
+Wybierz opcję **Dezaktywuj** aby dezaktywować konto wybranego użytkownika systemu.
+![Przypadek uzycia screen 3](./img/pu2_3.png)
+
+Krok 4:
+Konto wybranego użytkownika został zdezaktywowane.
+![Przypadek uzycia screen 4](./img/pu2_4.png)
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+
+System został zabezpieczony poprzez odpowiednią walidację wprowadzanych danych oraz reguł biznesowych sprecyzowanych w założeniach projektu. W systemie nie występują luki bezpieczeństwa z uwagi na dokładne zabezpieczenia dostępu odpowiednich ról do zasobów. W celu uzyskania szczegółowych informacji o każdym z modułów należy przejść do odpowiedniej sekcji w dokumentacji.
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
+Projekt systemu zarządzania energią w budynkach inteligentnych został zrealizowany przez studentów 5 semestru Informatyki stosowanej na specjalizacji Infrastruktura i aplikacje sieciowe (IAS). Spełnia on sprecyzowane przez klienta wymagania biznesowe oraz techniczne.
+
+Informacje techniczne:
+- Warstwa logiczna aplikacji została zbudowana z wykorzystaniem Spring Boot,
+- Interfejs graficzny użytkownika została zbudowany z wykorzystaniem ReactJS,
+- Baza danych obsługująca projekt to PostgreSQL w wersji 17,
+- Do kontroli migracji baz danych wykorzystywany jest Flyway.
 
