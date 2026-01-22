@@ -121,7 +121,7 @@ Miejsce na opis diagramu
 
 # Diagram maszyny stanowej [minimum 1]
 
-Miejsce na diagram
+![Diagram maszyny stanowej](img/diagram-maszyny-stanowej.png)
 
 Miejsce na opis diagramu
 
@@ -134,7 +134,7 @@ Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zuży
 
 # Diagram pakietów
 
-Miejsce na diagram
+![Diagram pakietów](img/diagram-pakietow.png)
 
 Miejsce na opis diagramu
 
