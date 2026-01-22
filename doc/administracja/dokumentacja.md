@@ -1,6 +1,5 @@
 
-# Nazwa modułu
-Moduł administracyjny
+# Moduł administracji
 
 ## Projektanci: 
 ```
@@ -12,14 +11,13 @@ Mikita Karabeika 252496
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-Moduł administracyjny ma za zadanie zarządzać działaniem programu oraz urządzeń podczas użytkowania.
+Moduł administracji ma za zadanie zarządzać działaniem programu oraz urządzeń podczas użytkowania.
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków użycia wraz z opisami, trzeba podzielić fragmentami co może robić dany aktor
 
 ## Aktor - Użytkownik niezalogowany
 
-- logowanie użytkowników w systemie.
+- Logowanie użytkowników w systemie.
 
 Użytkownik niezalogowany może zalogować się do systemu przy użyciu login oraz hasła. Po poprawnym uwierzytelnieniu uzyskuje dostęp do funkcjonalności zgodnych z przypisaną rolą. 
 
@@ -27,7 +25,7 @@ Użytkownik niezalogowany może zalogować się do systemu przy użyciu login or
 
 Użytkownik niezalogowany może skorzystać z funkcji odzyskiwania hasła. System wysyła na podany adres e-mail link umożliwiający zresetowanie hasła.
 
-- rejestracja mieszkańca w systemie
+- Rejestracja mieszkańca w systemie
 
 Tylko mieszkaniec może samodzielnie stworzyć konto w systemie, które musi być aktywowany przez adminstratora, żeby mieszkaniec mógł się uwierzytelnić.
 
@@ -37,10 +35,10 @@ Tylko mieszkaniec może samodzielnie stworzyć konto w systemie, które musi by�
 - Zarządzanie kontami użytkowników.
 
 Administrator może:
-- tworzyć konta użytkowników (mieszkańców, administratorów, inżynierów),
-- edytować konta użytkowników (zmienić hasło oraz informacje o użytkowniku).
-- usuwać konta użytkowników,
-- aktywować i dezaktywować konta.
+- Tworzyć konta użytkowników (mieszkańców, administratorów, inżynierów),
+- Edytować konta użytkowników (zmienić hasło oraz informacje o użytkowniku).
+- Usuwać konta użytkowników,
+- Aktywować i dezaktywować konta.
 
 - Nadawanie uprawnień do korzystania z urządzeń (przez administratora).
 
@@ -66,8 +64,6 @@ Administrator zatwierdza dodanie lub usunięcie urządzenia przez Mieszkańca.
 
 Diagram 1.
 
-Opis diagramu
-
 Diagram przypadków użycia przedstawia system logowania do aplikacji. Aktorem jest Użytkownik niezalogowany, który może zalogować się do systemu, zarejestrować się (tylko jako mieszkaniec) oraz zresetować swoje hasło. Diagram pokazuje sposób, w jaki użytkownik uwierzytelnia się do systemu.
 
 ## Przypdaki użycia dla Mieszkańca, Inżyniera oraz Administratora
@@ -75,8 +71,6 @@ Diagram przypadków użycia przedstawia system logowania do aplikacji. Aktorem j
 <img src="img/loggeduser.drawio.png">
 
 Diagram 2.
-
-Opis diagramu 
 
 Diagram przypadków użycia przedstawia system zarządzania uprawnieniami oraz użytkownikami w aplikacji. Aktorami są Mieszkaniec, Inżynier oraz Administrator, którzy mogą się wylogować, tylko Administrator może dodać, usunąć, aktywować, edytować konta użytkowników. Administrator również może zatwierdzać dodanie lub usuniecie urządzenia systemu przez Mieszkańca. Digram pokazuje, w jaki sposób Administrator zarządza systemem.
 
@@ -91,10 +85,7 @@ Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, 
 
 # Diagramy interakcji
 
-
 ## Scenariusz 1
-
-[do wypełnienia szablon scenariusza]
 
 | Pole                                | Treść                                                                                                                                                                                                                                                                                                                               |
 |:------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -107,10 +98,10 @@ Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, 
 | **Krótki opis:**                    | Użytkownik loguje się do systemu za pomocą loginu lub e-maila i hasła, a system weryfikuje dane.                                                                                                                                                                                                                                    |
 | **Warunki wstępne:**                | 1. Konto użytkownika istnieje w systemie.<br/>2. Konto użytkownika jest aktywne.                                                                                                                                                                                                                                                      |
 | **Warunki końcowe:**                | Użytkownik zostaje zalogowany i może korzystać z systemu zgodnie ze swoimi uprawnieniami, lub logowanie nie powiodło się i użytkownik otrzymuje odpowiedni komunikat                                                                                                                                                                |
-| **Główny przepływ zdarzeń:**        | 1. Użytkownik wprowadza login/e-mail i hasło.<br> 2. System weryfikuje poprawność danych. <br>3.Jeśli dane są poprawne, generuje unikalne ID sesji. <br> 4. System zapisuje informacje o logowaniu (czas, ID sesji, adres IP).<br> 5. Użytkownik uzyskuje dostęp do swojego pulpitu i modułów systemu, do których ma uprawnienia. |
+| **Główny przepływ zdarzeń:**        | 1. Użytkownik wprowadza login/e-mail i hasło.<br> 2. System weryfikuje poprawność danych. <br>3. Jeśli dane są poprawne, generuje unikalne ID sesji. <br> 4. System zapisuje informacje o logowaniu (czas, ID sesji, adres IP).<br> 5. Użytkownik uzyskuje dostęp do swojego pulpitu i modułów systemu, do których ma uprawnienia. |
 | **Alternatywne przepływy zdarzeń:** | 1. Jeśli login/e-mail lub hasło są niepoprawne, system wyświetla komunikat o błędzie i zapisuje próbę logowania. <br> 2. Jeśli konto jest dezaktywowane, system blokuje logowanie i wyświetla odpowiedni komunikat.                                                                                                                 |
-| **Specjalne wymagania:**            | Hasła muszą być bezpiecznie przechowywane w postaci hash-u. <br> Sesja musi mieć limit czasu bezczynności (20 min). <br> System musi logować wszystkie próby logowania i generować ID sesji                                                                                                                                         |
-| **Notatki i kwestie:**              | Scenariusz 1 odpowiada diagramowi sekwencji 1.                                                                                                                                                                                                                                                                                      |
+| **Specjalne wymagania:**            | Hasła muszą być bezpiecznie przechowywane w postaci hash-u. <br> Sesja musi mieć limit czasu bezczynności (15 min). <br> System musi logować wszystkie próby logowania i generować ID sesji                                                                                                                                         |
+| **Notatki i kwestie:**              | Scenariusz 1 odpowiada diagramowi sekwencji. 1.                                                                                                                                                                                                                                                                                      |
 
 ## Diagram interakcji 1
 
@@ -136,7 +127,7 @@ Diagram przedstawia przebieg procesu logowania użytkownika. Pokazuje komunikacj
 | **Główny przepływ zdarzeń:** | 1. Administrator wypełnia formularz dodania inżyniera. <br> 2. System sprawdza, czy login inżyniera jest unikalny i czy wszystkie pola w formularzu są wypełnione. <br> 3. System dodaje konto inżyniera do bazy danych. |
 | **Alternatywne przepływy zdarzeń:** | System blokuje operację, jeżeli login przypisany do konta inżyniera jest nieunikalny.                                                                                                                                    |
 | **Specjalne wymagania:** | Operacja powinna być atomowa — w przypadku błędu żadne częściowe dane nie powinny pozostać.                                                                                                                              |
-| **Notatki i kwestie:** | Scenariusz 2 odpowiada diagramowi sekwencji 2                                                                                                                                                                            |
+| **Notatki i kwestie:** | Scenariusz 2 odpowiada diagramowi sekwencji. 2                                                                                                                                                                            |
 
 ## Diagram interakcji 2
 
@@ -212,13 +203,13 @@ Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formul
 
 Zrzut ekranu 1.
 
-Następnie wypełniamy formularz (Wszystkie pola musza być wypełnione) i klikamy niebieski przycisk "Zaloguj się".
+Następnie wypełniamy formularz (wszystkie pola musza być wypełnione) i klikamy niebieski przycisk "Zaloguj się".
 
 ![img_1.png](img/img_1.png)
 
 Zrzut ekranu 2.
 
-Jeśli dane podane w formularzu logowania zgadzają się, to aplikacja przekieruje na strone główną użytkownika.
+Jeśli dane podane w formularzu logowania zostały poprawnie wprowadzone, to aplikacja przekieruje użytkownika aplikacji na strone główną.
 
 ![img_2.png](img/img_2.png)
 
@@ -227,19 +218,19 @@ Zrzut ekranu 3.
 
 ## Przypadek użycia 2 - Resetuj hasło
 
-Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formularza logowania, na którym będzie można też zresetować hasło.
+Po otwarciu strony wciśnij przycisk **"Zaloguj się"**, w celu wyświetlenia formularza logowania. Na tym samym widoku dostępna jest też opcja resetowania hasła.
 
 ![img.png](img/img.png)
 
 Zrzut ekranu 4.
 
-Wciskamy link "zapomniałem hasła", w celu wyświetlenia formularzu resetowania hasła. 
+Wybieramy opcję **"Zapomniałem hasła"**, w celu wyświetlenia formularzu resetowania hasła. 
 
 ![img_1.png](img/img_1.png)
 
 Zrzut ekranu 5.
 
-Podajemy e-mail naszego konta użytkownika (podanego podczas rejestracji), jeśli konto z takim adresem email istnieje to, na pocztę elektroniczną zostanie przesłany link do resetowania hasła.
+Podajemy e-mail naszego konta użytkownika (podanego podczas rejestracji) i jeśli konto z takim adresem email istnieje to, na pocztę elektroniczną zostanie przesłany link do resetowania hasła.
 
 ![img_3.png](img/img_3.png)
 
@@ -251,13 +242,13 @@ Wiadomość na poczcie elektronicznej będzie wyglądać w następujący sposób
 
 Zrzut ekranu 7.
 
-Po wciśnięciu linku z treści emailu (spójrz Zrzut ekranu 7), przekieruje nas na strone z formularzem resetowania hasła.
+Po wejściu w link w otrzymanej wiadomości mailowej (treść przedstawiona na zrzucie ekranu 7), zostaniemy przekierowani na strone z formularzem resetowania hasła.
 
 ![img_5.png](img/img_5.png)
 
 Zrzut ekranu 8.
 
-Udane resetowanie hasła będzie potwierdzone komunikatem (spójrz Zrzut ekranu 9).
+Udane resetowanie hasła będzie potwierdzone komunikatem (Zrzut ekranu 9).
 
 ![img_6.png](img/img_6.png)
 
@@ -265,29 +256,29 @@ Zrzut ekranu 9.
 
 ## Przypadek użycia 3 - Dodaj konto
 
-Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formularza logowania.
+Po otwarciu strony wciśnij przycisk **"Zaloguj się"**, w celu wyświetlenia formularza logowania.
 
 ![img.png](img/img.png)
 
 Zrzut ekranu 10.
 
-Następnie wypełniamy formularz (danymi konta z uprawnieniami Administratora) i klikamy niebieski przycisk "Zaloguj się".
+Następnie wypełniamy formularz (danymi konta z uprawnieniami Administratora) i klikamy niebieski przycisk **"Zaloguj się"**.
 
 ![img_1.png](img/img_1.png)
 
 Zrzut ekranu 11.
 
-Z głównego widoku przechodzimy do panelu administratora poprzez wciśnięcie przycisku "Administration".
+Z głównego widoku przechodzimy do panelu administratora poprzez wciśnięcie przycisku **"Administration"**.
 
 ![img_2.png](img/img_2.png)
 
 Zrzut ekranu 12.
 
-W panelu administratora przechodzimy do formularza tworzenia konta poprzez wciśnięcie przycisku "Stwórz użytkownika".
+W panelu administratora przechodzimy do formularza tworzenia konta poprzez wciśnięcie przycisku **"Stwórz użytkownika"**.
 
 ![img.png](img/img_12.png)
 
-Po wypełnieniu każdego pola oraz wybraniu uprawnień nowego konta wciskamy przycisk "Utwórz użytkownika".
+Po wypełnieniu każdego pola oraz wybraniu uprawnień nowego konta wciskamy przycisk **"Utwórz użytkownika"**.
 
 ![img_1.png](img/img_11.png)
 
@@ -299,7 +290,8 @@ Jeśli utworzenie konta powiodło się, wyświetli się odpowiedni komunikat.
 
 Zrzut ekranu 14.
 
-Można jeszcze potwierdzić stworzenie konta poprzez wyświetlenie listy użytkowników, poprzez powrót do panelu administratora, aby powrócić do panelu, można wcisnąć przycisk "Powrót" (Spójrz Zrzut ekranu 13).
+Można jeszcze potwierdzić stworzenie konta poprzez wyświetlenie listy użytkowników, poprzez powrót do panelu administratora, aby powrócić do panelu, można wcisnąć przycisk
+**"Powrót"** (Zrzut ekranu 13).
 
 ![img_3.png](img/img_13.png)
 
@@ -307,7 +299,7 @@ Zrzut ekranu 15.
 
 ## Obsługa błędów, sytuacji wyjątkowych
 
-Dostęp do funkcji systemu został zabezpieczony poprzez użycie tokena JWT, który realizuje podział na różne poziomy dostępu do aplikacji oraz zabezpiecza punkty końcowe warstwy logiki naszej aplikacji. Hasła w bazie danych są haszowane przez co, wyciek danych nie umożliwia logowania na konta systemu. Hasła podawane podczas rejestracji podlegają walidacji, hasło nie może być krótsze niż 8 znaków i musi się składać z przynajmniej jednej małej, jednej dużej litery oraz z jednego znaku specjalnego. Login nie może mieć mniej niż 8 znaków oraz musi być unikalny również, Email musi być unikalny.  
+Dostęp do funkcji systemu został zabezpieczony poprzez użycie tokenu JWT, który realizuje podział na różne poziomy dostępu do aplikacji oraz zabezpiecza punkty końcowe warstwy logiki naszej aplikacji. Hasła w bazie danych są zapisywane po zastosowaniu funkcji hashującej przez co, wyciek danych nie umożliwia jawnego logowania na konta systemu. Hasła podawane podczas rejestracji podlegają walidacji- hasło nie może być krótsze niż 8 znaków, musi się składać z przynajmniej jednej małej, jednej dużej litery oraz z jednego znaku specjalnego. Login nie może mieć mniej niż 8 znaków oraz musi być unikalny. Email również musi być unikalny i należeć jedynie do jednego konta.  
 
 ## Podsumowanie
 
