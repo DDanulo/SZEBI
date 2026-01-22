@@ -78,7 +78,7 @@ function App() {
                     <Routes>
                         <Route
                             path="/"
-                            element={user ? <ScheduleManager/> : <Navigate to="/login" replace />}
+                            element={user ? <ScheduleManager/> : <Navigate to="/login" replace/>}
                         />
                         <Route path="/simulation" element={<Simulation/>}/>
                         <Route path="/alerts" element={<AlertsModule/>}/>
@@ -86,15 +86,7 @@ function App() {
                         <Route path="/users" element={<AdminUsersPage/>}/>
                         <Route path="/users/edit/:id" element={<AdminUsersEditPage/>}/>
                         <Route path="/users/create" element={<AdminUsersCreatePage/>}/>
-                        <Route
-                            path="/reports"
-                            element={
-                                <RequireRole role="ADMIN">
-                                    <ReportModule/>
-                                </RequireRole>
-                            }
-                        />
-
+                        <Route path="/reports" element={<ReportModule/>}/>
                         <Route path="/predictions" element={<PredictionViewer/>}/>
                         <Route path="/communication" element={<Communication/>}/>
                         <Route path="/login" element={<LoginPage/>}/>

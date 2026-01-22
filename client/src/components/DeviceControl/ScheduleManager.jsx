@@ -230,7 +230,7 @@ const ScheduleManager = () => {
                                 </div>
                                 <div className="form-group" style={{flex: 1}}>
                                     {/* ZMIANA: Blokujemy input dla Wiatraków */}
-                                    <label>{newDeviceType === 'APPLIANCE' ? "Zyżycie (kwh)" : "Pow. (m²)"}</label>
+                                    <label>{newDeviceType === 'APPLIANCE' ? "Zużycie (kwh)" : "Pow. (m²)"}</label>
                                     <input
                                         type="number"
                                         className="form-input"
