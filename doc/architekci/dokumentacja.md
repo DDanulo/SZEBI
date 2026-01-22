@@ -110,13 +110,15 @@ Diagram interakcji (sekwencji) 2 przedstawia przypadek użycia "Usuń regułe dl
 
 # Diagram czynności 
 
-Miejsce na diagram
+![Diagram czynności](./img/czynności.png)
+Diagram 6.
 
-Miejsce na opis diagramu
+Diagram czynności przedstawia kolejność wykonywania czynności i spełniania warunków podczas tworzenia harmonogramu dla urządzenia.
 
 # Diagram maszyny stanowej 
 
 ![Diagram maszyny stanowej](./img/DiagramMaszynyStanowej.png)
+Diagram 5.
 
 Diagram maszyny stanowej przedstawia generowanie tokenu JWT podczas logowania użytkownika. Czas życia tokenu wynosi 15 minut, a po ich upływie należy zalogować się ponownie, aby móc dalej korzystać z systemu. W przypadku nieaktywności użytkownika przez wyżej opisany czas, zostanie on automatycznie wylogowany. Token nie przedłuża się automatycznie po czasie 15 minut.
 
@@ -152,23 +154,20 @@ Diagram 10.
 Diagram harmonogramowania przedstawia zaimplementowany cykl życia sesji użytkownika - ma aktywny token JWT do uwierzytelnienia przez 15 minut, a póżniej sesja wygasa, ale jest możliwość jej odświeżenia przez następne 7 dni, po czym sesja kompletnie się kończy.
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+## Przypadek użycia 1 - Wylogowanie się z konta
 
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
+Krok 1:
+Kliknij przycisk "Wyloguj" na górnym pasku przycisków.
+![s1](./img/screenshot_1.png)
 
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
+Krok 2:
+Potwierdż swój wybór w wyświetlonym komunikacie.
+![s2](./img/screenshot_2.png)
+
+Krok 3:
+Wylogowano się!
+![s3](./img/screenshot_3.png)
+
 
 [najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
 
