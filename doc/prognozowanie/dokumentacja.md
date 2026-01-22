@@ -98,21 +98,21 @@ Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu
 
 ## Scenariusz 2
 
-| Pole                                | Treść                                                                                                                                                                                                                                |
-|:------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Nazwa:**                          | Wyświetlanie prognozy zużycia energii elektrycznej                                                                                                                                                                                   |
-| **Numer:**                          | 2                                                                                                                                                                                                                                    |
-| **Twórca:**                         | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                           |
-| **Poziom ważności:**                | Średni                                                                                                                                                                                                                               |
-| **Typ przypadku użycia:**           | Przeciętnie istotny                                                                                                                                                                                                                  |
-| **Aktorzy:**                        | Administrator, Inżynier                                                                                                                                                                                                              |
-| **Krótki opis:**                    | Wyświetlenie prognozy zużycia energii elektrycznej                                                                                                                                                                                   |
-| **Warunki wstępne:**                | Zostały wcześniej wygenerowane i zapisane prognozy zużycia energii elektrycznej                                                                                                                                                      |
-| **Warunki końcowe:**                | W graficznym interfejsie użytkownika zostaje wyświetlona prognoza zużycia energii elektrycznej w formie wykresu oraz tabeli                                                                                                          |
-| **Główny przepływ zdarzeń:**        | 1. Pobranie zapisanych wcześniej najnowszych prognoz zużycia energii elektrycznej <br> 2. Wyświetlenie najnowszych prognoz zużycia energii elektrycznej na wykresie oraz w tabeli                                                    |
-| **Alternatywne przepływy zdarzeń:** | 2a. W przypadku wybrania w odpowiedniej kontrolce w graficznym interfejsie użytkownika zakresu datowego, w tabeli zostaną wyświetlone tylko te prognozy zużycia energii elektrycznej, które zostały wygenerowane w podanym zakresie. |
-| **Specjalne wymagania:**            | Istnieją zapisane wygenerowane wcześniej prognozy                                                                                                                                                                                    |
-| **Notatki i kwestie:**              | Brak                                                                                                                                                                                                                                 |
+| Pole                                | Treść                                                                                                                                                                                                                                                     |
+|:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Wyświetlanie prognozy zużycia energii elektrycznej                                                                                                                                                                                                        |
+| **Numer:**                          | 2                                                                                                                                                                                                                                                         |
+| **Twórca:**                         | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                                                |
+| **Poziom ważności:**                | Średni                                                                                                                                                                                                                                                    |
+| **Typ przypadku użycia:**           | Przeciętnie istotny                                                                                                                                                                                                                                       |
+| **Aktorzy:**                        | Administrator, Inżynier                                                                                                                                                                                                                                   |
+| **Krótki opis:**                    | Wyświetlenie prognozy zużycia energii elektrycznej                                                                                                                                                                                                        |
+| **Warunki wstępne:**                | Zostały wcześniej wygenerowane i zapisane prognozy zużycia energii elektrycznej                                                                                                                                                                           |
+| **Warunki końcowe:**                | W graficznym interfejsie użytkownika zostaje wyświetlona prognoza zużycia energii elektrycznej w formie wykresu oraz tabeli                                                                                                                               |
+| **Główny przepływ zdarzeń:**        | 1. Pobranie zapisanych wcześniej najnowszych prognoz zużycia energii elektrycznej <br> 2. Wyświetlenie najnowszych prognoz zużycia energii elektrycznej na wykresie oraz w tabeli                                                                         |
+| **Alternatywne przepływy zdarzeń:** | 1a. W przypadku wybrania w odpowiedniej kontrolce w graficznym interfejsie użytkownika zakresu datowego, zostaną pobrane, a następnie wyświetlone w tabeli tylko te prognozy zużycia energii elektrycznej, które zostały wygenerowane w podanym zakresie. |
+| **Specjalne wymagania:**            | Istnieją zapisane wygenerowane wcześniej prognozy                                                                                                                                                                                                         |
+| **Notatki i kwestie:**              | Brak                                                                                                                                                                                                                                                      |
 
 ## Diagram interakcji 2
 
@@ -124,27 +124,28 @@ Na diagramie został uwidoczniony przepływ informacji między klasami związany
 
 # Diagram czynności [minimum 1]
 
-Miejsce na diagram
+![Diagram czynności](img/activity_diagram.jpeg)
 
-Miejsce na opis diagramu
+Diagram przedstawia czynności wykonywane w przypadku wyświetlenia prognoz zużycia energii elektrycznej.
 
-# Diagram maszyny stanowej [minimum 1]
+# Diagram maszyny stanowej
 
-Miejsce na diagram
+![Diagram maszyny stanowej]()
 
-Miejsce na opis diagramu
+Diagram przedstawia stany, w których znajduje się system, gdy wyświetla prognozy zużycia energii elektrycznej.
 
 # Diagram komponentów [z czym dany moduł się łączy (wycinek)]
 
-Miejsce na diagram
+![Diagram komponentów](img/component_diagram.png)
 
-Miejsce na opis diagramu
+Moduł prognozowania łączy się z modułem symulacji poprzez bazę danych i pobiera z niej dane zużycia energii elektrycznej z poprzednich dni.
+Moduł alarmowania i alertów łączy się z modułem prognozowania poprzez wystawiony interfejs **ForecastService**, dzięki czemu moduł może dokładnie weryfikować poprawność najnowszych prognoz zużycia energii elektrycznej. 
 
 # Diagram pakietów
 
-Miejsce na diagram
+![Diagram pakietów](img/package_diagram.jpeg)
 
-Miejsce na opis diagramu
+Na diagramie zostały zaprezentowane relacje pomiędzy poszczególnymi pakietami modułu prognozowania.
 
 # Diagram przeglądu interakcji
 
