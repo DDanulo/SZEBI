@@ -106,6 +106,17 @@ public ResponseEntity<List<Device>> getDevicesByOwner(@PathVariable UUID ownerId
             @RequestParam(required = false) Integer maxPower,
             @RequestParam(required = false) Integer minWind
     ) {
+        for (IDeviceAuth manager : deviceManagers) {
+            boolean nameExists = manager.getDevices().stream()
+                    .anyMatch(d -> d.getName().equalsIgnoreCase(name));
+
+            if (nameExists) {
+
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+
         if(!Objects.equals(type, "WIND"))
              {
             if (area == null || area <= 0) {
