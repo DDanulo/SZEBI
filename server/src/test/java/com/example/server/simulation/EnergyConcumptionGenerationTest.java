@@ -53,7 +53,7 @@ public class EnergyConcumptionGenerationTest {
 
     @Test
     public void shouldSuccesfulyGenerateEnergyConsumption() {
-        ConsumingDevice consumingDevice = new ConsumingDevice("some consuming device", true);
+        ConsumingDevice consumingDevice = new ConsumingDevice("some consuming device", true, 12d);
         consumingDeviceService.addConsumingDevice(consumingDevice);
         consumingDeviceService.simulateEnergyConsumption();
         BigDecimal newValue = consumingDeviceService.getAllConsumingDevices().getLast().getTotalConsumed();
@@ -63,7 +63,7 @@ public class EnergyConcumptionGenerationTest {
 
     @Test
     public void shouldSuccessfulyGenerateMeasurementForEnergyConsumption() {
-        ConsumingDevice consumingDevice = new ConsumingDevice("some another funky consuming device", true);
+        ConsumingDevice consumingDevice = new ConsumingDevice("some another funky consuming device", true, 12d);
         consumingDeviceService.addConsumingDevice(consumingDevice);
         consumingDeviceService.simulateEnergyConsumption();
         List<ConsumedEnergyMeasure> measures = consumingMeasureRepository.findAll();
@@ -76,7 +76,7 @@ public class EnergyConcumptionGenerationTest {
 
     @Test
     public void ShouldNotGenerateConsumptionForInactiveDevice() {
-        ConsumingDevice consumingDevice = new ConsumingDevice("some bad device", false);
+        ConsumingDevice consumingDevice = new ConsumingDevice("some bad device", false, 12d);
         consumingDeviceService.addConsumingDevice(consumingDevice);
         consumingDeviceService.simulateEnergyConsumption();
         BigDecimal newValue = consumingDeviceService.getAllConsumingDevices().getLast().getTotalConsumed();
@@ -85,7 +85,7 @@ public class EnergyConcumptionGenerationTest {
 
     @Test
     public void shouldSuccessfulyNotGenerateMeasurementForInactiveDevice() {
-        ConsumingDevice consumingDevice = new ConsumingDevice("some another bad consuming device", false);
+        ConsumingDevice consumingDevice = new ConsumingDevice("some another bad consuming device", false, 12d);
         consumingDeviceService.addConsumingDevice(consumingDevice);
         consumingDeviceService.simulateEnergyConsumption();
         List<ConsumedEnergyMeasure> measures = consumingMeasureRepository.findAll();

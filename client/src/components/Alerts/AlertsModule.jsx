@@ -2,26 +2,30 @@ import React from "react";
 import SosButton from "./SosButton";
 import RulesManager from "./RulesManager";
 import AlertHistory from "./AlertHistory";
+import {useAuth} from "../Administration/AuthContext.jsx";
 
 const AlertsModule = () => {
+    const { user } = useAuth();
     return (
         <div style={styles.container}>
             <h2 style={styles.header}></h2>
 
             <div style={styles.section}>
-                <SosButton />
+                <SosButton/>
             </div>
 
-            <div style={styles.grid}>
-                <div style={styles.column}>
-                    <RulesManager />
-                </div>
+            {(user?.role === 'ADMIN' || user?.role === "ENGINEER") && (
+                <div style={styles.grid}>
+                    <div style={styles.column}>
+                        <RulesManager/>
+                    </div>
 
 
-                <div style={styles.column}>
-                    <AlertHistory />
+                    <div style={styles.column}>
+                        <AlertHistory/>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

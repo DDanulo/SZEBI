@@ -78,6 +78,6 @@ public class ConsumingDeviceService {
     public void simulateEnergyConsumption() {
         double temperature = simulator.getTemperature();
         consumingDeviceRepository.findByWorkingTrue().forEach(device -> consumingMeasureRepository
-                .save(new ConsumedEnergyMeasure(LocalDateTime.now(),device.consumeEnergy(temperature), device)));
+                .save(new ConsumedEnergyMeasure(LocalDateTime.now(),device.consumeEnergy(temperature ), device)));
     }
 }

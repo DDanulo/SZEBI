@@ -61,7 +61,7 @@ public class ManagerAppliance implements IDeviceAuth {
 
     @Override
     public Device addDevice(String name, Double area, Integer maxPower, Integer minWind, UUID ownerId) {
-         ConsumingDevice device = new ConsumingDevice(name, true);
+         ConsumingDevice device = new ConsumingDevice(name, true, area);
 
         device.setOwnerId(ownerId);
         var saved = controlDevices.addConsumingDevice(device);

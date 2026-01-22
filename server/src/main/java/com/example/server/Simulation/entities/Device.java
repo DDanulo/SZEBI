@@ -26,8 +26,8 @@ public abstract  class Device {
     @Column
     private boolean working;
 
-    @Column
-    protected int maxPowerPerHour = 0;
+//    @Column
+//    protected int maxPowerPerHour;
 
     @Column(name = "owner_id")
     private UUID ownerId;
