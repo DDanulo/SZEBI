@@ -1,173 +1,260 @@
 
-# Nazwa modułu
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+# Moduł analizy danych i raportowania
 
 ## Projektanci: 
 ```
-imie, nazwisko numer indeksu
-imie, nazwisko numer indeksu
+Remigiusz Bartczak 251677,252926
+Jan Kozłowski 251562
 ```
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
+Moduł pobiera, przetwarza i analizuje, a następnie wizualizuje dane. Dotyczą one zużycia i produkcji energii poszczególnych lub wszystkich urządzeń w budynku na przestrzeni danego okresu w czasie. Dostarcza on Administratorom i Inżynierom niezbędne informacje do monitorowania oraz optymalizacji działania poszczególnych urządzeń.
+
 
 ### Opis możliwości funkcjonalnych modułu
-Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
+* Generowanie raportu zużycia energii (w kWh) w wybranym zakresie dat dla np. Lodówki.
+* Generowanie raportu produkcji energii (w kWh) np. dla paneli słonecznych w wybranym zakresie dat.
+* Wybranie rodzaju raportu (liniowy, słupkowy, kołowy) oraz filtrowanie po odpowiednik okresie w czasie, oraz po poszczególnych urządzeniach.
+* Zapis dowolnie wygenerowanego raportu analitycznego do pliku w formacie PDF na dysk użytkownika.
+* Interfejs udostępniający generowanie oraz pobieranie raportów wraz z odpowiednimi opcjami wybranymi przez użytkownika.
 
 ### Opis możliwości niefunkcjonalnych modułu
-Opisac wymagania niefunkcjonalne
+* Złożone zapytania raportowe (np. roczne zestawienie zużycia wg urządzenia) muszą być przetworzone i zwrócone z bazy danych PostgreSQL w czasie skończonym (raport musi zostać wygenerowany, o ile dane istnieją).
+* Wartości zużycia i produkcji energii (w kWh) prezentowane w raporcie muszą być zgodne w 100% z danymi źródłowymi zapisanymi przez Moduł Symulacji.
+* W przypadku błędu zapisu pliku PDF system musi wyświetlić dedykowany komunikat o błędzie (np. "Błąd zapisu: ścieżka niedostępna" lub "Brak wolnego miejsca") zamiast ogólnej awarii aplikacji.
+* Dostęp do raportów musi być ściśle ograniczony wyłącznie dla ról Administratora oraz Inżyniera. Pozostali użytkownicy nie mają dostępu do tej funkcjonalności.
 
 # Diagramy przypadków użycia
-[Diagramy przypadków użycia (obejmują wszystkie przypadki użycia!)]
-## Nazwa przypadku użycia
 
-Tutaj miejsce na diagram
+## Diagram 1 - przypadki użycia dla inżyniera
 
-Podpis z numeracją (wystarczy diagram 1,2,3...)
+![Diagram przypadków użycia dla inżyniera](img/diagram-przypadkow-uzycia-1_inzynier.png)
 
-Opis diagramu
+Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest inżynier, który może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
-np.:
-Diagram przypadków użycia przedstawia system sklepu internetowego. Aktorem jest Klient, który może przeglądać ofertę, dodawać produkty do koszyka oraz składać zamówienie. Dodatkowym aktorem jest Administrator, odpowiedzialny za zarządzanie produktami i realizację zamówień. Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkowników z systemem.
+## Diagram 2 - przypadki użycia dla administratora
 
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
+![Diagram przypadków użycia dla administratora](img/diagram-przypadkow-uzycia-2_administrator.png)
+
+Diagram przypadków użycia przedstawia system zarządzania energią w budynkach inteligentnych. Aktorem jest administrator, który bardzo podobnie do inżyniera może generować raport zużycia lub produkcji energii, wybrać do niego odpowiedni zakres dat i urządzenia, dla których ma zostać wygenerowany raport. Ma też możliwość zapisu raportu na dysku jako plik PDF.
 
 # Diagramy klas
-[diagram(y) klas (obejmują wszystkie klasy)]
 
-Miejsce na diagram
+![Diagram klas](img/diagram-klas.png)
 
-Opis diagramu
+Diagram klas przedstawia architekturę systemu raportowania, którego fundamentem są klasy modelu DataPoint i DeviceInfo oraz definiujący rodzaj pomiaru typ wyliczeniowy DataType.
+
+Za warstwę danych i logiki odpowiadają: DataFetcher, który pobiera surowe informacje z bazy, oraz DataProcessor, który wykonuje na nich obliczenia matematyczne i agregacje. Te dwa komponenty są wykorzystywane przez główny serwis DataProvider (implementujący interfejs IData), który integruje pobieranie z przetwarzaniem.
+
+Całością steruje ReportController, który udostępnia dane poprzez API i – przy wsparciu klasy PdfReportGenerator – generuje gotowe raporty w formacie PDF.
 
 # Diagramy interakcji
-[diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
 
 ## Scenariusz 1
 
-[do wypełnienia szablon scenariusza]
-
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                                                       |
+|:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Generowanie raportu zużycia energii                                                                                                                                                                                                                                         |
+| **Numer:**                          | 1                                                                                                                                                                                                                                                                           |
+| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                      |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                      |
+| **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                      |
+| **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                     |
+| **Krótki opis:**                    | Generowanie raportu zużycia energii dla wybranego okresu w czasie.                                                                                                                                                                                                          |
+| **Warunki wstępne:**                | Użytkownik bazodanowy jest zalogowany i posiada uprawnienia (jest administratorem lub inżynierem). W bazie danych PostgreSQL istnieją dane dotyczące zużycia energii w danym okresie czasu z Modułu Symulacji.                                                              |
+| **Warunki końcowe:**                | Raport zostaje wygenerowany i wyświetlony.                                                                                                                                                                                                                                  |
+| **Główny przepływ zdarzeń:**        | 1. Administrator/inżynier wybiera raport zużycia energii. <br> 2. Zalogowany użytkownik wybiera dany okres czasu. <br> 3. Użytkownik wybiera opcję "Generuj raport" <br/> 4. System pobiera dane z bazy PostgreSQL, przetwarza je. <br/> 5. System wyświetla gotowy raport. |
+| **Alternatywne przepływy zdarzeń:** | 5a. Użytkownik pobiera raport jako plik PDF.                                                                                                                                                                                                                                |
+| **Specjalne wymagania:**            | -                                                                                                                                                                                                                                                                           |
+| **Notatki i kwestie:**              | Scenariusz ten będzie zilustrowany na Diagramie Sekwencji 1.                                                                                                                                                                                                                |
 
 ## Diagram interakcji 1
 
-Miejsce na diagram interakcji
+![Diagram interakcji 1](img/diagram-interakcji-1.png)
 
-Miejsce na podpis
+Diagram 1: Generowanie raportu zużycia energii
 
-Miejsce na opis diagramu
+Diagram ten ilustruje przepływ danych rozpoczynający się od żądania użytkownika w ReportController. Proces rozpoczyna się od wspólnego kroku pobrania surowych danych z bazy PostgreSQL za pośrednictwem DataFetcher. Następnie zastosowano blok alternatywny (alt), który rozdziela logikę na dwie ścieżki:
+
+Wyświetlenie wykresu: Dane trafiają do DataProcessor w celu agregacji (np. miesięcznej), a wynik jest zwracany jako JSON.
+
+Pobranie PDF: Surowe dane są przekazywane do PdfReportGenerator, który tworzy i zwraca plik dokumentu.
 
 ## Scenariusz 2
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                                                             |
+|:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Generowanie raportu produkcji energii                                                                                                                                                                                                                                             |
+| **Numer:**                          | 2                                                                                                                                                                                                                                                                                 |
+| **Twórca:**                         | Remigiusz Bartczak 251677,252926; Jan Kozłowski 251562                                                                                                                                                                                                                            |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                            |
+| **Typ przypadku użycia:**           | Ogólny                                                                                                                                                                                                                                                                            |
+| **Aktorzy:**                        | Administrator, inżynier                                                                                                                                                                                                                                                           |
+| **Krótki opis:**                    | Generowanie raportu produkcji energii dla wybranych urządzeń.                                                                                                                                                                                                                     |
+| **Warunki wstępne:**                | Użytkownik bazodanowy jest zalogowany i posiada uprawnienia (jest administratorem lub inżynierem). W bazie danych PostgreSQL istnieją dane dotyczące produkcji energii dla danych urządzeń z Modułu Symulacji.                                                                    |
+| **Warunki końcowe:**                | Raport zostaje wygenerowany i wyświetlony.                                                                                                                                                                                                                                        |
+| **Główny przepływ zdarzeń:**        | 1. Administrator/inżynier wybiera raport produkcji energii. <br> 2. Zalogowany użytkownik wybiera konkretne urządzenie. <br> 3. Użytkownik wybiera opcję "Generuj raport" <br/> 4. System pobiera dane z bazy PostgreSQL, przetwarza je. <br/> 5. System wyświetla gotowy raport. |
+| **Alternatywne przepływy zdarzeń:** | 2a. Zalogowany użytkownik wybiera "Wszystkie urządzenia"                                                                                                                                                                                                                          |
+| **Specjalne wymagania:**            | -                                                                                                                                                                                                                                                                                 |
+| **Notatki i kwestie:**              | Scenariusz ten będzie zilustrowany na Diagramie Sekwencji 2.                                                                                                                                                                                                                      |
 
 ## Diagram interakcji 2
 
-Miejsce na diagram interakcji
+![Diagram interakcji 2](img/diagram-interakcji-2.png)
 
-Miejsce na podpis
+Diagram 2: Generowanie raportu produkcji energii
 
-Miejsce na opis diagramu
+Ten diagram koncentruje się na różnicach w sposobie pozyskiwania danych w zależności od kryteriów wyboru urządzenia. Blok alternatywny (alt) występuje tutaj na samym początku interakcji z warstwą danych:
 
-# Diagram czynności [minimum 1]
+Konkretne urządzenie: System wywołuje metodę queryMeasure w DataFetcher, filtrując wyniki po ID urządzenia.
 
-Miejsce na diagram
+Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając pełen zakres danych. Niezależnie od wybranej ścieżki, uzyskana lista jest następnie przetwarzana przez DataProcessor (sumowanie, agregacja dzienna) przed finalną prezentacją użytkownikowi.
 
-Miejsce na opis diagramu
+# Diagram czynności 1
 
-# Diagram maszyny stanowej [minimum 1]
+![Diagram czynnosci 1](img/diagram-czynnosci-pdf.png)
 
-Miejsce na diagram
+Diagram przedstawia sekwencyjny proces tworzenia dokumentu raportowego. 
+Rozpoczyna się od pobrania surowych danych historycznych przez DataFetcher, 
+po czym następuje opcjonalna filtracja rekordów według identyfikatorów urządzeń. 
+Kluczowym elementem jest równoległe pobranie metadanych (aliasów) z bazy PostgreSQL, 
+co pozwala klasie PdfReportGenerator na renderowanie czytelnych nazw urządzeń zamiast surowych kluczy technicznych 
+przed wysłaniem gotowego strumienia bajtów do użytkownika.
 
-Miejsce na opis diagramu
+# Diagram czynności 2
 
-# Diagram komponentów [z czym dany moduł się łączy (wycinek)]
+![Diagram czynnosci 2](img/diagram-czynnosci-przebieg-analizy-danych-i-agregacji.png)
 
-Miejsce na diagram
+Przepływ ten ilustruje logikę obliczeniową systemu. Po odebraniu zapytania o statystyki, 
+serwis DataProvider pobiera dane pomiarowe i aktualizuje znacznik czasu ostatniej aktywności. 
+Dane są następnie przekazywane do DataProcessor, który w zależności od parametru czasu (godzina, dzień, rok) 
+wykonuje operacje sumowania lub uśredniania przy użyciu strumieni Javy.
 
-Miejsce na opis diagramu
+# Diagram maszyny stanowej
+
+![Diagram maszyny stanowej](img/diagram-maszyny-stanowej.png)
+
+Diagram obrazuje cykl życia pojedynczego żądania analitycznego. 
+Moduł znajduje się w stanie "Bezczynności" do momentu otrzymania sygnału z kontrolera API. 
+Proces przechodzi przez fazy ekstrakcji danych z bazy PostgreSQL, 
+aktywnego przetwarzania w procesorze lub generowania dokumentu, 
+kończąc się stanem finalizacji odpowiedzi. 
+Po wysłaniu danych do klienta system automatycznie powraca do stanu oczekiwania, zwalniając zajęte zasoby.
+
+# Diagram komponentów
+
+![Diagram komponetów](img/diagram-komponentow.png)
+
+Moduł analizy danych odczytuje dane historyczne (zużycie, produkcja) zapisane przez Moduł Symulacji w bazie dancyh PostgreSQL. Stanowi to surowiec do wszelkich analiz, wykresów i raportów.
+Udostępnia on również bieżące, przetworzone i zweryfikowane dane (np. zużycie z ostatniego tygodnia), umożliwiając Modułowi Alarmowania i Alertów szybkie wykrywanie anomalii i awarii (np. nagłe skoki zużycia energii przez dane urządzenie).
 
 # Diagram pakietów
 
-Miejsce na diagram
+![Diagram pakietów](img/diagram-pakietow.png)
 
-Miejsce na opis diagramu
+Struktura pakietów izoluje od siebie kluczowe warstwy odpowiedzialne za logikę biznesową. 
+Pakiet model dostarcza wspólny język danych dla całego modułu. 
+Pakiet api definiuje abstrakcyjne kontrakty (interfejsy), 
+co pozwala na niezależny rozwój warstwy service (implementującej logikę) 
+oraz warstwy controller (obsługującej komunikację REST), zapewniając wysoką modularność i łatwość testowania.
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+![Diagram przeglądu interakcji](img/diagram-przegladu-interakcji.png)
 
-Miejsce na opis diagramu
+Diagram przeglądu interakcji syntetyzuje logikę biznesową modułu, 
+przedstawiając przepływ sterowania pomiędzy wysokopoziomowymi fragmentami interakcji, 
+oznaczonymi ramkami odniesienia (ref). Całość procesu rozpoczyna się od zdefiniowania parametrów 
+wejściowych przez użytkownika (zakres czasowy oraz typ danych: produkcja/zużycie), 
+co inicjuje wywołania odpowiednich endpointów w klasie ReportController. 
+Pierwszym kluczowym krokiem jest odniesienie do procedury pobierania danych z bazy PostgreSQL, 
+realizowanej przez DataFetcher. Następnie system przechodzi przez węzły decyzyjne:
+
+1. Jeśli wybrano konkretne urządzenie, uruchamiany jest mechanizm filtracji strumieniowej po deviceIds.
+2. System sprawdza, czy użytkownik zażądał pliku PDF; jeśli tak, sterowanie trafia do fragmentu ref:
+Generowanie PDF, gdzie PdfReportGenerator renderuje dokument.
+3. Niezależnie od generowania pliku, proces kończy się przygotowaniem danych do wykresu, co domyka cykl analityczny.
 
 # Diagram strukturalny
 
-Miejsce na diagram
+![Diagram strukturalny](img/diagram-strukturalny.png)
 
-Miejsce na opis diagramu
+Diagram strukturalny ukazuje wewnętrzną budowę Modułu Analizy Danych jako kooperację współdziałających części, takich jak ReportController, DataProvider czy DataFetcher, niezbędnych do realizacji procesu raportowania. Przedstawia on instancje klas jako elementy połączone konektorami, które obrazują rzeczywiste ścieżki komunikacji i delegowania zadań wewnątrz systemu. Dzięki temu widoczne jest, jak poszczególne komponenty współpracują ze sobą, tworząc funkcjonalną całość, której działanie wykracza poza możliwości pojedynczego obiektu.
 
 # Diagram harmonogramowania
 
-Miejsce na diagram
+![Diagram harmonogramowania](img/diagram-harmonogramowania.png)
 
-Miejsce na opis diagramu
+Diagram harmonogramowania precyzuje dynamikę czasową modułu, 
+przedstawiając zmiany stanów poszczególnych komponentów w trakcie realizacji żądania analitycznego.
+Obrazuje on sekwencyjne przejścia od stanu bezczynności, 
+przez fazę intensywnej komunikacji z bazą danych PostgreSQL w celu pobrania pomiarów i metadanych, 
+aż po moment renderowania binarnej zawartości raportu PDF.
 
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+![Zrzut logowanie](img/zrzut-ekranu-logowanie.png)
 
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
+Do skorzystania z modułu analizy danych należy uwierzytelnić się w systemie jako inżynier lub administrator. Można to zrobić uruchamiając aplikację na komputerze w przeglądarce pod odpowiednim adresem URL i następnie:
+1. Wpisując dane do zalogowania administratora/inżyniera.
+2. Klikając przycisk "Zaloguj się"
 
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
+## Przypadek użycia 1 - generowanie wykresu liniowego
 
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
+![Zrzut liniowy](img/zrzut-ekranu-liniowy.png)
+
+Po zalogowaniu użytkownik z odpowiednimi uprawnieniami ma możliwość analizy historycznej danych zużycia lub produkcji energii. W następujący sposób może wygenerować raport z wykresem liniowym:
+1. Z górnego menu nawigacyjnego należy wybrać sekcję "Reports".
+2. W panelu bocznym skonfigurować parametry raportu:
+   * Typ Danych: Wybrać z listy (np. "Zużycie Energii").
+   * Urządzenie: Wybrać konkretne urządzenie lub opcję "Wszystkie urządzenia".
+   * Data Od / Data Do: Ustawić pożądany przedział czasowy w kalendarzu.
+3. Kliknąć przycisk "Generuj" (ikona odświeżania).
+4. W sekcji "Wizualizacja danych" upewnić się, że aktywna jest zakładka "Liniowy". System wygeneruje wykres ciągły.
+
+## Przypadek użycia 2 - generowanie wykresu słupkowego
+
+![Zrzut slupkowy](img/zrzut-ekranu-slupkowy.png)
+
+System umożliwia dynamiczną zmianę sposobu prezentacji tych samych danych bez konieczności ponownego wysyłania zapytania do serwera. Można to zrobić w ten sposób:
+1. Po wygenerowaniu danych (według kroków z Przypadku użycia 1), można przejść do sekcji "Wizualizacja danych" nad wykresem.
+2. Kliknąć przycisk "Słupkowy".
+3. Wykres zostanie natychmiast przerysowany w formie słupkowej, co ułatwia porównywanie wolumenu zużycia w poszczególnych interwałach czasowych dla wybranego zakresu dat.
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+System realizuje obsługę błędów na trzech poziomach, zapewniając stabilność działania i czytelną informację zwrotną dla użytkownika:
+
+1. Walidacja danych wejściowych:
+   * Frontend: Zastosowanie dedykowanych kontrolek HTML (`<input type="datetime-local">, <select>`) eliminuje możliwość wprowadzenia danych w błędnym formacie.
+   * Backend: Dane przychodzące do API są weryfikowane przez adnotacje Springa (np. @DateTimeFormat), co powoduje automatyczne odrzucenie niepoprawnych żądań (kod 400) przed uruchomieniem logiki biznesowej.
+2. Zabezpieczenia logiki biznesowej:
+   * W warstwie dostępu do danych (DataFetcher) zaimplementowano zabezpieczenia przed wartościami NULL zwracanymi z bazy oraz ochronę przed błędami arytmetycznymi (np. dzielenie przez zero przy obliczaniu efektywności).
+   * Generowanie plików PDF jest objęte blokami try-catch, aby błędy biblioteki iText nie powodowały awarii całego serwisu.
+3. Obsługa awarii i komunikacja z użytkownikiem:
+   * Aplikacja kliencka przechwytuje błędy sieciowe i serwerowe (blok try-catch w ReportModule), wyświetlając użytkownikowi stosowny komunikat zamiast zawieszać interfejs.
+   * System obsługuje tzw. "puste stany" – w przypadku braku danych dla wybranego okresu, wyświetlana jest informacja tekstowa zamiast pustego wykresu.
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
+Moduł analizy danych i raportowania stanowi kluczowy komponent systemu zarządzania energią, 
+przekształcając surowe dane pomiarowe z Modułu Symulacji w wartościowe, gotowe do wykorzystania informacje. 
+Dzięki precyzyjnemu przetwarzaniu i elastycznym możliwościom wizualizacji umożliwia administratorom i inżynierom 
+monitorowanie oraz optymalizację zużycia i produkcji energii w budynku.
 
+Architektura modułu, oparta na wyraźnej separacji warstw (kontrolera, serwisu, dostępu do danych) oraz zastosowaniu 
+wzorca dependency injection, gwarantuje wysoką skalowalność, łatwość testowania i prostotę rozbudowy 
+o nowe typy raportów czy formaty eksportu. Wszystkie komponenty od pobierania danych przez DataFetcher, 
+przez przetwarzanie w DataProcessor, aż po generowanie dokumentów w PdfReportGenerator są zaprojektowane z myślą 
+o niezawodności i zgodności z danymi źródłowymi.
+
+Moduł w pełni realizuje założone wymagania funkcjonalne, oferując generowanie raportów zużycia i produkcji energii 
+z możliwością filtrowania według urządzeń i okresów czasu, a także eksport do pliku PDF. Spełnia także kluczowe 
+wymagania niefunkcjonalne, takie jak kontrola dostępu oparta na rolach, wydajne przetwarzanie złożonych zapytań 
+oraz odporność na błędy dzięki wszechstronnej obsłudze wyjątków na każdym etapie przetwarzania.
+
+Dzięki intuicyjnemu interfejsowi użytkownika, który umożliwia dynamiczne przełączanie między wykresami liniowymi i 
+słupkowymi, oraz solidnej warstwie backendowej, system stanowi efektywne narzędzie wspierające podejmowanie decyzji 
+w zarządzaniu energią w inteligentnych budynkach.
