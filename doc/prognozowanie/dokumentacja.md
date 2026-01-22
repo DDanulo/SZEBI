@@ -73,55 +73,54 @@ Klasy pomocnicze **UsageRecord** i **Forecast** służą do przechowywania odpow
 
 ## Scenariusz 1
 
-| Pole | Treść                                                                                                                                                                                                                                                         |
-| :--- |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Nazwa:** | Generowanie prognozy zużycia energii elektrycznej                                                                                                                                                                                                             |
-| **Numer:** | 1                                                                                                                                                                                                                                                             |
-| **Twórca:** | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                                                    |
-| **Poziom ważności:** | Wysoki                                                                                                                                                                                                                                                        |
-| **Typ przypadku użycia:** | Istotny                                                                                                                                                                                                                                                       |
-| **Aktorzy:** | Interwał prognozy                                                                                                                                                                                                                                             |
-| **Krótki opis:** | Wygenerowanie prognozy na podstawie danych zużycia energii elektrycznej z poprzednich dni                                                                                                                                                                     |
-| **Warunki wstępne:** | 1. Model uczenia maszynowego jest wytrenowany <br> 2. Istnieją dane zużycia energii elektrycznej sprzed przynajmniej 7 dni                                                                                                                                    |
-| **Warunki końcowe:** | System zapisuje wygenerowaną prognozę zużycia energii elektrycznej                                                                                                                                                                                            |
-| **Główny przepływ zdarzeń:** | 1. Pobranie danych zużycia energii elektrycznej <br> 2. Przetworzenie danych zużycia energii elektrycznej 3. Wygenerowanie prognozy zużycia energii elektrycznej na następne 7 dni <br> 4. Sprawdza poprawność prognozy zużycia energii elektrycznej <br> 5.  |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.                                                                                                                                                                                                                                         |
-| **Specjalne wymagania:** |                                                                                                                                                                                                                                                               |
-| **Notatki i kwestie:** |                                                                                                                                                                                                                                                               |
+| Pole                                | Treść                                                                                                                                                                                                                                                                                                                                 |
+|:------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Generowanie prognozy zużycia energii elektrycznej                                                                                                                                                                                                                                                                                     |
+| **Numer:**                          | 1                                                                                                                                                                                                                                                                                                                                     |
+| **Twórca:**                         | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                                                                                                                            |
+| **Poziom ważności:**                | Wysoki                                                                                                                                                                                                                                                                                                                                |
+| **Typ przypadku użycia:**           | Istotny                                                                                                                                                                                                                                                                                                                               |
+| **Aktorzy:**                        | Interwał prognozy, Administrator, Inżynier                                                                                                                                                                                                                                                                                            |
+| **Krótki opis:**                    | Wygenerowanie prognozy na podstawie danych zużycia energii elektrycznej z poprzednich dni                                                                                                                                                                                                                                             |
+| **Warunki wstępne:**                | 1. Model uczenia maszynowego jest wytrenowany <br> 2. Istnieją dane zużycia energii elektrycznej sprzed przynajmniej 7 dni                                                                                                                                                                                                            |
+| **Warunki końcowe:**                | System zapisuje wygenerowaną prognozę zużycia energii elektrycznej                                                                                                                                                                                                                                                                    |
+| **Główny przepływ zdarzeń:**        | 1. Pobranie danych zużycia energii elektrycznej z przeszłości <br/> 2. Przetworzenie danych zużycia energii elektrycznej <br/> 3. Wygenerowanie prognozy zużycia energii elektrycznej na następne 7 dni <br> 4. Sprawdzenie poprawności prognozy zużycia energii elektrycznej <br> 5. Zapisanie prognozy zużycia energii elektrycznej |
+| **Alternatywne przepływy zdarzeń:** | 4a. Zidentyfikowanie wygenerowanej prognozy zużycia energii elektrycznej jako niepoprawnej. Następuje ponowna próba wygenerowania prognozy po wytrenowaniu na nowo modelu uczenia maszynowego.                                                                                                                                        |
+| **Specjalne wymagania:**            | Istnieją dane zużycia energii elektrycznej z poprzednich dni.                                                                                                                                                                                                                                                                         |
+| **Notatki i kwestie:**              | brak                                                                                                                                                                                                                                                                                                                                  |
 
 ## Diagram interakcji 1
 
-Miejsce na diagram interakcji
+![Diagram interakcji 1](img/sequence_diagram_1.jpeg)
+Diagram 3
 
-Miejsce na podpis
-
-Miejsce na opis diagramu
+Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu w celu wygenerowania prognozy zużycia energii elektrycznej.
 
 ## Scenariusz 2
 
-| Pole | Treść |
-| :--- | :--- |
-| **Nazwa:** | |
-| **Numer:** | |
-| **Twórca:** | |
-| **Poziom ważności:** | |
-| **Typ przypadku użycia:** | |
-| **Aktorzy:** | |
-| **Krótki opis:** | |
-| **Warunki wstępne:** | |
-| **Warunki końcowe:** | |
-| **Główny przepływ zdarzeń:** | 1. <br> 2. <br> 3. |
-| **Alternatywne przepływy zdarzeń:** | 1a. <br> 1b. <br> 3a.|
-| **Specjalne wymagania:** | |
-| **Notatki i kwestie:** | |
+| Pole                                | Treść                                                                                                                                                                                                                                |
+|:------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Nazwa:**                          | Wyświetlanie prognozy zużycia energii elektrycznej                                                                                                                                                                                   |
+| **Numer:**                          | 2                                                                                                                                                                                                                                    |
+| **Twórca:**                         | Projektanci: Michał Domagała 251505, Mikołaj Pawłoś 258681                                                                                                                                                                           |
+| **Poziom ważności:**                | Średni                                                                                                                                                                                                                               |
+| **Typ przypadku użycia:**           | Przeciętnie istotny                                                                                                                                                                                                                  |
+| **Aktorzy:**                        | Administrator, Inżynier                                                                                                                                                                                                              |
+| **Krótki opis:**                    | Wyświetlenie prognozy zużycia energii elektrycznej                                                                                                                                                                                   |
+| **Warunki wstępne:**                | Zostały wcześniej wygenerowane i zapisane prognozy zużycia energii elektrycznej                                                                                                                                                      |
+| **Warunki końcowe:**                | W graficznym interfejsie użytkownika zostaje wyświetlona prognoza zużycia energii elektrycznej w formie wykresu oraz tabeli                                                                                                          |
+| **Główny przepływ zdarzeń:**        | 1. Pobranie zapisanych wcześniej najnowszych prognoz zużycia energii elektrycznej <br> 2. Wyświetlenie najnowszych prognoz zużycia energii elektrycznej na wykresie oraz w tabeli                                                    |
+| **Alternatywne przepływy zdarzeń:** | 2a. W przypadku wybrania w odpowiedniej kontrolce w graficznym interfejsie użytkownika zakresu datowego, w tabeli zostaną wyświetlone tylko te prognozy zużycia energii elektrycznej, które zostały wygenerowane w podanym zakresie. |
+| **Specjalne wymagania:**            | Istnieją zapisane wygenerowane wcześniej prognozy                                                                                                                                                                                    |
+| **Notatki i kwestie:**              | Brak                                                                                                                                                                                                                                 |
 
 ## Diagram interakcji 2
 
-Miejsce na diagram interakcji
+![Diagram sekwencji 2](img/sequence_diagram_2.jpeg)
 
-Miejsce na podpis
+Diagram 4
 
-Miejsce na opis diagramu
+Na diagramie został uwidoczniony przepływ informacji między klasami związany z pobraniem, a następnie wyświetleniem prognoz.
 
 # Diagram czynności [minimum 1]
 
