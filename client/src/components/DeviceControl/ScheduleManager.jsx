@@ -57,23 +57,49 @@ const ScheduleManager = () => {
         try {
 
             const extraParams = { area: newDeviceType === 'WIND' ? 0 : parsedArea };
-
+            let response;
             if (isStaff) {
-                await addDevice(trimmedName, newDeviceType, extraParams);
-                alert("Urządzenie dodane pomyślnie!");
-                loadDevices();
+                response = await addDevice(trimmedName, newDeviceType, extraParams);
             } else {
-                await requestAddDevice(trimmedName, newDeviceType, extraParams);
-                alert("Wniosek o dodanie urządzenia został wysłany do Administratora.");
+                response = await requestAddDevice(trimmedName, newDeviceType, extraParams);
             }
 
-            setNewDeviceName('');
-            setArea('');
+            if (response && (response.status === 200 || response.status === 201)) {
+                if (isStaff) {
+                    alert("Urządzenie dodane pomyślnie!");
+                    loadDevices();
+                } else {
+                    alert("Wniosek o dodanie urządzenia został wysłany do Administratora.");
+                }
+                setNewDeviceName('');
+                setArea('');
+            }
+
+            else if (response) {
+                if (response.status === 400) {
+                    alert("Błąd: Urządzenie o takiej nazwie już istnieje lub dane są niepoprawne!");
+                } else if (response.status === 403 || response.status === 401) {
+                    alert("Błąd: Brak uprawnień do dodawania urządzeń.");
+                } else {
+                    alert("Wystąpił nieoczekiwany błąd serwera (Status: " + response.status + ")");
+                }
+            }
 
         } catch (error) {
             console.error(error);
-            const msg = error.response?.data?.message || "Wystąpił błąd.";
-            alert("Błąd: " + msg);
+            if (error.response) {
+                const status = error.response.status;
+                if (status === 400) {
+                    alert("Błąd: Urządzenie o takiej nazwie już istnieje lub dane są niepoprawne!");
+                } else if (status === 403 || status === 401) {
+                    alert("Błąd: Brak uprawnień.");
+                } else {
+                    const msg = error.response.data?.message || "Wystąpił błąd serwera.";
+                    alert("Błąd: " + msg);
+                }
+            } else {
+                alert("Błąd połączenia z serwerem.");
+            }
         }
     };
 

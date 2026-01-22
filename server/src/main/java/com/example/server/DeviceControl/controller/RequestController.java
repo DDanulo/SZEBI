@@ -54,8 +54,14 @@ public class RequestController {
     @PostMapping("/{id}/approve")
     @PreAuthorize("hasAnyRole('ADMIN', 'ENGINEER')")
     public ResponseEntity<Void> approve(@PathVariable UUID id) {
-        requestService.approveRequest(id);
-        return ResponseEntity.ok().build();
+        try {
+            requestService.approveRequest(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     // ADMIN/ENGINEER: Odrzuć
