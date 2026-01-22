@@ -64,7 +64,7 @@ Administrator zatwierdza dodanie lub usunięcie urządzenia przez Mieszkańca.
 
 <img src="img/notloggeduser.drawio.png">
 
-Diagram 1
+Diagram 1.
 
 Opis diagramu
 
@@ -74,7 +74,7 @@ Diagram przypadków użycia przedstawia system logowania do aplikacji. Aktorem j
 
 <img src="img/loggeduser.drawio.png">
 
-Diagram 2
+Diagram 2.
 
 Opis diagramu 
 
@@ -85,7 +85,7 @@ Diagram przypadków użycia przedstawia system zarządzania uprawnieniami oraz u
 
 <img src="./img/package.png">
 
-Diagram 3
+Diagram 3.
 
 Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, poprzez wysłanie linku na poczte, tworzenie, usuwanie, edycje użytkowników o różnym dostępie do systemu, tworzenie Tokena JWT oraz filtrowanie wg. niego dostępu do poszczególnych metod, hashowanie haseł, logowanie oraz rejestracje do aplikacji. 
 
@@ -116,7 +116,7 @@ Diagram klas przedstawia aplikacje REST, która umożliwia, resetowanie hasła, 
 
 <img src="img/przypadek1.drawio.png">
 
-Diagram 4
+Diagram 4.
 
 Miejsce na opis diagramu
 
@@ -142,7 +142,7 @@ Miejsce na opis diagramu
 
 <img src="img/przypadek2.drawio.png">
 
-Diagram 5
+Diagram 5.
 
 Miejsce na opis diagramu
 
@@ -150,7 +150,7 @@ Miejsce na opis diagramu
 
 <img src="./img/dgrczynności.drawio(1).png">
 
-Diagram 6
+Diagram 6.
 
 Miejsce na opis diagramu
 
@@ -158,7 +158,7 @@ Miejsce na opis diagramu
 
 <img src="./img/stanu.drawio(2).png">
 
-Diagram 7
+Diagram 7.
 
 Miejsce na opis diagramu
 
@@ -166,7 +166,7 @@ Miejsce na opis diagramu
 
 <img src="img/komp.png">
 
-Diagram 8
+Diagram 8.
 
 Miejsce na opis diagramu
 
@@ -174,7 +174,7 @@ Miejsce na opis diagramu
 
 <img src="img/packet.drawio.png">
 
-Diagram 9
+Diagram 9.
 
 Miejsce na opis diagramu
 
@@ -182,7 +182,7 @@ Miejsce na opis diagramu
 
 <img src="img/przebieg.drawio.png">
 
-Diagram 10
+Diagram 10.
 
 Miejsce na opis diagramu
 
@@ -190,7 +190,7 @@ Miejsce na opis diagramu
 
 <img src="img/strukturalny.drawio.png">
 
-Diagram 11
+Diagram 11.
 
 Miejsce na opis diagramu
 
@@ -198,36 +198,119 @@ Miejsce na opis diagramu
 
 <img src="img/harmonogram.drawio.png">
 
-Diagram 12
+Diagram 12.
 
 Miejsce na opis diagramu
 
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+## Przypadek użycia 1 - Zaloguj się
 
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
+Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formularza logowania.
 
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
+![img.png](img/img.png)
 
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
+Zrzut ekranu 1.
+
+Następnie wypełniamy formularz (Wszystkie pola musza być wypełnione) i klikamy niebieski przycisk "Zaloguj się".
+
+![img_1.png](img/img_1.png)
+
+Zrzut ekranu 2.
+
+Jeśli dane podane w formularzu logowania zgadzają się, to aplikacja przekieruje na strone główną użytkownika.
+
+![img_2.png](img/img_2.png)
+
+Zrzut ekranu 3.
+
+
+## Przypadek użycia 2 - Resetuj hasło
+
+Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formularza logowania, na którym będzie można też zresetować hasło.
+
+![img.png](img/img.png)
+
+Zrzut ekranu 4.
+
+Wciskamy link "zapomniałem hasła", w celu wyświetlenia formularzu resetowania hasła. 
+
+![img_1.png](img/img_1.png)
+
+Zrzut ekranu 5.
+
+Podajemy e-mail naszego konta użytkownika (podanego podczas rejestracji), jeśli konto z takim adresem email istnieje to, na pocztę elektroniczną zostanie przesłany link do resetowania hasła.
+
+![img_3.png](img/img_3.png)
+
+Zrzut ekranu 6.
+
+Wiadomość na poczcie elektronicznej będzie wyglądać w następujący sposób.
+
+![img_4.png](img/img_4.png)
+
+Zrzut ekranu 7.
+
+Po wciśnięciu linku z treści emailu (spójrz Zrzut ekranu 7), przekieruje nas na strone z formularzem resetowania hasła.
+
+![img_5.png](img/img_5.png)
+
+Zrzut ekranu 8.
+
+Udane resetowanie hasła będzie potwierdzone komunikatem (spójrz Zrzut ekranu 9).
+
+![img_6.png](img/img_6.png)
+
+Zrzut ekranu 9.
+
+## Przypadek użycia 3 - Dodaj konto
+
+Po otwarciu strony wciśnij przycisk "Zaloguj się", w celu wyświetlenia formularza logowania.
+
+![img.png](img/img.png)
+
+Zrzut ekranu 10.
+
+Następnie wypełniamy formularz (danymi konta z uprawnieniami Administratora) i klikamy niebieski przycisk "Zaloguj się".
+
+![img_1.png](img/img_1.png)
+
+Zrzut ekranu 11.
+
+Z głównego widoku przechodzimy do panelu administratora poprzez wciśnięcie przycisku "Administration".
+
+![img_2.png](img/img_2.png)
+
+Zrzut ekranu 12.
+
+W panelu administratora przechodzimy do formularza tworzenia konta poprzez wciśnięcie przycisku "Stwórz użytkownika".
+
+![img.png](img/img_12.png)
+
+Po wypełnieniu każdego pola oraz wybraniu uprawnień nowego konta wciskamy przycisk "Utwórz użytkownika".
+
+![img_1.png](img/img_11.png)
+
+Zrzut ekranu 13.
+
+Jeśli utworzenie konta powiodło się, wyświetli się odpowiedni komunikat.
+
+![img_2.png](img/img_14.png)
+
+Zrzut ekranu 14.
+
+Można jeszcze potwierdzić stworzenie konta poprzez wyświetlenie listy użytkowników, poprzez powrót do panelu administratora, aby powrócić do panelu, można wcisnąć przycisk "Powrót" (Spójrz Zrzut ekranu 13).
+
+![img_3.png](img/img_13.png)
+
+Zrzut ekranu 15.
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+
+Dostęp do funkcji systemu został zabezpieczony poprzez użycie tokena JWT, który realizuje podział na różne poziomy dostępu do aplikacji oraz zabezpiecza punkty końcowe warstwy logiki naszej aplikacji. Hasła w bazie danych są haszowane przez co, wyciek danych nie umożliwia logowania na konta systemu. Hasła podawane podczas rejestracji podlegają walidacji, hasło nie może być krótsze niż 8 znaków i musi się składać z przynajmniej jednej małej, jednej dużej litery oraz z jednego znaku specjalnego. Login nie może mieć mniej niż 8 znaków oraz musi być unikalny również, Email musi być unikalny.  
 
 ## Podsumowanie
 
 [Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
+
 
