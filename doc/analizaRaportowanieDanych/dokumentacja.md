@@ -243,5 +243,9 @@ System realizuje obsługę błędów na trzech poziomach, zapewniając stabilno�
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
-
+Moduł analizy danych i raportowania stanowi kluczowe ogniwo systemu zarządzania energią, 
+przekształcając surowe dane pomiarowe w czytelną wiedzę operacyjną. 
+Dzięki zastosowaniu architektury warstwowej oraz wyraźnej separacji odpowiedzialności między komponentami takimi jak 
+DataFetcher, DataProcessor i PdfReportGenerator, system charakteryzuje się łatwością rozbudowy o nowe typy wizualizacji.
+Projekt spełnia wszystkie założone wymagania funkcjonalne i niefunkcjonalne, 
+dostarczając precyzyjne narzędzie do optymalizacji zużycia energii w budynkach inteligentnych.
