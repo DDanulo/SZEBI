@@ -1,6 +1,6 @@
 
-# Nazwa modułu
-Moduł Inteligentnego Sterowania i Optymalizacji
+# Moduł Inteligentnego Sterowania i Optymalizacji
+
 ## Projektanci: 
 ```
 Vladyslav Shpyhariev 253830
@@ -11,9 +11,11 @@ Adam Jędrzejek 251537
 ## Opis funkcjonalny
 
 ### Opis przeznaczenia modułu
+
 Moduł ma za zadanie sterować urządzeniami (włącz/wyłącz), dodawać je albo usuwać. Także tworzy harmonogramy (włącz/wyłącz) dla urządzeń o konkretnej porze dnia z możliwością cykliczności.
 
 ### Opis możliwości funkcjonalnych modułu
+
 Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
 Aktor: Mieszkaniec
 1) Może wysłać prośbę o dodanie urządzenia ale przed tym musi wpisać nazwę, wybrać typ urządzenia i opcjonalnie wpisać pole powierzchni.
@@ -40,20 +42,26 @@ Data włączenia może być po dacie wyłączenia.
 # Diagramy przypadków użycia
 
 ## Nazwa przypadku użycia
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
 
 ![Diagram przypadków użycia dla aktora Mieszkaniec](img/Diagram_przypadkiużycia_mieszkaniec.png)
+Diagram 1.
+
 Diagram przypadków użycia przedstawia system zarządzania urządzeniami domowymi z perspektywy aktora Mieszkaniec. Mieszkaniec ten może planować harmonogramy pracy sprzętu, definiując czasy włączenia i wyłączenia, a także przeglądać i usuwać istniejące harmonogramy. Mieszkaniec wyświetla listę urządzeń oraz bezpośrednio steruje ich zasilaniem (włączanie/wyłączanie). Diagram obrazuje również proces zgłaszania próśb o dodanie nowych urządzeń (określając ich parametry) lub usunięcie istniejących z systemu.
 
 ![Diagram przypadków użycia dla aktorów Administrator i Inżynier](img/Diagram_przypadkiużycia_admin.png)
-Diagram przedstawia praktycznie te same interakcje, tylko różnica jest taka, żę Inżynier/Administrator nie wysyłają prośbę o dodaniu/usunięciu urządzenia. a mają bezpośredni dostęp do tego.
+Diagram 2.
+
+Diagram przedstawia praktycznie te same interakcje, tylko różnica jest taka, że Inżynier/Administrator nie wysyłają prośbę o dodaniu/usunięciu urządzenia. a mają bezpośredni dostęp do tego.
 
 
 
 # Diagramy klas
+
 ![Diagram klas](img/Diagram_klas.png)
+Diagram 3.
 
 Diagram klas obrazuje kompletną strukturę backendu systemu, która łączy w sobie trzy kluczowe funkcjonalności: sterowanie urządzeniami, obsługę harmonogramów oraz obsługę wniosków. Widoczny na górze diagramu ScheduleExecutor wraz z ScheduleService polewo odpowiada za cykliczne przetwarzanie zadań czasowych, podczas gdy prawa dolna część diagramu (RequestController, RequestService) obsługuje system zgłoszeń, pozwalający użytkownikom na wysyłanie prośby  o dodanie lub usunięcie sprzętu. Całość spina warstwa kontrolerów wystawiających API oraz repozytoria zapewniające trwałość danych dla encji takich jak Device, Schedule czy DeviceRequest
+
 # Diagramy interakcji
 
 ## Scenariusz 1
@@ -63,14 +71,14 @@ Diagram klas obrazuje kompletną strukturę backendu systemu, która łączy w s
 | :--- |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:** | Włącz urządzenie                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Numer:** | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| **Twórca:** | Vladyslav Shpyhariev, Adam Jędrzejek                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Twórca:** | Vladyslav Shpyhariev 253830, Adam Jędrzejek 251537 - projektanci                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Poziom ważności:** | Średni                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **Typ przypadku użycia:** | Podstawowy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Aktorzy:** | Mieszkaniec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **Krótki opis:** | Wyłączone urządzenie mieszkaniec włączy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | **Warunki wstępne:** | Mieszkaniec jest zalogowany na konto, ma aktualny token,Mieszkaniec ma dostęp do tego urządzenia, urządzenie jest wyłączone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **Warunki końcowe:** | Urządzenie jest włączone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| **Główny przepływ zdarzeń:** | 1.Użytkownik wybiera wyłączone urządzenie z listy w panelu sterowania i klika przycisk "ON".<br> 2. Aplikacja frontendowa wysyła żądanie do serwera, który deleguje zadanie do odpowiedniego menedżera sprzętu. <br> 3. System wysyła sygnał sterujący do modułu symulacji, aby fizycznie uruchomić urządzenie. <br> 4.Po potwierdzeniu włączenia przez symulację, serwer aktualizuje status urządzenia w bazie danych na aktywny. <br> 5.Backend zwraca do aplikacji potwierdzenie pomyślnego wykonania operacji. <br> 6. Interfejs użytkownika automatycznie odświeża listę, wyświetlając urządzenie jako włączone. |
+| **Główny przepływ zdarzeń:** | 1. Użytkownik wybiera wyłączone urządzenie z listy w panelu sterowania i klika przycisk "ON".<br> 2. Aplikacja frontendowa wysyła żądanie do serwera, który deleguje zadanie do odpowiedniego menedżera sprzętu. <br> 3. System wysyła sygnał sterujący do modułu symulacji, aby fizycznie uruchomić urządzenie. <br> 4. Po potwierdzeniu włączenia przez symulację, serwer aktualizuje status urządzenia w bazie danych na aktywny. <br> 5. Backend zwraca do aplikacji potwierdzenie pomyślnego wykonania operacji. <br> 6. Interfejs użytkownika automatycznie odświeża listę, wyświetlając urządzenie jako włączone. |
 | **Alternatywne przepływy zdarzeń:** | brak                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Specjalne wymagania:** | Mieszkaniec ma dostęp do tego urządzenia, urządzenie jest wyłączone                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Notatki i kwestie:** | brak                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -78,7 +86,7 @@ Diagram klas obrazuje kompletną strukturę backendu systemu, która łączy w s
 ## Diagram interakcji 1
 
 ![Diagram Sekwencji włączenia urządzenia](img/Diagram_Sekwencji_1.png)
-Diagram Sekwencji nr. 1
+Diagram 4.
 
 Diagram sekwencji przedstawia proces aktywacji urządzenia, w którym żądanie aktora Mieszkaniec z warstwy frontendowej jest przetwarzane przez kontroler i delegowane do odpowiedniego menedżera sprzętu. System realizuje operację dwutorowo, aktualizując status w bazie danych oraz wysyłając fizyczny sygnał do API symulacji, a następnie odświeża widok aplikacji po potwierdzeniu sukcesu.
 
@@ -88,23 +96,22 @@ Diagram sekwencji przedstawia proces aktywacji urządzenia, w którym żądanie 
 | :--- |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:** | Dodaj urządzenie                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Numer:** | 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| **Twórca:** | Vladyslav Shpyhariev, Adam Jędrzejek                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **Twórca:** | Vladyslav Shpyhariev 253830, Adam Jędrzejek 251537 - projektanci                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | **Poziom ważności:** | Wysoki                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Typ przypadku użycia:** | Podstawowy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | **Aktorzy:** | Administrator                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Krótki opis:** | Administrator dodaje nowe urządzenie typu AGD                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Warunki wstępne:** | Administator jest zalogowany, ma aktualny token                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Warunki końcowe:** | Urządzenie zostanie dodane                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| **Główny przepływ zdarzeń:** | 1. Administrator wpisuje nazwę urządzenia (np. "Pralka").<br> 2.. Administrator wybiera typ "AGD (Zużywa)". <br> 3. Administrator wpisuje powierzchnię (m²) > 0. i klika przycisk Dodaj urządzenie <br> 4. System (FE) sprawdza poprawność znaków w nazwie (tylko litery, cyfry, spacje). <br> 5. System (FE)  sprawdza, czy nazwa nie jest duplikatem na liście pobranej z API. <br> 6.System (FE) sprawdza, czy powierzchnia jest liczbą dodatnią. <br> 7. System (FE) wysyła żądanie POST /api/devices. <br> 8. System (BE) weryfikuje dane i tworzy urządzenie w symulacji. <br> 9. System (FE) wyświetla komunikat "Urządzenie dodane pomyślnie!" i odświeża listę urządzeń. | 
-| **Alternatywne przepływy zdarzeń:** | 4a. Administrator wpisał znaki specjale (np. "Pralka$"). Frontend przerywa proces i wyświetla alert("Nazwa zawiera niedozwolone znaki!"). <br> 5a. Administrator wpisał nazwę urządzenia która jest duplikatem i  już istnieje na liście. Frontend przerywa proces i wyświetla alert("Urządzenie o takiej nazwie już istnieje!..."). <br> 6a. Administrator wpisał "0" lub "-5". Frontend przerywa proces i wyświetla alert("Powierzchnia musi być większa od 0.").                                                                                                                                                                                                               |
+| **Główny przepływ zdarzeń:** | 1. Administrator wpisuje nazwę urządzenia (np. "Pralka").<br> 2.. Administrator wybiera typ "AGD (Zużywa)". <br> 3. Administrator wpisuje powierzchnię (m²) > 0. i klika przycisk Dodaj urządzenie <br> 4. System sprawdza poprawność znaków w nazwie (tylko litery, cyfry, spacje). <br> 5. System  sprawdza, czy nazwa nie jest duplikatem na liście pobranej z API. <br> 6. System sprawdza, czy powierzchnia jest liczbą dodatnią. <br> 7. System wysyła żądanie POST /api/devices. <br> 8. System weryfikuje dane i tworzy urządzenie w symulacji. <br> 9. System wyświetla komunikat "Urządzenie dodane pomyślnie!" i odświeża listę urządzeń. | 
+| **Alternatywne przepływy zdarzeń:** | 4a. Administrator wpisał znaki specjale (np. "Pralka$"). Frontend przerywa proces i wyświetla alert ("Nazwa zawiera niedozwolone znaki!"). <br> 5a. Administrator wpisał nazwę urządzenia która jest duplikatem i  już istnieje na liście. Frontend przerywa proces i wyświetla alert("Urządzenie o takiej nazwie już istnieje!..."). <br> 6a. Administrator wpisał "0" lub "-5". Frontend przerywa proces i wyświetla alert("Powierzchnia musi być większa od 0.").                                                                                                                                                                                                               |
 | **Specjalne wymagania:** | brak                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **Notatki i kwestie:** | Skoro Administrator dodaje urządzenie typu AGD to system waliduje powierzchnię, gdyby dodawał urządzenie typu Wiatrak to ten krok byłby pominięty                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ## Diagram interakcji 2
 
 ![Diagram Sekwencji dla aktora Administrator](img/Diagram_Sekwencji_2.png)
-
-Diagram Sekwencji nr.2
+Diagram 5.
 
 Diagram przedstawia proces dodawania urządzenia przez Administratora, który rozpoczyna się od rygorystycznej walidacji danych po stronie interfejsu (sprawdzenie znaków specjalnych, unikalności nazwy oraz poprawności wartości liczbowych). 
 
@@ -114,18 +121,23 @@ Dopiero po pomyślnej weryfikacji frontend wysyła żądanie do serwera, gdzie k
 # Diagram czynności 
 
 ![Diagam Czynności dodawania urządzenia](img/Diagram_Czynności.png)
+Diagram 6.
+
 Diagram przedstawia sekwencyjny proces walidacji danych podczas dodawania urządzenia przez Administrtora, w którym niespełnienie któregokolwiek z warunków (poprawność znaków, unikalność nazwy, dodatnia powierzchnia) lub błąd serwera prowadzi do wyświetlenia odpowiedniego komunikatu i natychmiastowego zakończenia przepływu. 
 
 Dopiero pozytywna weryfikacja na wszystkich krokach pozwala na pomyślne zakończenie operacji dodania urządzenia.
 
-# Diagram maszyny stanowej [minimum 1]
+# Diagram maszyny stanowej
 
 ![Diagram Maszyny Stanowej wysłanie prośby o dodaniu urządzenia](img/Diagram_Maszyny_Stanowej.png)
+Diagram 7.
 
 Diagram przedstawia cykl życia prośby o dodaniu urządzenia. Prośba rozpoczyna się w stanie oczekiwania, z którego pod wpływem decyzji administratora przechodzi do stanu zatwierdzenia (skutkującego zmianami w systemie) lub odrzucenia, co kończy jego proces przetwarzania.
 
 # Diagram komponentów
+
 ![Diagram Komponentów](img/Diagram_Komponentów.png)
+Diagram 8.
 
 Nasz moduł komunikuje się z:
 
@@ -138,6 +150,7 @@ użytkowników.
 # Diagram pakietów
 
 ![Diagram Pakietów](img/Diagram_Pakietów.png)
+Diagram 9.
 
 Przedstawiony diagram pakietów ilustruje modułową architekturę systemu, podzieloną na główną przestrzeń naszego modułu(DeviceControl) odpowiedzialną za logikę biznesową oraz część modułu symulacji(Simulation) obsługującą interfejsy urządzeń.
 
@@ -146,39 +159,48 @@ Wewnątrz głównego modułu widoczny jest podział na pakiety kontrolerów, ser
 # Diagram przeglądu interakcji
 
 ![Diagram Przeglądu Interakcji](img/Diagram_Przeglądu_Interakcji.png)
-Diagram przeglądu interakcji ilustruje przepływ sterowania procesem dodawania urządzenia, w którym złożone sekwencje interakcji zostały zastąpione czytelnymi odnośnikami (ref) do osobnych diagramów.
+Diagram 10.
 
+Diagram przeglądu interakcji ilustruje przepływ sterowania procesem dodawania urządzenia, w którym złożone sekwencje interakcji zostały zastąpione czytelnymi odnośnikami (ref) do osobnych diagramów.
 
 # Diagram strukturalny
 
 ![Diagram Strukturalny](img/Diagram_Strukturalny.png)
+Diagram 11.
 
 Diagram strukturalny obrazuje modułową architekturę systemu, w której DeviceController zarządza różnymi typami sprzętu (AGD, Wiatraki, Panele) wykorzystując wzorzec Strategii poprzez wspólny interfejs IDeviceAuth. Struktura ta zapewnia ścisłą separację warstwy prezentacji (ScheduleManager) od logiki biznesowej oraz zewnętrznego modułu symulacji (IControlDevices), odpowiedzialnego za fizyczne sterowanie urządzeniami.
 
 # Diagram harmonogramowania
 
 ![Diagram Harmonogramowania](img/Diagram_Harmonogramowania.png)
+Diagram 12.
+
 Ten diagram przedstawia stan obiektu urządzenie. Przed godziną 8 urządzenie jest wyłączone (OFF), był stworzony harmonogram Turn_On: 8:00, Turn_Off: 10:00. O godzinie 8:00 ScheduleExecutor wykrył że jest godzina o której ma sie włączyć, tak samo o 10:00 wykrył, że ma się wyłączyć urządzenie (na diagramie widoczne jako Sprawdzenie)
+
 # Dokumentacja użytkownika
 
 ## Przypadek użycia 1 - Wyślij prośbę o dodaniu urządzenia
 
 Żeby wysłać prośbę o dodaniu urządzenia najpierw musisz być zalogowanym na koncie z rolą Mieszkaniec i przejść do zakładki "Control"
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-1_1.png)
+Zrzut ekranu 1.
 
 Teraz musisz wpisać nazwę w polu "Nazwa urządzenia", która może być w innym języku, zawierać cyfry ale nie może mieć specjalnych znaków (np. # @ $ itd.).
 W "Typ" wybierz z listy typ urządzenia które chcesz dodać a w polu "Pow. (m^2)" musisz wpisać powierzchnię, która nie może być mniejsza od 0 albo zawierać litery, tylk cyfry musisz wpisać. Jeżeli wybrałeś typ urządzenia Wiatrak to nie możesz wpisać powierzchnię.
 Sprawdź czy dobrze wszystko wpisałeś i możesz kliknąć przycisk "Wyślij wniosek o dodanie".
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-1_2.png)
+Zrzut ekranu 2.
 
 Powinieneś dostać komunikat "Wniosek o dodanie urządzenia został wysłany do Administratora"  co oznacza, że wszystko zrobiłeś dobrze. 
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-1_3.png)
+Zrzut ekranu 3.
 
 Po zatwierdzeniu przez Administratora twojego wniosku powinieneś zobaczyć nowe urządzenie na liście.
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-1_4.png)
+Zrzut ekranu 4.
 
 ## Przypadek użycia 2 - Zaplanuj Harmonogram
 Już jesteś zalogowany na koncie z rolą Mieszkaniec, masz już już dodane urządzenie i żeby zaplanować harmonogram
@@ -188,24 +210,30 @@ Jeśli chcesz żeby harmonogram się powtarzał to zaznacz "Powtarzaj codziennie
 Jak wszystko już zrobiłeś kliknij "Zaplanuj Harmonogram".
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-2_1.png)
+Zrzut ekranu 5.
 
 Powinieneś dostać komunikat "Zaplanowano!" co oznacza, że wszystko zrobiłeś dobrze
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-2_2.png)
+Zrzut ekranu 6.
 
 Kliknij Przycisk "OK" i zobacz że twój nowy harmonogram pojawił się na liście.
 
 ![Zrzut ekranu z widocznym interfejsem sterowania urządzeń](img/GUI_Przypadek-2_3.png)
+Zrzut ekranu 7.
 
 
 ## Obsługa błędów, sytuacji wyjątkowych
+
 System realizuje wielowarstwową obsługę błędów, walidując dane zarówno w warstwie prezentacji, jak i logiki biznesowej, co zapewnia spójność i bezpieczeństwo przetwarzanych informacji. 
 
 Frontendowy komponent wstępnie weryfikuje poprawność formularzy, blokując wysyłkę pustych pól lub ujemnych wartości i natychmiast informując użytkownika o konieczności korekty.
 Po stronie serwera wykorzystuje się bloki try-catch do przechwytywania wyjątków logicznych, zwracając klientowi czytelne komunikaty błędów zamiast awarii systemu. 
 
 Dodatkowo serwisy backendowe dbają o integralność danych, blokując operacje naruszające logikę biznesową, np. nakładające się harmonogramy. Całość dopełnia wykorzystanie wzorca Strategii, który uniemożliwia wykonanie operacji na nieobsługiwanych typach urządzeń, chroniąc system przed niespójnym stanem.
+
 ## Podsumowanie
+
 Wnioski: Nasz moduł spełnia wszystkie wymagania, które były założone przez architektów a nawet zrobione jest troszeczkę więcej (Obsługa wysyłania wniosków).
 
 Uruchomienie:
