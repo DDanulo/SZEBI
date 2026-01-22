@@ -3,7 +3,7 @@
 [usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
 [wpisy bez nawiasów są do zastąpienia zawartością]
 
-## Projektanci: 
+## Członkowie: 
 ```
 Danylo Dobrianskyi 258668
 Paweł Rajnert 251618
@@ -130,7 +130,7 @@ Miejsce na opis diagramu
 ![[./img/komponenty.png]]
 Diagram 6.
 
-Miejsce na opis diagramu
+Diagram komponentów przedstawia podział systemu na oddzielne moduły oraz interfejsy przez które się komunikują.
 
 # Diagram pakietów
 
@@ -141,22 +141,22 @@ Diagram pakietów przedstawia ogólny obraz całego systemu składający się z 
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+![[./img/przeglad_interakcji.png]]
+Diagram 8.
 
-Miejsce na opis diagramu
+Diagram interakcji przedstawia połączenie kilku interakcji w systemie - od logowania do pobrania listy urządzeń.
 
 # Diagram strukturalny
 
-Miejsce na diagram
+![[./img/strukturalny.png]]
+Diagram 9.
 
-Miejsce na opis diagramu
-
+Diagram strukturalny przedstawia kooperację trzech części systemu służących do generacji danych symulacji.
 # Diagram harmonogramowania
+![[./img/scheduling.png]]
+Diagram 10.
 
-Miejsce na diagram
-
-Miejsce na opis diagramu
-
+Diagram harmonogramowania przedstawia zaimplementowany cykl życia sesji użytkownika - ma aktywny token JWT do uwierzytelnienia przez 15 minut, a póżniej sesja wygasa, ale jest możliwość jej odświeżenia przez następne 7 dni, po czym sesja kompletnie się kończy.
 # Dokumentacja użytkownika
 
 ## Przypadek użycia 1 - [nazwa]
