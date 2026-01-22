@@ -113,7 +113,7 @@ Konkretne urządzenie: System wywołuje metodę queryMeasure w DataFetcher, filt
 
 Wszystkie urządzenia: System używa ogólnej metody fetchData, pobierając pełen zakres danych. Niezależnie od wybranej ścieżki, uzyskana lista jest następnie przetwarzana przez DataProcessor (sumowanie, agregacja dzienna) przed finalną prezentacją użytkownikowi.
 
-# Diagram czynności 1 [minimum 1]
+# Diagram czynności 1
 
 ![Diagram czynnosci 1](img/diagram-czynnosci-pdf.png)
 
@@ -125,7 +125,7 @@ Kluczowym elementem jest równoległe pobranie metadanych (aliasów) z bazy Post
 co pozwala klasie PdfReportGenerator na renderowanie czytelnych nazw urządzeń zamiast surowych kluczy technicznych 
 przed wysłaniem gotowego strumienia bajtów do użytkownika.
 
-# Diagram czynności 2 [minimum 1]
+# Diagram czynności 2
 
 ![Diagram czynnosci 2](img/diagram-czynnosci-przebieg-analizy-danych-i-agregacji.png)
 
@@ -135,7 +135,7 @@ i aktualizuje znacznik czasu ostatniej aktywności. Dane są następnie przekazy
 który w zależności od parametru czasu (godzina, dzień, rok) wykonuje operacje sumowania lub uśredniania przy 
 użyciu strumieni Javy.
 
-# Diagram maszyny stanowej [minimum 1]
+# Diagram maszyny stanowej
 
 ![Diagram maszyny stanowej](img/diagram-maszyny-stanowej.png)
 
@@ -171,9 +171,9 @@ Miejsce na opis diagramu
 
 # Diagram strukturalny
 
-Miejsce na diagram
+![Diagram strukturalny](img/diagram-strukturalny.png)
 
-Miejsce na opis diagramu
+Diagram strukturalny ukazuje wewnętrzną budowę Modułu Analizy Danych jako kooperację współdziałających części, takich jak ReportController, DataProvider czy DataFetcher, niezbędnych do realizacji procesu raportowania. Przedstawia on instancje klas jako elementy połączone konektorami, które obrazują rzeczywiste ścieżki komunikacji i delegowania zadań wewnątrz systemu. Dzięki temu widoczne jest, jak poszczególne komponenty współpracują ze sobą, tworząc funkcjonalną całość, której działanie wykracza poza możliwości pojedynczego obiektu.
 
 # Diagram harmonogramowania
 
@@ -189,28 +189,46 @@ aż po moment renderowania binarnej zawartości raportu PDF.
 
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+![Zrzut logowanie](img/zrzut-ekranu-logowanie.png)
 
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
+Do skorzystania z modułu analizy danych należy uwierzytelnić się w systemie jako inżynier lub administrator. Można to zrobić uruchamiając aplikację na komputerze w przeglądarce pod odpowiednim adresem URL i następnie:
+1. Wpisując dane do zalogowania administratora/inżyniera.
+2. Klikając przycisk "Zaloguj się"
 
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
+## Przypadek użycia 1 - generowanie wykresu liniowego
 
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
+![Zrzut liniowy](img/zrzut-ekranu-liniowy.png)
+
+Po zalogowaniu użytkownik z odpowiednimi uprawnieniami ma możliwość analizy historycznej danych zużycia lub produkcji energii. W następujący sposób może wygenerować raport z wykresem liniowym:
+1. Z górnego menu nawigacyjnego należy wybrać sekcję "Reports".
+2. W panelu bocznym skonfigurować parametry raportu:
+   * Typ Danych: Wybrać z listy (np. "Zużycie Energii").
+   * Urządzenie: Wybrać konkretne urządzenie lub opcję "Wszystkie urządzenia".
+   * Data Od / Data Do: Ustawić pożądany przedział czasowy w kalendarzu.
+3. Kliknąć przycisk "Generuj" (ikona odświeżania).
+4. W sekcji "Wizualizacja danych" upewnić się, że aktywna jest zakładka "Liniowy". System wygeneruje wykres ciągły.
+
+## Przypadek użycia 2 - generowanie wykresu słupkowego
+
+![Zrzut slupkowy](img/zrzut-ekranu-slupkowy.png)
+
+System umożliwia dynamiczną zmianę sposobu prezentacji tych samych danych bez konieczności ponownego wysyłania zapytania do serwera. Można to zrobić w ten sposób:
+1. Po wygenerowaniu danych (według kroków z Przypadku użycia 1), można przejść do sekcji "Wizualizacja danych" nad wykresem.
+2. Kliknąć przycisk "Słupkowy".
+3. Wykres zostanie natychmiast przerysowany w formie słupkowej, co ułatwia porównywanie wolumenu zużycia w poszczególnych interwałach czasowych dla wybranego zakresu dat.
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+System realizuje obsługę błędów na trzech poziomach, zapewniając stabilność działania i czytelną informację zwrotną dla użytkownika:
+
+1. Walidacja danych wejściowych:
+   * Frontend: Zastosowanie dedykowanych kontrolek HTML (`<input type="datetime-local">, <select>`) eliminuje możliwość wprowadzenia danych w błędnym formacie.
+   * Backend: Dane przychodzące do API są weryfikowane przez adnotacje Springa (np. @DateTimeFormat), co powoduje automatyczne odrzucenie niepoprawnych żądań (kod 400) przed uruchomieniem logiki biznesowej.
+2. Zabezpieczenia logiki biznesowej:
+   * W warstwie dostępu do danych (DataFetcher) zaimplementowano zabezpieczenia przed wartościami NULL zwracanymi z bazy oraz ochronę przed błędami arytmetycznymi (np. dzielenie przez zero przy obliczaniu efektywności).
+   * Generowanie plików PDF jest objęte blokami try-catch, aby błędy biblioteki iText nie powodowały awarii całego serwisu.
+3. Obsługa awarii i komunikacja z użytkownikiem:
+   * Aplikacja kliencka przechwytuje błędy sieciowe i serwerowe (blok try-catch w ReportModule), wyświetlając użytkownikowi stosowny komunikat zamiast zawieszać interfejs.
+   * System obsługuje tzw. "puste stany" – w przypadku braku danych dla wybranego okresu, wyświetlana jest informacja tekstowa zamiast pustego wykresu.
 
 ## Podsumowanie
 
