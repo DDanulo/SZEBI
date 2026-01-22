@@ -1,9 +1,7 @@
 
-# Architekci
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+# Projekt systemu zarządzania energią w budynkach inteligentnych
 
-## Projektanci: 
+## Architektci: 
 ```
 Danylo Dobrianskyi 258668
 Paweł Rajnert 251618
@@ -11,9 +9,6 @@ Paweł Rajnert 251618
 # Dokumentacja techniczna
 
 ## Opis funkcjonalny
-
-### Opis przeznaczenia modułu
-1/2 zdania co moduł w ogóle robi
 
 ### Opis możliwości funkcjonalnych projektu
 Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeba podzielic fragmentami co moze robic dany aktor
@@ -51,7 +46,7 @@ Co realizuje dany moduł, wypunktowanie przypadków uzycia wraz z opisami, trzeb
 # Diagramy przypadków użycia
 
 ## Nazwa przypadku użycia
-![[./img/UCD.drawio.png]]
+![Diagram przypadków użycia](./img/UCD.drawio.png)
 Diagram 1.
 
 Diagram przypadków użycia przedstawia ogólnie cały system zarządzania energią w budynkach inteligentnych. Aktorami są: Mieszkaniec, Administrator, Inżynier oraz Użytkownik niezalogowany. 
@@ -83,7 +78,7 @@ Diagram pokazuje podstawowe funkcjonalności systemu oraz interakcje użytkownik
 
 ## Diagram interakcji 1
 
-![[./img/sekwencji_1.drawio.png]]
+![Diagram interakcji 1](./img/sekwencji_1.drawio.png)
 Diagram 2.
 
 Diagram interakcji (sekwencji) 1 przedstawia przypadek użycia "Edytuj konta innych użytkowników" wykonywany przez Administratora. Polega on na edycji konta jednego z użytkowników systemu przez panel administratora z zapisem do bazy danych.
@@ -108,7 +103,7 @@ Diagram interakcji (sekwencji) 1 przedstawia przypadek użycia "Edytuj konta inn
 
 ## Diagram interakcji 2
 
-![[./img/sekwencji_2.png]]
+![Diagram interakcji 2](./img/sekwencji_2.png)
 Diagram 3.
 
 Diagram interakcji (sekwencji) 2 przedstawia przypadek użycia "Usuń regułe dla alarmów" wykonywany przez Administratora. Polega on na usuwaniu jednej z istniejących reguł z bazy danych przez panel zarządzania regułami.
@@ -121,20 +116,20 @@ Miejsce na opis diagramu
 
 # Diagram maszyny stanowej 
 
-Miejsce na diagram
+![Diagram maszyny stanowej](./img/DiagramMaszynyStanowej.png)
 
-Miejsce na opis diagramu
+Diagram maszyny stanowej przedstawia generowanie tokenu JWT podczas logowania użytkownika. Czas życia tokenu wynosi 15 minut, a po ich upływie należy zalogować się ponownie, aby móc dalej korzystać z systemu. W przypadku nieaktywności użytkownika przez wyżej opisany czas, zostanie on automatycznie wylogowany. Token nie przedłuża się automatycznie po czasie 15 minut.
 
 # Diagram komponentów systemu
 
-![[./img/komponenty.png]]
+![Diagram komponentów](./img/komponenty.png)
 Diagram 6.
 
 Miejsce na opis diagramu
 
 # Diagram pakietów
 
-![[./img/pakiety.png]]
+![Diagram pakietów](./img/pakiety.png)
 Diagram 7.
 
 Diagram pakietów przedstawia ogólny obraz całego systemu składający się z 7 podsystemów odpowiadających za różne funkcjonalności.  
