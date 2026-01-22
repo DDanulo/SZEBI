@@ -41,6 +41,7 @@ Dodatkowo Administrator i Inżynier mogą jeszcze:
 ## Okresowe generowanie prognoz zużycia energii elektrycznej oraz trenowanie modelu uczenia maszynowego.
 
 ![Diagram przypadków użycia dla aktorów "czasowych"](./img/io_use_case_diagram_time_actors.png)
+
 Diagram 1
 
 Ten diagram przypadków użycia przedstawia automatyczne generowanie prognozy zużycia energii elektrycznej oraz trening modelu uczenia maszynowego.
@@ -49,27 +50,28 @@ Głównymi aktorami w tym diagramie są interwał prognozy oraz interwał trenin
 ## Generowanie i wyświetlanie prognoz zużycia energii elektrycznej.
 
 ![Diagram przypadków użycia dla ludzkich aktorów](./img/io_use_case_diagram_actors.png)
+
 Diagram 2
 
 Powyższy diagram przypadków użycia przedstawia generowanie prognozy zużycia energii elektrycznej na żądanie oraz wyświetlanie jej.
 Główni aktorzy tego diagramu to Inżynier oraz Administrator. 
 Mogą oni wygenerować prognozę, co wiąże się z pobraniem danych zużycia energii elektrycznej z poprzednich dni, przetworzeniem ich i zapisaniem wygenerowanej prognozy zużycia energii elektrycznej.
 Gdy podczas sprawdzania poprawności prognozy zużycia energii elektrycznej dojdzie do wykrycia nieprawidłowości, zostanie przeprowadzony trening modelu uczenia maszynowego.
-Inna czynności dostępna dla tych aktorów to wyświetlenie prognozy zużycia energii elektrycznej, co wiąże się z odczytaniem poprzednio wygenerowanych i zapisanych prognoz.
+Inna czynność dostępna dla tych aktorów to wyświetlenie prognozy zużycia energii elektrycznej, co wiąże się z odczytaniem poprzednio wygenerowanych i zapisanych prognoz.
 
 # Diagramy klas
 
 ![Diagram klas](img/class_diagram.jpg)
+
 Diagram 3
 
-Na przedstawionym diagramie zostały uwidocznione klasy związane z modułem prognozowania
+Na przedstawionym diagramie zostały uwidocznione klasy związane z modułem prognozowania.
 Najistotniejszą klasą w tym module jest klasa **ForecastServiceImpl** implementująca interfejs **ForecastService**.
 Steruje ona przepływem danych pomiędzy repozytorium **ForecastRepository**, a algorytmem uczenia maszynowego zdefiniowanym w **ForecasterModel**.
 Klasy pomocnicze **UsageRecord** i **Forecast** służą do przechowywania odpowiednio przeszłego i prognozowanego zużycia energii elektrycznej.
 **DataPredictionController** zapewnia komunikację modułu prognozowania z warstwą prezentacji.
 
 # Diagramy interakcji
-[diagramy interakcji (sekwencji lub komunikacji) dla wybranych przypadków użycia z diagramu(ów) przypadków użycia, dla których zdefiniowano wcześniej scenariusze]
 
 ## Scenariusz 1
 
@@ -92,6 +94,7 @@ Klasy pomocnicze **UsageRecord** i **Forecast** służą do przechowywania odpow
 ## Diagram interakcji 1
 
 ![Diagram interakcji 1](img/sequence_diagram_1.jpeg)
+
 Diagram 4
 
 Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu w celu wygenerowania prognozy zużycia energii elektrycznej.
@@ -117,13 +120,15 @@ Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu
 ## Diagram interakcji 2
 
 ![Diagram sekwencji 2](img/sequence_diagram_2.jpeg)
+
 Diagram 5
 
-Na diagramie został uwidoczniony przepływ informacji między klasami związany z pobraniem, a następnie wyświetleniem prognoz.
+Na diagramie został uwidoczniony przepływ informacji między klasami związany z pobraniem, a następnie wyświetleniem prognoz zużycia energii elektrycznej.
 
-# Diagram czynności [minimum 1]
+# Diagram czynności
 
 ![Diagram czynności](img/activity_diagram.jpeg)
+
 Diagram 6
 
 Diagram przedstawia czynności wykonywane w przypadku wyświetlenia prognoz zużycia energii elektrycznej.
@@ -131,6 +136,7 @@ Diagram przedstawia czynności wykonywane w przypadku wyświetlenia prognoz zuż
 # Diagram maszyny stanowej
 
 ![Diagram maszyny stanowej](img/state_machine_diagram.jpg)
+
 Diagram 7
 
 Diagram przedstawia stany, w których znajduje się system, gdy wyświetla prognozy zużycia energii elektrycznej.
@@ -138,6 +144,7 @@ Diagram przedstawia stany, w których znajduje się system, gdy wyświetla progn
 # Diagram komponentów
 
 ![Diagram komponentów](img/component_diagram.png)
+
 Diagram 8
 
 Moduł prognozowania łączy się z modułem symulacji poprzez bazę danych i pobiera z niej dane zużycia energii elektrycznej z poprzednich dni.
@@ -146,6 +153,7 @@ Moduł alarmowania i alertów łączy się z modułem prognozowania poprzez wyst
 # Diagram pakietów
 
 ![Diagram pakietów](img/package_diagram.jpeg)
+
 Diagram 9
 
 Na diagramie zostały zaprezentowane relacje pomiędzy poszczególnymi pakietami modułu prognozowania.
@@ -153,6 +161,7 @@ Na diagramie zostały zaprezentowane relacje pomiędzy poszczególnymi pakietami
 # Diagram przeglądu interakcji
 
 ![Diagram przeglądu interakcji](img/interaction_diagram.jpeg)
+
 Diagram 10
 
 Diagram przedstawia przepływ sterowania dla przypadku wyświetlenia prognozy zużycia energii elektrycznej.
@@ -160,6 +169,7 @@ Diagram przedstawia przepływ sterowania dla przypadku wyświetlenia prognozy zu
 # Diagram strukturalny
 
 ![Diagram strukturalny](img/structural_diagram.jpeg)
+
 Diagram 11
 
 Diagram przedstawia wzajemnie współdziałające części modułu prognozowania.
@@ -168,6 +178,7 @@ Kooperacją większości części modułu jest "Trening modelu uczenia maszynowe
 # Diagram harmonogramowania
 
 ![Diagram harmonogramowania](img/scheduling_diagram.jpg)
+
 Diagram 12
 
 Diagram przedstawia przybliżony czas trwania poszczególnych stanów wymienionych obiektów zachodzących w przypadku treningu modelu uczenia maszynowego oraz generowaniu prognozy zużycia energii elektrycznej.
