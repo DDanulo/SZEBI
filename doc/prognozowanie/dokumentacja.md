@@ -92,7 +92,7 @@ Klasy pomocnicze **UsageRecord** i **Forecast** służą do przechowywania odpow
 ## Diagram interakcji 1
 
 ![Diagram interakcji 1](img/sequence_diagram_1.jpeg)
-Diagram 3
+Diagram 4
 
 Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu w celu wygenerowania prognozy zużycia energii elektrycznej.
 
@@ -117,26 +117,28 @@ Diagram przedstawia przepływ informacji między poszczególnymi klasami modułu
 ## Diagram interakcji 2
 
 ![Diagram sekwencji 2](img/sequence_diagram_2.jpeg)
-
-Diagram 4
+Diagram 5
 
 Na diagramie został uwidoczniony przepływ informacji między klasami związany z pobraniem, a następnie wyświetleniem prognoz.
 
 # Diagram czynności [minimum 1]
 
 ![Diagram czynności](img/activity_diagram.jpeg)
+Diagram 6
 
 Diagram przedstawia czynności wykonywane w przypadku wyświetlenia prognoz zużycia energii elektrycznej.
 
 # Diagram maszyny stanowej
 
-![Diagram maszyny stanowej]()
+![Diagram maszyny stanowej](img/state_machine_diagram.jpg)
+Diagram 7
 
 Diagram przedstawia stany, w których znajduje się system, gdy wyświetla prognozy zużycia energii elektrycznej.
 
-# Diagram komponentów [z czym dany moduł się łączy (wycinek)]
+# Diagram komponentów
 
 ![Diagram komponentów](img/component_diagram.png)
+Diagram 8
 
 Moduł prognozowania łączy się z modułem symulacji poprzez bazę danych i pobiera z niej dane zużycia energii elektrycznej z poprzednich dni.
 Moduł alarmowania i alertów łączy się z modułem prognozowania poprzez wystawiony interfejs **ForecastService**, dzięki czemu moduł może dokładnie weryfikować poprawność najnowszych prognoz zużycia energii elektrycznej. 
@@ -144,26 +146,31 @@ Moduł alarmowania i alertów łączy się z modułem prognozowania poprzez wyst
 # Diagram pakietów
 
 ![Diagram pakietów](img/package_diagram.jpeg)
+Diagram 9
 
 Na diagramie zostały zaprezentowane relacje pomiędzy poszczególnymi pakietami modułu prognozowania.
 
 # Diagram przeglądu interakcji
 
 ![Diagram przeglądu interakcji](img/interaction_diagram.jpeg)
+Diagram 10
 
 Diagram przedstawia przepływ sterowania dla przypadku wyświetlenia prognozy zużycia energii elektrycznej.
 
 # Diagram strukturalny
 
-Miejsce na diagram
+![Diagram strukturalny](img/structural_diagram.jpeg)
+Diagram 11
 
-Miejsce na opis diagramu
+Diagram przedstawia wzajemnie współdziałające części modułu prognozowania.
+Kooperacją większości części modułu jest "Trening modelu uczenia maszynowego i generowanie predykcji", ponieważ do tego procesu należy pobrać dane zużycia (**ForecastRepository**), przetworzyć je używając algorytmu uczenia maszynowego (**ForecaterModel**), oraz odpowiednio sterować przepływem danych między repozytorium a modelem uczenia maszynowego (**ForecastService**).
 
 # Diagram harmonogramowania
 
-Miejsce na diagram
+![Diagram harmonogramowania](img/scheduling_diagram.jpg)
+Diagram 12
 
-Miejsce na opis diagramu
+Diagram przedstawia przybliżony czas trwania poszczególnych stanów wymienionych obiektów zachodzących w przypadku treningu modelu uczenia maszynowego oraz generowaniu prognozy zużycia energii elektrycznej.
 
 # Dokumentacja użytkownika
 
@@ -179,7 +186,7 @@ Po załadowaniu strony widok powinien być podobny do tego przedstawionego na po
 ![Moduł prognozowania wykres](img/man-view-chart.jpg)
 ![Moduł prognozowania tabela](img/man-view-table.jpg)
 
-Aby w tabeli zmienić zakres dat, w którym mają się znajdować, należy ustawić je w poniższych polach, a następnie kliknąć przycisk **Filtruj**:
+Aby w tabeli zmienić zakres dat, w którym ma się znajdować czas wygenerowania prognozy, należy ustawić je w poniższych polach, a następnie kliknąć przycisk **Filtruj**:
 ![Filtrowanie prognoz](img/man-view-table-marked-filter.jpg)
 ![Filtrowane prognozy](img/man-view-table-ext.jpg)
 
@@ -206,7 +213,7 @@ Uprawnienia do generowania i przeglądania prognoz zużycia energii elektrycznej
 Do generowania prognozy zużycia energii elektrycznej używane jest zużycie energii elektrycznej sprzed 7 dni.
 Gdyby tych danych było za mało, to w danej iteracji nie dojdzie do wygenerowania i zapisania prognozy zużycia energii elektrycznej.
 Podobnie z treningiem, który pobiera dane zużycia energii sprzed 14 dni.
-Gdy z powodu zbyt małej ilości danych zużycia model uczenia maszynowego nie zostanie wytrenowany, automatycznie nie można wygenerować nowych prognoz zużycia energii elektrycznej.
+Gdy z powodu zbyt małej ilości danych zużycia model uczenia maszynowego nie zostanie wytrenowany, wygenerowanie nowych prognoz zużycia energii elektrycznej jest niemożliwe.
 
 ## Podsumowanie
 
