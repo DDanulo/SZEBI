@@ -159,14 +159,17 @@ Diagram harmonogramowania przedstawia zaimplementowany cykl życia sesji użytko
 Krok 1:
 Kliknij przycisk "Wyloguj" na górnym pasku przycisków.
 ![s1](./img/screenshot_1.png)
+Zrzut ekranu 1.
 
 Krok 2:
 Potwierdż swój wybór w wyświetlonym komunikacie.
 ![s2](./img/screenshot_2.png)
+Zrzut ekranu 2.
 
 Krok 3:
 Wylogowano się!
 ![s3](./img/screenshot_3.png)
+Zrzut ekranu 3.
 
 ## Przypadek użycia 2 - Dezaktywacja konta użytkownika systemu
 
@@ -174,18 +177,22 @@ Krok 1:
 Zaloguj się na konto administratora systemu.
 
 ![Przypadek uzycia screen 1](./img/pu2_1.png)
+Zrzut ekranu 4.
 
 Krok 2:
 Przejdź do zakładki **Administraion**, gdzie znajduje się panel administratora i zarządzania kontami w systemie.
 ![Przypadek uzycia screen 2](./img/pu2_2.png)
+Zrzut ekranu 5.
 
 Krok 3:
 Wybierz opcję **Dezaktywuj** aby dezaktywować konto wybranego użytkownika systemu.
 ![Przypadek uzycia screen 3](./img/pu2_3.png)
+Zrzut ekranu 6.
 
 Krok 4:
 Konto wybranego użytkownika został zdezaktywowane.
 ![Przypadek uzycia screen 4](./img/pu2_4.png)
+Zrzut ekranu 7.
 
 ## Obsługa błędów, sytuacji wyjątkowych
 
