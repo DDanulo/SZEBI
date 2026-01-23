@@ -117,9 +117,10 @@ Diagram przedstawia kolejne czynności będące częścią cyklu generowania dan
 
 # Diagram maszyny stanowej 
 
-Miejsce na diagram
+<img src="img/maszyna-stanow.png">
 
-Miejsce na opis diagramu
+Diagram 6
+Diagram maszyny stanów opisuje cykl życia obiektu reprezentującego użącenie zużywające energię.
 
 # Diagram komponentów 
 
