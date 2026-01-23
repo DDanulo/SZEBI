@@ -33,7 +33,7 @@ Moduł Zarządzania:
 
 # Diagramy przypadków użycia
 
-<img src="img/diagram_przypadków_uzycia.png">
+<img src="img/diagram_przypadkow_uzycia.png">
 
 Diagram 1
 
@@ -185,9 +185,10 @@ Zrzut ekranu
 [najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
 
 ## Obsługa błędów, sytuacji wyjątkowych
-Opisać zastosowane zabezpieczenia i ewentualnie co jesli jakis blad wystapi to mozna zrobic albo np. jak sa wprowadzone dane to jak sa walidowane itp.
+Dzięki ograniczeniu możliwości wyboru pór roku i dnia do listy konkretnych opcji, zamiast wpisywania dowolnej wartości, nie ma możliwośći wystąpienia błędów w tym zakresie.
+
 
 ## Podsumowanie
 
-[Słowa końcowe jakieś, jak to konfigurowac zarzadzac tym]
-
+Zarządzanie modułem symulacji sprowadza się do nadzorowania generowanych danych i ewentualnych zmian parametrów(pory roku i dnia) w celu zmiany zmiany wyliczanych wartości.
+Należy również kontrolować stan bazy danych gdzyż ilość generowanych danych przy braku kontroli może doprowadzić do przepełnienia. W takim wypadku może być potrzebne wyczyszczenie lub zwiększenie zasobów pamięci przydzielonych dla naszej bazy.
