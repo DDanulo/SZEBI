@@ -1,6 +1,5 @@
 
-# Nazwa modułu
-Moduł Symulacji
+# Moduł Symulacji
 
 ## Projektanci: 
 ```
@@ -59,16 +58,16 @@ Trzeci diagram klas pokazuje hierarchię klas odpowiedzialnych za zarządzanie u
 |:------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:**                          | Zmień porę roku                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | **Numer:**                          | 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| **Twórca:**                         | Jędrzej Bartoszewski 251482, Kacper Maziarz 251586                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| **Poziom ważności:**                | średni                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| **Typ przypadku użycia:**           | szczegółowy, przeciętnie istotny                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| **Twórca:**                         | Jędrzej Bartoszewski 251482, Kacper Maziarz 251586 - projektanci                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **Poziom ważności:**                | Średni                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **Typ przypadku użycia:**           | Szczegółowy, przeciętnie istotny                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | **Aktorzy:**                        | Administrator                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Krótki opis:**                    | Zmiana pory roku przez aktora powodująca zmianę w parametrach symulacji.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | **Warunki wstępne:**                | Aktor jest uwierzytelniony w systemie oraz posiada odpowiedni poziom dostępu (Administrator).                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Warunki końcowe:**                | Poprawnie dokonano zmiany pory roku, nowa pora roku wraz z pozostałymi, zaktualizowanymi parametrami symulacji są widoczne w GUI.                                                                                                                                                                                                                                                                                                                                                                               |
 | **Główny przepływ zdarzeń:**        | 1. Aktor dokonuje wyboru nowej pory roku w GUI i zatwierdza wybór.<br/> 2. System przyjmuje żądanie HTTP oraz dokonuje walidacji otrzymanych danych (nazwy pory roku). <br> 3. Dokonana zostaje zmiana pory roku w obiekcie symulacji na nową wartość. <br/> 4. Licznik odpowiadający za zliczanie iteracji i zmianę pory roku zostaje wyzerowany. <br/> 5. System zwraca kod odpowiedzi 200. oraz aktualny stan symulacji. <br/> 6. GUI dostosowuje widok na podstawie zaktualizowanych danych dot. symulacji. |
 | **Alternatywne przepływy zdarzeń:** | 3a. System wychwytuje niepoprawne dane. <br/> 3b. System zwraca kod błędu 400.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Specjalne wymagania:**            | nie dotyczy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Specjalne wymagania:**            | Nie dotyczy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Notatki i kwestie:**              | Zmiana pory roku nie wpływa na harmonogram generowania zużycia/produkcji energii - nowe parametry będą uwzględnione przy najbliższej iteracji.                                                                                                                                                                                                                                                                                                                                                                  |
 
 ## Diagram interakcji 1
@@ -85,17 +84,17 @@ Diagram 5. Diagram sekwencji ukazujący przepływ sterowania i wywołań dla prz
 |:------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Nazwa:**                          | Wyłącz wiatrak                                                                                                                                                                                                                     |
 | **Numer:**                          | 2                                                                                                                                                                                                                                  |
-| **Twórca:**                         | Jędrzej Bartoszewski 251482, Kacper Maziarz 251586                                                                                                                                                                                 |
+| **Twórca:**                         | Jędrzej Bartoszewski 251482, Kacper Maziarz 251586 - projektanci                                                                                                                                                                                |
 | **Poziom ważności:**                | średni                                                                                                                                                                                                                             |
-| **Typ przypadku użycia:**           | ogólny, przeciętnie istotny                                                                                                                                                                                                        |
+| **Typ przypadku użycia:**           | Ogólny, przeciętnie istotny                                                                                                                                                                                                        |
 | **Aktorzy:**                        | Moduł  zarządzania                                                                                                                                                                                                                 |
 | **Krótki opis:**                    | Aktywacja konkretnego wiatraka przez aktualizację danych w bazie danych                                                                                                                                                            |
 | **Warunki wstępne:**                | Wiatrak jest obecny w systemie                                                                                                                                                                                                     |
 | **Warunki końcowe:**                | Urządzenie(wiatrak) zostało wyłączone (zaktualizowany rekord w bazie)                                                                                                                                                              |
 | **Główny przepływ zdarzeń:**        | 1.Wywołanie przez aktora odpowiedniej metody z interfejsu IControlDevices. <br/> 2.Weryfikacja obecności urządzenia w bazie. <br> 3. Wywołanie metody dla serwisu obsługującego wiatrak <br/>4. Aktualizacja rekordu  bazie danych |
 | **Alternatywne przepływy zdarzeń:** | 3a. Brak odpowiedniego rekordu w bazie danych 3b. rzucenie wyjątku.                                                                                                                                                                |
-| **Specjalne wymagania:**            | brak                                                                                                                                                                                                                               |
-| **Notatki i kwestie:**              | brak                                                                                                                                                                                                                               |
+| **Specjalne wymagania:**            | Brak                                                                                                                                                                                                                               |
+| **Notatki i kwestie:**              | Brak                                                                                                                                                                                                                               |
 
 ## Diagram interakcji 2
 
@@ -162,31 +161,59 @@ Diagram przedstawia szacunkowy czas, w jakim przebiegają kolejne etapy symulowa
 
 ## Przypadek użycia 1 - Zmiana pory dnia
 ![img.png](img/logowanie.png)
+Zrzut ekranu 1.
+
 Aby przejść do widoku symulacji, należy się zalogować do konta z poziomem dostępu Administrator.
 
 Login i hasło do domyślnego konta administratora to `admin`.
 Następnie ukaże się panel główny aplikacji.
+
 ![img.png](img/logowanie.png)
+Zrzut ekranu 2.
+
 Należy przejść do zakładki `Simulation` (zaznaczone na rysunku powyżej.)
+
 ![img_2.png](img/okno-symulacji.png)
+Zrzut ekranu 3.
+
 Wyświetli się okno z aktualnymi parametrami symulacji.
 Aby zmienić porę dnia, należy wybrać jedną z wartości z pierwszej rozwijanej listy i kliknąć znajdujący się obok przycisk "Zmień".
+
 ![img_3.png](img/zamiana-pory-dnia.png)
+Zrzut ekranu 4.
+
 Po zatwierdzeniu powinny pojawić się w panelu zaktualizowane samoistnie parametry: 
+
 ![img_4.png](img/zaktualizowana-pora-dnia.png)
+Zrzut ekranu 5.
+
 W razie próby wysłania "pustej" pory dnia (klikając "Zmień" bez wybrania żadnej opcji) wyświetli się okno powiadamiające o nieprawidłowej akcji.
+
 ![img_5.png](img/okno-bledu.png)
+Zrzut ekranu 6.
 
 ## Przypadek użycia 2 - Zmiana pory roku
 Analogicznie jak zmiana pory roku jest dostępna tylko dla użytkowników z poziomem dostępu Administrator.
 Po uwierzytelnieniu się należy przejść do panelu symulacji.
+
 ![img.png](img/logowanie.png)
+Zrzut ekranu 7.
+
 Aby zmienić porę, roku należy wybrać jedną z opcji z drugiej rozwijanej listy, a następnie użyć znajdującego się obok niej (w tym samym wierszu) przycisku Zmień.
+
 ![img.png](img/zmiana-pory-roku.png)
+Zrzut ekranu 8.
+
 Po zatwierdzeniu akcji powinny samoistnie zaktualizować parametry symulacji. Jak można zauażyć, pora roku ma znacząco większy wpływ na warunki pogodowe niż pora dnia.
+
 ![img.png](img/widok-po-zmianie-pory-roku.png)
+Zrzut ekranu 9.
+
 W razie próby dodania pory roku bez wybrania opcji pojawi się okno informujące o nieprawidłowej akcji:
+
 ![img.png](img/bład-pora-dnia.png)
+Zrzut ekranu 10.
+
 ## Obsługa błędów, sytuacji wyjątkowych
 Dzięki ograniczeniu możliwości wyboru pór roku i dnia do listy konkretnych opcji, zamiast wpisywania dowolnej wartości, nie ma możliwośći wystąpienia błędów w tym zakresie.
 
