@@ -1,6 +1,7 @@
 
 # Moduł Komunikacji
 
+
 ## Projektanci: 
 ```
 Rafał Kwaśniewski 251566
@@ -47,7 +48,7 @@ wydajności.
 ## Diagram przypadków użycia dla Mieszkańca
 
 ![alt text](img/image-28.png)
-Diagram 1.
+
 
 Diagram przedstawia funkcjonalności Modułu Komunikacji, z którego korzysta aktor Mieszkaniec. System umożliwia użytkownikowi dwa główne procesy: zarządzanie ogłoszeniami oraz komunikację bezpośrednią.
 
@@ -66,7 +67,6 @@ Diagram czytelnie definiuje zakres systemu, oddzielając funkcje podstawowe od t
 
 ## Diagram przypadków użycia dla Administratora oraz Inżyniera
 ![alt text](img/image-29.png)
-Diagram 2.
 
 Diagram przedstawia funkcjonalności Moduł Komunikacji, w którym występują dwaj aktorzy: Administrator oraz Inżynier. Poprzez relację generalizacji wskazano, że Inżynier posiada wszystkie uprawnienia Administratora, co pozwala mu na pełną interakcję z systemem.
 
@@ -84,7 +84,6 @@ Diagram ten obrazuje kompleksowy system zarządzania informacjami i przepływem 
 
 # Diagramy klas
 ![alt text](img/Communication2.png)
-Diagram 3.
 
 Diagram klas przedstawia strukturę backendową systemu, opartą na architekturze warstwowej Controller → Service → Repository oraz wzorcu DTO. System dzieli się na dwa główne pakiety logiczne:
 
@@ -109,7 +108,7 @@ Diagram uwzględnia dedykowane wyjątki, takie jak AnnouncementNotFoundException
 | :--- | :--- |
 | **Nazwa:** | Przeglądaj ogłoszenia|
 | **Numer:** | 1 |
-| **Twórca:** | Rafał Kwaśniewski 251566, Aleksander Gencel 251517 - projektanci |
+| **Twórca:** | Rafał Kwaśniewski 251566, Aleksander Gencel 251517 |
 | **Poziom ważności:** | Wysoki |
 | **Typ przypadku użycia:** | Niezbędny |
 | **Aktorzy:** | Mieszkaniec |
@@ -122,7 +121,7 @@ Diagram uwzględnia dedykowane wyjątki, takie jak AnnouncementNotFoundException
 
 ## Diagram interakcji dla scenariusza 1 - Przeglądaj ogłoszenia
 ![alt text](img/image-1.png)
-Diagram 4.
+
 
 Diagram przedstawia sekwencję zdarzeń dla przypadku użycia polegającego na wyświetlaniu ogłoszeń przez mieszkańca, z uwzględnieniem podziału na logikę biznesową (Service) oraz dostęp do danych (Repository).
 
@@ -143,7 +142,7 @@ Diagram przewiduje dwa scenariusze w zależności od wyniku wyszukiwania:
 | :--- | :--- |
 | **Nazwa:** | Utwórz ogłoszenie |
 | **Numer:** | 2 |
-| **Twórca:** | Rafał Kwaśniewski 251566, Aleksander Gencel 251517 - projektanci|
+| **Twórca:** | Rafał Kwaśniewski 251566, Aleksander Gencel 251517 |
 | **Poziom ważności:** | Wysoki |
 | **Typ przypadku użycia:** | Niezbędny |
 | **Aktorzy:** | Administrator, Inżynier  |
@@ -156,7 +155,7 @@ Diagram przewiduje dwa scenariusze w zależności od wyniku wyszukiwania:
 
 ## Diagram interakcji dla scenariusza 2 - Utwórz ogłoszenie
 ![alt text](img/image-2.png)
-Diagram 5.
+
 
 Diagram przedstawia sekwencję zdarzeń dla przypadku użycia polegającego na dodawaniu nowego ogłoszenia przez Inżyniera, z uwzględnieniem walidacji danych oraz podziału na warstwy systemowe.
 
@@ -173,7 +172,6 @@ Diagram przewiduje dwa scenariusze w zależności od wyniku walidacji:
 # Diagram czynności dla Mieszkańca
 
 ![alt text](img/image-30.png)
-Diagram 6.
 
 Diagram przedstawia przepływ czynności wykonywanych przez Mieszkańca w ramach modułu komunikacji. System oferuje dwie główne ścieżki interakcji: wyświetlanie ogłoszeń oraz obsługę konwersji, zapewniając użytkownikowi dostęp do informacji i narzędzi komunikacyjnych.
 
@@ -198,7 +196,6 @@ Diagram kończy się w momencie wyświetlenia ogłoszeń lub wysłania wiadomoś
 # Diagram maszyny stanów obiektu ogłoszenia
 
  ![alt text](img/image-6.png)
- Diagram 7.
 
 Diagram przedstawia pełny cykl życia obiektu Ogłoszenie, od jego inicjalizacji po archiwizację lub wystąpienie błędów krytycznych.
 
@@ -213,7 +210,6 @@ Ze stanu zapisu następuje automatyczna publikacja (Opublikowane). Zakończenie 
 # Diagram komponentów
 
 ![alt text](img/image-9.png)
-Diagram 8.
 
 Powiązanie z Modułem Alertów: Moduł ten jest kanałem mechanizmu publikacji.
 Implementujemy jego interfejs IAlertObserver i po otrzymaniu obiektu Alert, decydujemy o
@@ -227,14 +223,12 @@ komunikacyjnych.
 # Diagram pakietów
 
 ![alt text](img/image-27.png)
-Diagram 9.
 
 Diagram obrazuje podział systemu na pakiety funkcjonalne. Każdy pakiet stanowi niezależną warstwę odpowiedzialną za inny aspekt działania aplikacji.
 
 # Diagram przeglądu interakcji
 
 ![alt text](img/image-10.png)
-Diagram 10.
 
 Diagram przedstawia logiczny przepływ działań podczas próby wyświetlenia ogłoszeń przez użytkownika.Element „Przeglądaj ogłoszenia” pełni funkcję odnośnika do szczegółowego diagramu interakcji o tej samej nazwie. Diagram ten opisuje techniczne kroki pobierania danych z bazy.
 Po pobraniu danych system sprawdza warunek: "Czy lista ogłoszeń jest pusta?".<vr>
@@ -244,14 +238,12 @@ Jeśli lista jest pusta, system generuje "Wyświetlenie komunikatu o braku ogło
 # Diagram strukturalny
 
 ![alt text](img/image-11.png)
-Diagram 11.
 
 Diagram obrazuje wewnętrzną strukturę i powiązania danych w obrębie obiektu ogłoszenia Announcement.
 
 # Diagram harmonogramowania
 
 ![alt text](img/image-12.png)
-Diagram 12.
 
 Diagram przedstawia zmiany stanów obiektu klasy Message w funkcji czasu, obrazując proces od momentu powstania wiadomości do jej finalnego doręczenia.
 
@@ -265,38 +257,33 @@ Przypadek użycia zakłada że użytkownik posiada aktywne konto w systemie.
 Zaloguj się do systemu wpisując poprawny login oraz hasło a następnie naciśnij przycisk `Zaloguj się` przedstawiony na rysunku poniżej. 
 
 ![alt text](img/image-13.png)
-Zrzut ekranu 1.
 
 Po uwierzytelnieniu zostanie wyświetlony główny panel kontroli urządzeń.
 Następnie należy na górnym pasku nawigacyjnym nacisnąć przycisk `Communication` zaznaczony czerwoną ramką na poniższym rysunku.
 
 ![alt text](img/image-14.png)
-Zrzut ekranu 2.
+
 
 Przycisk ten przeniesie nas do modułu komunikacji w którym zostanie wyświetlony panel przeglądania ogłoszeń widoczny na poniższym rysunku.
 
 ![alt text](img/image-15.png)
-Zrzut ekranu 3.
 
 System oferuje funkcję filtrowania ogłoszeń w oparciu o trzy kryteria: treść, stopień ważności oraz budynek, którego dotyczy informacja.
 
 Aby przefiltrować ogłoszenia stosując kryterium treści należy w pole `Szukaj w treści lub autorze` wpisać interesującą nas frazę. Przykład takowego filtrowania zaprezentowano na rysunku poniżej.
 
+
 ![alt text](img/image-16.png)
-Zrzut ekranu 4.
 
 Aby przefiltrować ogłoszenia stosując kryterium stopnia ważności należy z listy rozwijanej wybrać interesujący nas poziom ważności. Przykład takiego filtrowania zaprezentowano na rysunkach poniżej.
 
 ![alt text](img/image-17.png)
-Zrzut ekranu 5.
 
 ![alt text](img/image-18.png)
-Zrzut ekranu 6.
 
 Aby przefiltrować ogłoszenia stosując kryterium budynku należy w pole `Filtruj po budynku` wpisać interesujący nas budynek. Przykład takiego filtrowania zaprezentowano na rysunku poniżej.
 
 ![alt text](img/image-19.png)
-Zrzut ekranu 7.
 
 ## Przypadek użycia 3 oraz 4 - Przeglądaj konwersacje oraz Wyślij wiadomość
 
@@ -306,38 +293,33 @@ Przypadek użycia zakłada że użytkownik posiada aktywne konto w systemie.
 Zaloguj się do systemu wpisując poprawny login oraz hasło a następnie naciśnij przycisk `Zaloguj się` przedstawiony na rysunku poniżej. 
 
 ![alt text](img/image-13.png)
-Zrzut ekranu 8.
 
 Po uwierzytelnieniu zostanie wyświetlony główny panel kontroli urządzeń.
 Następnie należy na górnym pasku nawigacyjnym nacisnąć przycisk `Communication` zaznaczony czerwoną ramką na poniższym rysunku.
 
 ![alt text](img/image-14.png)
-Zrzut ekranu 9.
+
 
 Przycisk ten przeniesie nas do modułu komunikacji w którym zostanie wyświetlony panel przeglądania ogłoszeń widoczny na poniższym rysunku.
 
 ![alt text](img/image-15.png)
-Zrzut ekranu 10.
 
 Następnie klikamy przycisk `Wiadomości` znajdujący się na głównym panelu modułu komunikacji, który przedstawiono na rysunku poniżej.
 
 ![alt text](img/image-22.png)
-Zrzut ekranu 11.
 
 Zostaniemy przeniesieni do widoku dostępnych konwersacji. Następnie aby wyświetlić porządaną konwersację należy wybrać ją z listy znajdującej się po lewej stronie ekranu, którą przedstawiono na rysunku poniżej. 
 
 ![alt text](img/image-23.png)
-Zrzut ekranu 12.
 
 Wybór konkretnej rozmowy powoduje przejście do okna czatu, w którym wyświetlana jest pełna historia korespondencji. Aby wysłać nową wiadomość, należy wprowadzić jej treść w polu `Napisz wiadomość...` a następnie wcisnać przycisk `Wyślij`, zaprezentowany na poniższym rysunku.
 
 ![alt text](img/image-25.png)
-Zrzut ekranu 13.
 
 Finalnie nasza wiadomość zostanie wysłana i wyświetli się w oknie czatu co zaprezentowano na rysunku poniżej.
 
 ![alt text](img/image-26.png)
-Zrzut ekranu 14.
+
 
 ## Obsługa błędów, sytuacji wyjątkowych
 System został zaprojektowany z uwzględnieniem mechanizmów gwarantujących spójność danych oraz kontrolę dostępu do kluczowych funkcjonalności.

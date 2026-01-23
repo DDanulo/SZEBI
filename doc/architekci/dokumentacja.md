@@ -111,7 +111,7 @@ Diagram interakcji (sekwencji) 2 przedstawia przypadek użycia "Usuń regułe dl
 # Diagram czynności 
 
 ![Diagram czynności](./img/czynności.png)
-Diagram 4.
+Diagram 6.
 
 Diagram czynności przedstawia kolejność wykonywania czynności i spełniania warunków podczas tworzenia harmonogramu dla urządzenia.
 

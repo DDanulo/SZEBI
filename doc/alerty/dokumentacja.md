@@ -3,8 +3,8 @@
 
 ## Projektanci: 
 ```
-Mateusz Chodulski 252929
-Karol Dawid 252931
+Mateusz Chodulski, 252929
+Karol Dawid, 252931
 ```
 # Dokumentacja techniczna
 

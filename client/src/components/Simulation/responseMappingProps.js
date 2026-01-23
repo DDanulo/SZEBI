@@ -10,8 +10,8 @@ export const seasonMappingProps = {
 }
 
 export const daytimeMappingProps = {
-    EARLY_MORNING: "Ranek",
-    MORNING: "Przedpołudnie",
+    EARLY_MORNING: "Wczesny ranek",
+    MORNING: "Ranek",
     AFTERNOON: "Popołudnie",
     EVENING: "Późne popołudnie",
     LATE_EVENING: "Wieczór",
