@@ -688,3 +688,9 @@
     cursor: pointer;
     padding: 0;
 }
+
+.close-btn {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
