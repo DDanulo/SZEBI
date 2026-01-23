@@ -165,34 +165,32 @@ Diagram przedstawia szacunkowy czas, w jakim przebiegają kolejne etapy symulowa
 # Dokumentacja użytkownika
 
 ## Przypadek użycia 1 - Zmiana pory dnia
-![img.png](img.png)
+![img.png](img/logowanie.png)
+Aby przejść do widoku symulacji, należy się zalogować do konta z poziomem dostępu Administrator.
 
+Login i hasło do domyślnego konta administratora to `admin`.
+Następnie ukaże się panel główny aplikacji.
+![img.png](img/logowanie.png)
+Należy przejść do zakładki `Simulation` (zaznaczone na rysunku powyżej.)
+![img_2.png](img/okno-symulacji.png)
+Wyświetli się okno z aktualnymi parametrami symulacji.
+Aby zmienić porę dnia, należy wybrać jedną z wartości z pierwszej rozwijanej listy i kliknąć znajdujący się obok przycisk "Zmień".
+![img_3.png](img/zamiana-pory-dnia.png)
+Po zatwierdzeniu powinny pojawić się w panelu zaktualizowane samoistnie parametry: 
+![img_4.png](img/zaktualizowana-pora-dnia.png)
+W razie próby wysłania "pustej" pory dnia (klikając "Zmień" bez wybrania żadnej opcji) wyświetli się okno powiadamiające o nieprawidłowej akcji.
+![img_5.png](img/okno-bledu.png)
 
-![img_1.png](img_1.png)
-
-![img_2.png](img_2.png)
-
-![img_3.png](img_3.png)
-![img_4.png](img_4.png)
-![img_5.png](img_5.png)
-Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
-
-I kroki opisane np.
-Zaloguj się lub przejdź do sklepu jako gość.
-Zrzut ekranu
-Przeglądaj ofertę i wybierz interesujący Cię produkt.
-Zrzut ekranu
-Kliknij na produkt, aby zobaczyć szczegóły.
-Zrzut ekranu
-Wybierz ilość (oraz wariant, jeśli jest dostępny).
-Zrzut ekranu
-Kliknij przycisk „Dodaj do koszyka”
-Zrzut ekranu
-Produkt zostanie dodany do koszyka, który możesz sprawdzić, klikając ikonę koszyka.
-Zrzut ekranu
-
-[najwazniejsze przypadki uzycia wybrac ze 2/3 wystarcza]
-
+## Przypadek użycia 2 - Zmiana pory roku
+Analogicznie jak zmiana pory roku jest dostępna tylko dla użytkowników z poziomem dostępu Administrator.
+Po uwierzytelnieniu się należy przejść do panelu symulacji.
+![img.png](img/logowanie.png)
+Aby zmienić porę, roku należy wybrać jedną z opcji z drugiej rozwijanej listy, a następnie użyć znajdującego się obok niej (w tym samym wierszu) przycisku Zmień.
+![img.png](img/zmiana-pory-roku.png)
+Po zatwierdzeniu akcji powinny samoistnie zaktualizować parametry symulacji. Jak można zauażyć, pora roku ma znacząco większy wpływ na warunki pogodowe niż pora dnia.
+![img.png](img/widok-po-zmianie-pory-roku.png)
+W razie próby dodania pory roku bez wybrania opcji, pojawi się okno informujące o nieprawidłowej akcji:
+![img.png](bład-pora-dnia.png)
 ## Obsługa błędów, sytuacji wyjątkowych
 Dzięki ograniczeniu możliwości wyboru pór roku i dnia do listy konkretnych opcji, zamiast wpisywania dowolnej wartości, nie ma możliwośći wystąpienia błędów w tym zakresie.
 
