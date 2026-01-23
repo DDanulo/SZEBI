@@ -139,9 +139,11 @@ Diagram pakietów przedstawia jakie pakiety zawiera pakiet Symulacji.
 
 # Diagram przeglądu interakcji
 
-Miejsce na diagram
+<img src="img/przegladu-interakcji.png">
 
-Miejsce na opis diagramu
+Diagram 9
+
+Diagram obrazowuje przepływ sterowania dla pżypadku użycia dotyczącego włączenia/aktywacji panelu słonecznego o wskazanym identyfikatorze.
 
 # Diagram strukturalny
 
@@ -161,8 +163,17 @@ Diagram przedstawia szacunkowy czas, w jakim przebiegają kolejne etapy symulowa
 
 # Dokumentacja użytkownika
 
-## Przypadek użycia 1 - [nazwa]
+## Przypadek użycia 1 - Zmiana pory dnia
+![img.png](img.png)
 
+
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
+
+![img_3.png](img_3.png)
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
 Instrukcja z zrzutami ekranu jak wygląda GUI (jeśli jest):
 
 I kroki opisane np.
