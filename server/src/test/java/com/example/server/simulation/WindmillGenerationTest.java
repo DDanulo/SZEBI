@@ -22,7 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+//poprawic konstruktory....
 @Testcontainers
 @Transactional
 @SpringBootTest
@@ -51,7 +51,7 @@ public class WindmillGenerationTest {
 
     @Test
     public void shouldSuccesfulyGenerateEnergyConsumption() {
-        Windmill windmill = new Windmill(true, 150, 25);
+        Windmill windmill = new Windmill("some", true,150, 25);
         windmillService.saveWindmill(windmill);
         windmillService.simulateEnergyGeneration();
         BigDecimal newValue = windmillService.getAllWindmills().getLast().getTotalGenerated();
@@ -61,7 +61,7 @@ public class WindmillGenerationTest {
 
     @Test
     public void shouldSuccessfulyGenerateMeasurementForEnergyConsumption() {
-        Windmill windmill = new Windmill(true, 150, 25);
+        Windmill windmill = new Windmill("some",true, 120, 25);
         windmillService.saveWindmill(windmill);
         windmillService.simulateEnergyGeneration();
         List<GeneratedEnergyMeasure> measures = generatedMeasureRepository.findAll();
@@ -75,7 +75,7 @@ public class WindmillGenerationTest {
 
     @Test
     public void ShouldNotGenerateConsumptionForInactiveDevice() {
-        Windmill windmill = new Windmill(false, 150, 25);
+        Windmill windmill = new Windmill("some", false, 200, 25);
         windmillService.saveWindmill(windmill);
         windmillService.simulateEnergyGeneration();
         BigDecimal newValue = windmillService.getAllWindmills().getLast().getTotalGenerated();
@@ -84,7 +84,7 @@ public class WindmillGenerationTest {
 
     @Test
     public void shouldSuccessfulyNotGenerateMeasurementForInactiveDevice() {
-        Windmill windmill = new Windmill(false, 150, 25);
+        Windmill windmill = new Windmill("some",false, 150, 25);
         windmillService.saveWindmill(windmill);
         windmillService.simulateEnergyGeneration();
         List<GeneratedEnergyMeasure> measures = generatedMeasureRepository.findAll();

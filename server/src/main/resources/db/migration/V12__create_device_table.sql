@@ -1,0 +1,1 @@
+ALTER TABLE device ADD COLUMN owner_id UUID not null;

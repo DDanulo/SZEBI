@@ -49,16 +49,24 @@ public class RequestService {
         DeviceRequest req = requestRepo.findById(requestId).orElseThrow();
 
         if (req.getRequestType() == DeviceRequest.RequestType.ADD) {
-            // Szukamy odpowiedniego managera i tworzymy urządzenie
+
+            for (IDeviceAuth manager : deviceManagers) {
+                boolean nameExists = manager.getDevices().stream()
+                        .anyMatch(d -> d.getName().equalsIgnoreCase(req.getDeviceName()));
+
+                if (nameExists) {
+                    throw new IllegalArgumentException("Urządzenie o nazwie " + req.getDeviceName() + " już istnieje!");
+                }
+            }
+
+
             for (IDeviceAuth manager : deviceManagers) {
                 if (manager.supports(req.getDeviceType())) {
-                    // UWAGA: Tu przekazujemy ID użytkownika z wniosku jako właściciela!
                     manager.addDevice(req.getDeviceName(), req.getArea(), req.getMaxPower(), req.getMinWind(), req.getUserId());
                     break;
                 }
             }
         } else if (req.getRequestType() == DeviceRequest.RequestType.REMOVE) {
-            // Usuwamy urządzenie
             for (IDeviceAuth manager : deviceManagers) {
                 if (manager.removeDevice(req.getTargetDeviceId())) break;
             }
