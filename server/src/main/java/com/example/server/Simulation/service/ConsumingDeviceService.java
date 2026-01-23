@@ -73,10 +73,11 @@ public class ConsumingDeviceService {
         return maybeConsumingDevice.get();
     }
 
+    @Transactional
     @Scheduled(fixedRate = 300_000, initialDelay = 10000)
     public void simulateEnergyConsumption() {
         double temperature = simulator.getTemperature();
         consumingDeviceRepository.findByWorkingTrue().forEach(device -> consumingMeasureRepository
-                .save(new ConsumedEnergyMeasure(LocalDateTime.now(),device.consumeEnergy(temperature), device)));
+                .save(new ConsumedEnergyMeasure(LocalDateTime.now(),device.consumeEnergy(temperature ), device)));
     }
 }

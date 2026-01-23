@@ -18,18 +18,18 @@ public class ConsumingDevice extends Device {
     @Column
     private BigDecimal totalConsumed;
 
+    @Column(name = "consuming_rate")
+    private Double deviceConsumptionRate;
 
-    public ConsumingDevice(String description, boolean active,double area) {
+    public ConsumingDevice(String description, boolean active, Double deviceConsumptionRate) {
         super(description,active);
-
-        this.setArea(area);
+        this.totalConsumed = BigDecimal.valueOf(0.0f);
+        this.deviceConsumptionRate = deviceConsumptionRate;
     }
 
     public double consumeEnergy(double coeff){
-        if(this.totalConsumed == null){
-            this.totalConsumed = BigDecimal.ZERO;
-        }
-        double calculated = 5 * (45.0 - coeff);
+        double saveDeviceConsumptionRate = deviceConsumptionRate == null? 0: deviceConsumptionRate;
+        double calculated = 2 * (45.0 - coeff) + saveDeviceConsumptionRate;
         this.totalConsumed = totalConsumed.add(BigDecimal.valueOf(calculated));
         return calculated;
     }

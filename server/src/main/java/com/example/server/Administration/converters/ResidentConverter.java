@@ -17,8 +17,8 @@ public class ResidentConverter {
     public static Resident convertResidentDTOToResident(ResidentDTO residentDTO){
         return Resident.builder()
                 .id(residentDTO.id())
-                .login(residentDTO.login())
-                .passwordHash(residentDTO.password())
+                .login(residentDTO.login() != null && !residentDTO.login().isEmpty() ? residentDTO.login() : "")
+                .passwordHash(residentDTO.password() != null ? residentDTO.password() : "")
                 .firstName(residentDTO.firstName())
                 .lastName(residentDTO.lastName())
                 .active(residentDTO.active())

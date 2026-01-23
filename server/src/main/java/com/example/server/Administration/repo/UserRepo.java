@@ -14,6 +14,8 @@ public interface UserRepo extends JpaRepository<User, UUID> {
 
     Optional<User> findByLogin(String login);
 
+    Optional<User> findByEmail(String email);
+
     List<User> findAllByLoginContainingIgnoreCase(String partial);
 
 

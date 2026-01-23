@@ -15,13 +15,23 @@ public class SimulatorManagementService {
         this.simulator = simulator;
     }
 
-    public Map<String, Object> changeSeason(Season season) {
-        simulator.setSeason(season);
-        return simulator.getSimulationParameters();
+    public void changeSeason(Season season) {
+        if(season == null) {
+            throw new IllegalArgumentException("Season cannot be null");
+        }
+        simulator.changeSeason(season);
+        getSimulationParameters();
     }
 
-    public Map<String, Object> changeTimeOfDay(TimeOfDay timeOfDay) {
+    public void changeTimeOfDay(TimeOfDay timeOfDay) {
+        if(timeOfDay == null) {
+            throw new IllegalArgumentException("TimeOfDay cannot be null");
+        }
         simulator.changeTimeOfDay(timeOfDay);
+        getSimulationParameters();
+    }
+
+    public Map<String, Object> getSimulationParameters() {
         return simulator.getSimulationParameters();
     }
 

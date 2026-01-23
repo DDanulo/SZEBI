@@ -1,42 +1,81 @@
-import axios from 'axios';
+import api from '../Administration/api.js';
 
+const API_URL = "/api";
 
-const API_URL = 'http://localhost:8080/api';
+// --- URZĄDZENIA (ADMIN/ENGINEER) ---
 
-export const getSchedulesByDevice = (deviceId) => {
-    return axios.get(`${API_URL}/schedules/device/${deviceId}`);
-};
-
-export const addSchedule = (schedule) => {
-    return axios.post(`${API_URL}/schedules`, schedule);
-};
-
-export const deleteSchedule = (id) => {
-    return axios.delete(`${API_URL}/schedules/${id}`);
-};
-
-// --- NOWA METODA ---
 export const getAllDevices = () => {
-    return axios.get(`${API_URL}/devices`);
-};
-// --- NOWE METODY ---
-export const turnDeviceOn = (id) => {
-    return axios.post(`${API_URL}/devices/${id}/turn-on`);
+    return api.get(`${API_URL}/devices`);
 };
 
-export const turnDeviceOff = (id) => {
-    return axios.post(`${API_URL}/devices/${id}/turn-off`);
-};
-export const addDevice = (name, type, params = {}) => {
-    return axios.post(`${API_URL}/devices`, null, {
-        params: {
-            name,
-            type,
-            ...params
-        }
-    });
+export const addDevice = (name, type, extraParams) => {
+    const params = new URLSearchParams();
+    params.append('name', name);
+    params.append('type', type);
+    params.append('area', extraParams.area);
+    if (extraParams.maxPower) params.append('maxPower', extraParams.maxPower);
+    if (extraParams.minWind) params.append('minWind', extraParams.minWind);
+
+    return api.post(`${API_URL}/devices`, null, { params });
 };
 
 export const removeDevice = (id) => {
-    return axios.delete(`${API_URL}/devices/${id}`);
+    return api.delete(`${API_URL}/devices/${id}`);
+};
+
+export const turnDeviceOn = (id) => {
+    return api.post(`${API_URL}/devices/${id}/turn-on`);
+};
+
+export const turnDeviceOff = (id) => {
+    return api.post(`${API_URL}/devices/${id}/turn-off`);
+};
+
+// --- HARMONOGRAMY ---
+
+export const getSchedulesByDevice = (deviceId) => {
+    return api.get(`${API_URL}/schedules/device/${deviceId}`);
+};
+
+export const addSchedule = (schedule) => {
+    return api.post(`${API_URL}/schedules`, schedule);
+};
+
+export const deleteSchedule = (id) => {
+    return api.delete(`${API_URL}/schedules/${id}`);
+};
+
+
+// --- WNIOSKI (REQUESTS) ---
+
+
+export const requestAddDevice = (name, type, extraParams) => {
+    const params = new URLSearchParams();
+    params.append('name', name);
+    params.append('type', type);
+    params.append('area', extraParams.area);
+    extraParams.maxPower = 500;
+    console.log(extraParams.maxPower);
+    // extraParams.minWind = 0.1;
+    if (extraParams.maxPower) params.append('maxPower', extraParams.maxPower);
+    if (extraParams.minWind) params.append('minWind', extraParams.minWind);
+
+    return api.post(`${API_URL}/requests/add`, null, { params });
+};
+
+
+export const requestRemoveDevice = (deviceId) => {
+    return api.post(`${API_URL}/requests/remove/${deviceId}`);
+};
+
+export const getPendingRequests = () => {
+    return api.get(`${API_URL}/requests/pending`);
+};
+
+export const approveRequest = (id) => {
+    return api.post(`${API_URL}/requests/${id}/approve`);
+};
+
+export const rejectRequest = (id) => {
+    return api.post(`${API_URL}/requests/${id}/reject`);
 };

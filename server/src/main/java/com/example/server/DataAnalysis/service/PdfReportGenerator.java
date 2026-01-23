@@ -18,7 +18,8 @@ import java.awt.Color;
 @Service
 public class PdfReportGenerator {
 
-    public byte[] generateUsageReport(List<DataPoint> data, LocalDateTime from, LocalDateTime to) {
+    public byte[] generateUsageReport(List<DataPoint> data, LocalDateTime from, LocalDateTime to,
+                                      Map<String, String> deviceAliases) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Document document = new Document();
             PdfWriter writer = PdfWriter.getInstance(document, out);
@@ -27,7 +28,7 @@ public class PdfReportGenerator {
 
             // nagłówek
             String fontPath = "fonts/arial.ttf";
-            Font titleFont = FontFactory.getFont(fontPath, BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 18);
+            Font titleFont = FontFactory.getFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 18);
             Paragraph title = new Paragraph("Raport Zużycia Energii", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
@@ -50,7 +51,9 @@ public class PdfReportGenerator {
             double total = 0;
             for (DataPoint dp : data) {
                 table.addCell(dp.getTimestamp().toString());
-                table.addCell(dp.getDeviceId());
+                String devId = dp.getDeviceId();
+                String alias = deviceAliases != null && devId != null ? deviceAliases.get(devId) : null;
+                table.addCell(alias != null && !alias.isBlank() ? alias : (devId != null ? devId : "-"));
                 table.addCell(String.format("%.2f", dp.getValue()));
                 total += dp.getValue();
             }
@@ -62,29 +65,59 @@ public class PdfReportGenerator {
             document.add(new Paragraph(" "));
             document.add(new Paragraph("Całkowite zużycie: " + String.format("%.2f", total) + " kWh", summaryFont));
 
-            // wykres słupkowy (agregacja dzienna)
+            // TUTAJ DODAJEMY NOWĄ STRONĘ, ABY WYKRES NIE NACHODZIŁ NA TABELĘ
+            document.newPage();
+
+            // wykres słupkowy
             document.add(new Paragraph(" "));
             Font chartTitleFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 16);
-            document.add(new Paragraph("Wykres dzienny (słupkowy)", chartTitleFont));
+            String chartTitle = "Wykres słupkowy";
+            document.add(new Paragraph(chartTitle, chartTitleFont));
             document.add(new Paragraph(" "));
 
-            if (data == null || data.isEmpty()) {
+            if (data.isEmpty()) {
                 document.add(new Paragraph("Brak danych do narysowania wykresu."));
             } else {
-                Map<LocalDate, Double> daily = data.stream()
-                        .collect(Collectors.groupingBy(dp -> dp.getTimestamp().toLocalDate(), Collectors.summingDouble(DataPoint::getValue)));
+                // Pozostawiono agregację dzienną
+                Map<String, Double> buckets = data.stream().collect(Collectors.groupingBy(
+                        dp -> dp.getTimestamp().toLocalDate().toString(),
+                        Collectors.summingDouble(DataPoint::getValue)));
 
-                List<LocalDate> days = new ArrayList<>(daily.keySet());
-                Collections.sort(days);
+                List<String> keys = buildFullKeys(from, to);
 
-                double maxVal = daily.values().stream().mapToDouble(Double::doubleValue).max().orElse(1.0);
+                List<Double> values = new ArrayList<>(keys.size());
+                for (String k : keys) {
+                    values.add(buckets.getOrDefault(k, 0.0));
+                }
+
+                // przycinamy wiodące i końcowe zera
+                int firstNonZero = -1;
+                for (int i = 0; i < values.size(); i++) {
+                    if (values.get(i) != null && values.get(i) > 0.0) { firstNonZero = i; break; }
+                }
+                int lastNonZero = -1;
+                for (int i = values.size() - 1; i >= 0; i--) {
+                    if (values.get(i) != null && values.get(i) > 0.0) { lastNonZero = i; break; }
+                }
+
+                if (firstNonZero == -1 || lastNonZero == -1 || firstNonZero > lastNonZero) {
+                    document.add(new Paragraph("Brak niezerowych danych w zadanym zakresie."));
+                    document.close();
+                    return out.toByteArray();
+                }
+
+                keys = new ArrayList<>(keys.subList(firstNonZero, lastNonZero + 1));
+                values = new ArrayList<>(values.subList(firstNonZero, lastNonZero + 1));
+
+                //maksymalna wartość do skalowania liczona z przyciętego zakresu
+                double maxVal = values.stream().mapToDouble(v -> v != null ? v : 0.0).max().orElse(1.0);
                 if (maxVal <= 0) maxVal = 1.0;
 
                 //obszar rysowania
                 float left = 50f;
                 float right = document.getPageSize().getRight(36f);
                 float width = right - left - 20f;
-                float bottom = 330f;
+                float bottom = 450f; // Podniesiono wykres wyżej na nowej stronie
                 float height = 220f;
 
                 //osie
@@ -100,7 +133,7 @@ public class PdfReportGenerator {
                 cb.stroke();
 
                 // słupki
-                int n = days.size();
+                int n = keys.size();
                 float barGap = 6f;
                 float barWidth = Math.max(8f, (width - (n + 1) * barGap) / Math.max(1, n));
                 float x = left + barGap;
@@ -109,14 +142,16 @@ public class PdfReportGenerator {
                 Font labelFont = FontFactory.getFont(fontPath,BaseFont.IDENTITY_H,BaseFont.EMBEDDED, 8);
 
                 for (int i = 0; i < n; i++) {
-                    LocalDate day = days.get(i);
-                    double val = daily.getOrDefault(day, 0.0);
+                    String key = keys.get(i);
+                    double val = values.get(i);
                     float barHeight = (float) (val / maxVal) * (height - 20f);
 
                     cb.rectangle(x, bottom + 0.5f, barWidth, Math.max(0.5f, barHeight));
                     cb.fill();
 
-                    String lbl = day.getMonthValue() + "-" + String.format("%02d", day.getDayOfMonth());
+                    // format YYYY-MM-DD, a ma pokazać MM-DD
+                    String lbl = key.substring(5);
+
                     ColumnText.showTextAligned(cb, Element.ALIGN_CENTER, new Phrase(lbl, labelFont), x + barWidth / 2f, bottom - 10f, 0);
 
                     if (n <= 14 || i % Math.max(1, n / 10) == 0) {
@@ -149,5 +184,18 @@ public class PdfReportGenerator {
         } catch (Exception e) {
             throw new RuntimeException("Błąd generowania PDF", e);
         }
+    }
+
+    // budowanie pełnej listy kluczy osi X dla wybranego przedziału czasu
+    private List<String> buildFullKeys(LocalDateTime from, LocalDateTime to) {
+        List<String> keys = new ArrayList<>();
+        // daily (domyślnie)
+        LocalDate cur = from.toLocalDate();
+        LocalDate end = to.toLocalDate();
+        while (!cur.isAfter(end)) {
+            keys.add(cur.toString());
+            cur = cur.plusDays(1);
+        }
+        return keys;
     }
 }
