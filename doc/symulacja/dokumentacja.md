@@ -1,7 +1,6 @@
 
 # Nazwa modułu
-[usuńcie wszystkie wpisy w kwadratowych nawiasach! sa to dodatkowe pomocnicze opisy]
-[wpisy bez nawiasów są do zastąpienia zawartością]
+Moduł Symulacji
 
 ## Projektanci: 
 ```
@@ -37,22 +36,21 @@ Moduł Zarządzania:
 
 Diagram 1
 
-Diargram przypadków użycia przedstawia moduł symulacji. Aktorami są użytkownika z rolą Administrator, który może zmieniać porę roku i dnia i pobierać aktualne parametry, oraz Moduł Zarządzania, który może dodawać, usuwać, włączać, wyłączać wszystkoe urządzenia oraz pobierać wszystkie urządzenia lub listę konkretnych urządzeń.
+Diagram przypadków użycia przedstawia moduł symulacji. Aktorami są: użytkownik z rolą Administrator, który może zmieniać porę roku i dnia oraz pobierać aktualne parametry, oraz Moduł Zarządzania, który może dodawać, usuwać, włączać, wyłączać wszystkoe urządzenia oraz pobierać wszystkie urządzenia lub listę konkretnych urządzeń.
 
-[powtórzyć dla każdego diagramu, tak samo nagłówki]
 
 # Diagramy klas
-[diagram(y) klas (obejmują wszystkie klasy)]
+Ze względu na ilość klas podzielono diagram klas na trzy części.
+![img.png](img/klasy1-v3.png)
+Diagram 2. Pierwsza część diagramu klas
 
-![img.png](img/klas-1.png)
-
-Diagram X.Y.Z Pierwsza część diagramu klas
-
-![img.png](img/klas-2.png)
-Diagram X.Y.Z Pierwsza część diagramu klas
-
-
-
+Pierwsza częśc diagramu klas pokazuje hierarchię klas encyjnych, wykorzystyanych do mapowania obirktowo relacyjnego oraz klas tzw. repozytoriów, obsługujących operacje na bazie danych.
+![img.png](img/klasy-2.png)
+Diagram 3. Druga część diagramu klas
+Drugi diagram obrazuje część modułu odpowiadającą za zarządzanie obiektem symulacji oraz obsługą żądań z aplikacji klienckiej.
+![img.png](img/klas-3.png)
+Diagram 4. Trzecia część diagramu klas
+Trzeci diagram klas pokazuje hierarchię klas odpowiedzialnych za zarządzanie urządzeniami oraz okresowe generowanie zużycia/produkcji energii.
 # Diagramy interakcji
 
 ## Scenariusz 1
@@ -77,9 +75,9 @@ Diagram X.Y.Z Pierwsza część diagramu klas
 
 ![img.png](img/int-1.png)
 
-Miejsce na podpis
+Diagram 5. Diagram sekwencji ukazujący przepływ sterowania i wywołań dla przypadku użycia "zmień porę roku".
 
-Miejsce na opis diagramu
+
 
 ## Scenariusz 2
 
@@ -103,15 +101,13 @@ Miejsce na opis diagramu
 
 ![img.png](img/interakcji-2.png)
 
-Miejsce na podpis
-
-Miejsce na opis diagramu
+Diagram 6. Diagram sekwencji obrazujący przepływ sterowania i wywołań dla przypadku użycia "Wyłącz wiatrak".
 
 # Diagram czynności 
 
 <img src="img/diagram_czynnosci.png">
 
-Diagram 5
+Diagram 7
 
 Diagram przedstawia kolejne czynności będące częścią cyklu generowania danych produkcji i zużycia energii oraz zapisania ich do bazy danych. Czynnikiem rozpoczynającym cały przebieg jest w tym wypadku określony odstęp czasu, który musi upłynąć między kolejnymi cyklami (5 minut).
 
@@ -119,14 +115,14 @@ Diagram przedstawia kolejne czynności będące częścią cyklu generowania dan
 
 <img src="img/maszyna-stanow.png">
 
-Diagram 6
-Diagram maszyny stanów opisuje cykl życia obiektu reprezentującego użącenie zużywające energię.
+Diagram 8.
+Diagram maszyny stanów opisuje cykl życia obiektu reprezentującego urządzenie zużywające energię.
 
 # Diagram komponentów 
 
 <img src="img/diagram_komponentow.png">
 
-Diagram 7
+Diagram 9
 
 Diagram komponentów przedstawia powiązania z 3 innymi modułami (zarządzania, alalizy danych, predykcji) oraz interfejsy, za pomocą których te powiązania są realizowane.
 
@@ -134,7 +130,7 @@ Diagram komponentów przedstawia powiązania z 3 innymi modułami (zarządzania,
 
 <img src="img/diagram_pakietow.png">
 
-Diagram 8
+Diagram 10
 
 Diagram pakietów przedstawia jakie pakiety zawiera pakiet Symulacji.
 
@@ -142,7 +138,7 @@ Diagram pakietów przedstawia jakie pakiety zawiera pakiet Symulacji.
 
 <img src="img/przegladu-interakcji.png">
 
-Diagram 9
+Diagram 11
 
 Diagram obrazowuje przepływ sterowania dla pżypadku użycia dotyczącego włączenia/aktywacji panelu słonecznego o wskazanym identyfikatorze.
 
@@ -150,7 +146,7 @@ Diagram obrazowuje przepływ sterowania dla pżypadku użycia dotyczącego włą
 
 <img src="img/diagram_strukturalny.png">
 
-Diagram 10
+Diagram 12
 
 Diagram pokazuje powiązanie między obiektami uczestniczącymi w procesie generowania danych o produkcji i zużyciu energii.
 
@@ -158,7 +154,7 @@ Diagram pokazuje powiązanie między obiektami uczestniczącymi w procesie gener
 
 <img src="img/diagram_harmonogramowania.png">
 
-Diagram 11
+Diagram 13
 
 Diagram przedstawia szacunkowy czas, w jakim przebiegają kolejne etapy symulowania produkcji oraz zużycia energii.
 
@@ -189,13 +185,12 @@ Aby zmienić porę, roku należy wybrać jedną z opcji z drugiej rozwijanej lis
 ![img.png](img/zmiana-pory-roku.png)
 Po zatwierdzeniu akcji powinny samoistnie zaktualizować parametry symulacji. Jak można zauażyć, pora roku ma znacząco większy wpływ na warunki pogodowe niż pora dnia.
 ![img.png](img/widok-po-zmianie-pory-roku.png)
-W razie próby dodania pory roku bez wybrania opcji, pojawi się okno informujące o nieprawidłowej akcji:
-![img.png](bład-pora-dnia.png)
+W razie próby dodania pory roku bez wybrania opcji pojawi się okno informujące o nieprawidłowej akcji:
+![img.png](img/bład-pora-dnia.png)
 ## Obsługa błędów, sytuacji wyjątkowych
 Dzięki ograniczeniu możliwości wyboru pór roku i dnia do listy konkretnych opcji, zamiast wpisywania dowolnej wartości, nie ma możliwośći wystąpienia błędów w tym zakresie.
 
 
 ## Podsumowanie
-
 Zarządzanie modułem symulacji sprowadza się do nadzorowania generowanych danych i ewentualnych zmian parametrów(pory roku i dnia) w celu zmiany zmiany wyliczanych wartości.
-Należy również kontrolować stan bazy danych gdyż ilość generowanych danych przy braku kontroli może doprowadzić do przepełnienia. W takim wypadku może być potrzebne wyczyszczenie lub zwiększenie zasobów pamięci przydzielonych dla naszej bazy.
+Należy również kontrolować stan bazy danych, gdyż ilość generowanych danych przy braku kontroli może doprowadzić do przepełnienia. W takim wypadku może być potrzebne wyczyszczenie lub zwiększenie zasobów pamięci przydzielonych dla naszej bazy.
