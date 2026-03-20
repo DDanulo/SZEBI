@@ -1,4 +1,4 @@
-# IO_IAS_25
+# System Zarządzania Energią w Budynkach Inteligentnych (SZEBI) IO_IAS_25
 ## Struktura projektu
 projekt składa się z dwóch części - server oraz client.
 ### Server
@@ -8,13 +8,10 @@ Dodatkowe narzędzia:
   - docker-compose: do uruchamiania bazy danych
   - Flyway: do kontroli migracji baz danych
  
-
 Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ścieżką `server/src/main/java/com/example/server` odpowiadające nazwom modułów projektu.
 
 ### Client
 Technologia główna: ReactJS\
-Technologie pomocnicze:
-  - Tailwind
 
 Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ścieżką `client/src/components/` odpowiadające nazwom modułów projektu.
 
