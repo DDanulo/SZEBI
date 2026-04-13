@@ -16,7 +16,7 @@ Technologia główna: ReactJS\
 Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ścieżką `client/src/components/` odpowiadające nazwom modułów projektu.
 
 ## Jak zacząć?
-Żeby zacząć pracę nad projektem, sklonujcie to repozytorium i znajdżcie katalog z nazwą swojego modułu wewnątrz katalogów server oraz client odpowiadających za swoje moduły.\
+Żeby zacząć pracę nad projektem, sklonujcie repozytorium i znajdżcie katalog z nazwą swojego modułu wewnątrz katalogów server oraz client odpowiadających za swoje moduły.\
 \
 Uruchomić bazę danych można za pomocą polecenia `docker compose up -d`. (Trzeba mieć zainstalowany docker na maszynie)\
 \
