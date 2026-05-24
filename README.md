@@ -18,6 +18,7 @@ Wewnątrz utworzonego projektu Spring boot zostały utworzone katalogi za ście�
 ## Jak zacząć?
 Żeby zacząć pracę nad projektem, sklonujcie repozytorium i znajdżcie katalog z nazwą swojego modułu wewnątrz katalogów server oraz client odpowiadających za swoje moduły.\
 \
+
 Uruchomić bazę danych można za pomocą polecenia `docker compose up -d`. (Trzeba mieć zainstalowany docker na maszynie)\
 \
 Dla pierwszego uruchomienia front-endu powinniście posiadać na maszynie [node.js i npm](https://nodejs.org/en/download/) i zainstalować potrzebne biblioteki npm za pomocą polecenia `npm install` wewnątrz katalogu `client`.\
